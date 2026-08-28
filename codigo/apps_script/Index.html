@@ -1,0 +1,1832 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Formatos BBVA — HABICREDIT</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <style>
+    body { background: #f0f4f8; }
+    .seccion { background: #fff; border-radius: 10px; padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+    .seccion h5 { color: #1565c0; border-bottom: 2px solid #1565c0; padding-bottom: 8px; margin-bottom: 20px; }
+    .header-app { background: #1565c0; color: #fff; padding: 18px 24px; border-radius: 10px; margin-bottom: 24px; }
+    .btn-generar { background: #1565c0; color: #fff; font-size: 1.1rem; padding: 12px 40px; border-radius: 8px; }
+    .btn-generar:hover { background: #0d47a1; color: #fff; }
+    .campo-oculto { display: none; }
+    #spinner { display: none; }
+    .text-muted-sm { font-size: 0.82rem; color: #888; }
+    /* ── MENÚ Y NAVEGACIÓN ── */
+    #menuInicio { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #f0f4f8; padding: 32px 16px; }
+    .card-formato { width: 240px; cursor: pointer; border: 2px solid #e3e8ef; border-radius: 14px; padding: 28px 20px; text-align: center; background: #fff; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+    .card-formato:hover { border-color: #1565c0; box-shadow: 0 6px 20px rgba(21,101,192,.18); transform: translateY(-3px); }
+    .card-formato .icono { font-size: 2.4rem; margin-bottom: 12px; }
+    .card-formato h5 { color: #1565c0; margin-bottom: 6px; font-size: 1rem; }
+    .card-formato p { font-size: 0.82rem; color: #666; margin: 0; }
+    .formato-oculto { display: none; }
+    .btn-volver { background: rgba(255,255,255,.18); color: #fff; border: 1.5px solid rgba(255,255,255,.55); border-radius: 8px; padding: 5px 14px; cursor: pointer; font-size: 0.85rem; white-space: nowrap; flex-shrink: 0; }
+    .btn-volver:hover { background: rgba(255,255,255,.32); }
+  </style>
+</head>
+<body>
+<div class="container py-4" style="max-width:860px">
+
+  <!-- Encabezado -->
+  <div class="header-app">
+    <h4 class="mb-0">📄 Formatos BBVA — HABICREDIT</h4>
+    <small>HABICREDIT · Vinculación · Nómina · Conocimiento de Cliente</small>
+  </div>
+
+  <!-- ── SECCIÓN: RADICACIÓN ── -->
+  <div class="seccion">
+    <h5>Información de radicación</h5>
+    <div class="row g-3">
+
+      <div class="col-md-6">
+        <label class="form-label">Ciudad de radicación *</label>
+        <select id="ciudad" class="form-select" onchange="actualizarDirectores()">
+          <option value="">— Seleccione —</option>
+          <option>Bogotá</option>
+          <option>Cali</option>
+          <option>Medellín</option>
+          <option>Barranquilla</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Director Comercial *</label>
+        <select id="director" class="form-select" onchange="actualizarAnalista()">
+          <option value="">— Seleccione ciudad primero —</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Tipo de vínculo *</label>
+        <select id="tipoVinculo" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option>Titular</option>
+          <option>Avalista</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Destino del crédito *</label>
+        <select id="destino" class="form-select" onchange="mostrarSeccionLeasing(); mostrarSeccionCartera()">
+          <option value="">— Seleccione —</option>
+          <option>Compra de vivienda</option>
+          <option>Construcción individual</option>
+          <option>Remodelación de Vivienda</option>
+          <option>Compra de cartera</option>
+          <option>Leasing habitacional</option>
+        </select>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN: DATOS DEL BROKER ── -->
+  <div class="seccion">
+    <h5>Datos del Prescriptor (broker que radica)</h5>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Nombre completo del broker *</label>
+        <input type="text" id="brokerNombre" class="form-control" placeholder="Nombres y apellidos">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Cédula del broker *</label>
+        <input type="text" id="brokerCedula" class="form-control" placeholder="Sin puntos ni comas">
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 2: DATOS PERSONALES ── -->
+  <div class="seccion">
+    <h5>Sección 2 — Datos personales del cliente</h5>
+    <div class="row g-3">
+
+      <div class="col-md-4">
+        <label class="form-label">Nombres *</label>
+        <input type="text" id="nombres" class="form-control">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Primer apellido *</label>
+        <input type="text" id="primerApellido" class="form-control">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Segundo apellido</label>
+        <input type="text" id="segundoApellido" class="form-control">
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Género *</label>
+        <select id="genero" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="1">Hombre</option>
+          <option value="2">Mujer</option>
+          <option value="On">Otro</option>
+        </select>
+      </div>
+
+      <div class="col-md-2">
+        <label class="form-label">Día nacimiento *</label>
+        <input type="text" id="diaNac" class="form-control" maxlength="2" placeholder="DD">
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">Mes nacimiento *</label>
+        <input type="text" id="mesNac" class="form-control" maxlength="2" placeholder="MM">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Año nacimiento *</label>
+        <input type="text" id="anoNac" class="form-control" maxlength="4" placeholder="AAAA">
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">País de nacimiento *</label>
+        <input type="text" id="paisNac" class="form-control" placeholder="Colombia">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Departamento de nacimiento *</label>
+        <input type="text" id="dptoNac" class="form-control">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Ciudad de nacimiento *</label>
+        <input type="text" id="ciudadNac" class="form-control">
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Tipo de identificación *</label>
+        <select id="tipoId" class="form-select" onchange="mostrarCualTipoId()">
+          <option value="">— Seleccione —</option>
+          <option value="1">CC — Cédula de ciudadanía</option>
+          <option value="2">CE — Cédula de extranjería</option>
+          <option value="3">TI — Tarjeta de identidad</option>
+          <option value="4">Pasaporte</option>
+          <option value="5">Otro</option>
+        </select>
+      </div>
+      <div class="col-md-4 campo-oculto" id="divCualTipoId">
+        <label class="form-label">¿Cuál tipo de identificación?</label>
+        <input type="text" id="cualTipoId" class="form-control">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Número de identificación *</label>
+        <input type="text" id="numId" class="form-control" placeholder="Sin puntos ni comas">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Grupo étnico *</label>
+        <select id="grupoEtnico" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="1">Indígena</option>
+          <option value="2">Gitano(a) o Rrom</option>
+          <option value="3">Raizal del Archipiélago de San Andrés, Providencia y Santa Catalina</option>
+          <option value="4">Palenquero(a) de San Basilio</option>
+          <option value="5">Negro(a), Mulato(a), Afrodescendiente, Afrocolombiano(a)</option>
+          <option value="6">Ningún grupo étnico</option>
+          <option value="7">Sin información</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Estado civil *</label>
+        <select id="estadoCivil" class="form-select" onchange="mostrarSeccionConyuge()">
+          <option value="">— Seleccione —</option>
+          <option value="1">Soltero</option>
+          <option value="2">Casado</option>
+          <option value="3">Viudo</option>
+          <option value="4">Divorciado</option>
+          <option value="5">Separado</option>
+          <option value="6">Unión Libre</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Nivel de estudios *</label>
+        <select id="nivelEstudios" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="1">Ninguno</option>
+          <option value="2">Primaria</option>
+          <option value="5">Bachillerato</option>
+          <option value="4">Tecnólogo</option>
+          <option value="3">Universitario</option>
+          <option value="6">Especialización</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Tipo de vivienda *</label>
+        <select id="tipoVivienda" class="form-select" onchange="mostrarCualVivienda(); mostrarValorVivienda()">
+          <option value="">— Seleccione —</option>
+          <option value="1">Propia sin hipoteca</option>
+          <option value="2">Propia con hipoteca</option>
+          <option value="3">Familiar</option>
+          <option value="4">Arriendo</option>
+          <option value="5">Otro</option>
+        </select>
+      </div>
+      <div class="col-md-6 campo-oculto" id="divCualVivienda">
+        <label class="form-label">¿Cuál tipo de vivienda?</label>
+        <input type="text" id="cualVivienda" class="form-control">
+      </div>
+      <div class="col-md-6 campo-oculto" id="divValorVivienda">
+        <label class="form-label">Valor de la vivienda propia ($) *</label>
+        <input type="text" id="valorVivienda" class="form-control" placeholder="Solo números">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">¿Persona con discapacidad (PcD)? *</label>
+        <select id="pcd" class="form-select" onchange="mostrarCualPcd()">
+          <option value="">— Seleccione —</option>
+          <option value="1">No</option>
+          <option value="2">Sí</option>
+        </select>
+      </div>
+      <div class="col-md-6 campo-oculto" id="divCualPcd">
+        <label class="form-label">¿Cuál discapacidad?</label>
+        <input type="text" id="cualPcd" class="form-control">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Título profesional</label>
+        <input type="text" id="tituloProfesional" class="form-control">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Correo electrónico *</label>
+        <input type="email" id="correo" class="form-control">
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Dirección de residencia *</label>
+        <input type="text" id="direccion" class="form-control">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">País de residencia *</label>
+        <input type="text" id="paisRes" class="form-control" placeholder="Colombia">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Departamento de residencia *</label>
+        <input type="text" id="dptoRes" class="form-control">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Ciudad de residencia *</label>
+        <input type="text" id="ciudadRes" class="form-control">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Estrato *</label>
+        <input type="text" id="estrato" class="form-control" maxlength="1">
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">N° personas a cargo *</label>
+        <input type="text" id="personasCargo" class="form-control" placeholder="0 si no tiene">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Antigüedad en la ciudad *</label>
+        <input type="text" id="antiguedadCiudad" class="form-control" placeholder="ej. 5 años">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Teléfono celular *</label>
+        <input type="text" id="telefonoCelular" class="form-control">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Nacionalidad *</label>
+        <input type="text" id="nacionalidad" class="form-control" placeholder="ej. Colombiana">
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 3: CÓNYUGE (condicional) ── -->
+  <div class="seccion campo-oculto" id="seccionConyuge">
+    <h5>Sección 3 — Datos del cónyuge / compañero permanente</h5>
+    <p class="text-muted-sm">Se diligencia solo cuando el estado civil es Casado o Unión Libre.</p>
+    <div class="row g-3">
+      <div class="col-md-4">
+        <label class="form-label">Nombres del cónyuge *</label>
+        <input type="text" id="conyNombres" class="form-control">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Primer apellido *</label>
+        <input type="text" id="conyApellido1" class="form-control">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Segundo apellido</label>
+        <input type="text" id="conyApellido2" class="form-control">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Tipo de documento *</label>
+        <select id="conyTipoId" class="form-select" onchange="mostrarCualConyuge()">
+          <option value="">— Seleccione —</option>
+          <option value="1">CC</option>
+          <option value="2">CE</option>
+          <option value="3">TI</option>
+          <option value="4">Pasaporte</option>
+          <option value="5">Otro</option>
+        </select>
+      </div>
+      <div class="col-md-4 campo-oculto" id="divCualConyuge">
+        <label class="form-label">¿Cuál tipo de documento?</label>
+        <input type="text" id="cualConyuge" class="form-control">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Número de identificación *</label>
+        <input type="text" id="conyNumId" class="form-control">
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 5: ACTIVIDAD ECONÓMICA ── -->
+  <div class="seccion">
+    <h5>Sección 5 — Actividad económica</h5>
+    <div class="row g-3">
+
+      <div class="col-md-6">
+        <label class="form-label">Situación laboral *</label>
+        <select id="situacionLaboral" class="form-select" onchange="mostrarCualLaboral(); mostrarVentasAnuales()">
+          <option value="">— Seleccione —</option>
+          <option value="1">Asalariado término indefinido</option>
+          <option value="2">Pensionado</option>
+          <option value="3">Independiente</option>
+          <option value="4">Asalariado temporal</option>
+          <option value="5">Otro</option>
+        </select>
+      </div>
+      <div class="col-md-6 campo-oculto" id="divCualLaboral">
+        <label class="form-label">¿Cuál situación laboral?</label>
+        <input type="text" id="cualLaboral" class="form-control">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Nombre de la empresa / empleador *</label>
+        <input type="text" id="nombreEmpresa" class="form-control">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Cargo / Ocupación / Oficio *</label>
+        <input type="text" id="cargo" class="form-control">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Actividad económica de la empresa *</label>
+        <input type="text" id="actividadEmpresa" class="form-control">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">¿Es socio de la empresa donde trabaja? *</label>
+        <select id="esSocio" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="Sí">Sí</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+
+      <div class="col-md-2">
+        <label class="form-label">Día inicio actividad *</label>
+        <input type="text" id="diaIngreso" class="form-control" maxlength="2" placeholder="DD">
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">Mes *</label>
+        <input type="text" id="mesIngreso" class="form-control" maxlength="2" placeholder="MM">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Año *</label>
+        <input type="text" id="anoIngreso" class="form-control" maxlength="4" placeholder="AAAA">
+      </div>
+
+      <div class="col-12"><hr class="my-1"><p class="text-muted-sm mb-0">Preguntas PEP — marque según corresponda al cliente</p></div>
+
+      <div class="col-md-6">
+        <label class="form-label">¿Es Persona Políticamente Expuesta (PEP)? *</label>
+        <select id="pepSiNo" class="form-select" onchange="mostrarPepNacExt()">
+          <option value="No">No</option>
+          <option value="Sí">Sí</option>
+        </select>
+      </div>
+      <div class="col-md-6 campo-oculto" id="divPepNacExt">
+        <label class="form-label">¿Nacional o Extranjero? *</label>
+        <select id="pepNacExt" class="form-select">
+          <option value="Nacional">Nacional</option>
+          <option value="Extranjero">Extranjero</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">¿Es familiar de un PEP? *</label>
+        <select id="familiarPep" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="No">No</option>
+          <option value="Sí">Sí</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">¿Está asociado a un PEP? *</label>
+        <select id="asociadoPep" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="No">No</option>
+          <option value="Sí">Sí</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">¿Los recursos corresponden a campaña política? *</label>
+        <select id="campanaPolitica" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="No">No</option>
+          <option value="Sí">Sí</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">¿Tiene cuenta financiera en país extranjero? *</label>
+        <select id="cuentaExtranjera" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="No">No</option>
+          <option value="Sí">Sí</option>
+        </select>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 6: INFORMACIÓN FINANCIERA ── -->
+  <div class="seccion">
+    <h5>Sección 6 — Información financiera</h5>
+    <div class="row g-3">
+
+      <div class="col-md-6">
+        <label class="form-label">Ingresos mensuales — salario / pensión / prestación de servicios ($) *</label>
+        <input type="text" id="ingresos" class="form-control" placeholder="Solo números" oninput="calcularTotalIngresos()">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Otros ingresos — arriendos / actividad independiente ($) *</label>
+        <input type="text" id="otrosIngresos" class="form-control" placeholder="0 si no tiene" oninput="calcularTotalIngresos()">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Total ingresos mensuales ($)</label>
+        <input type="text" id="totalIngresos" class="form-control bg-light" readonly>
+        <small class="text-muted-sm">Calculado automáticamente</small>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Canon de arriendo / cuota hipotecaria vigente ($)</label>
+        <input type="text" id="canonArriendo" class="form-control" placeholder="0 si no aplica">
+        <small class="text-muted-sm">Solo si vive en arriendo o tiene hipoteca vigente; de lo contrario escriba 0</small>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Total egresos mensuales ($) *</label>
+        <input type="text" id="totalEgresos" class="form-control" placeholder="Solo números">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Total pasivos ($) *</label>
+        <input type="text" id="totalPasivos" class="form-control" placeholder="Solo números">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Total activos — valor de sus bienes ($) *</label>
+        <input type="text" id="totalActivos" class="form-control" placeholder="Solo números">
+      </div>
+
+      <div class="col-md-6 campo-oculto" id="divVentasAnuales">
+        <label class="form-label">Valor ventas anuales ($) *</label>
+        <input type="text" id="ventasAnuales" class="form-control" placeholder="Solo independientes o propietarios">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">¿A qué corresponden los otros ingresos?</label>
+        <input type="text" id="descripcionOtrosIngresos" class="form-control" placeholder="ej. Arriendo de apartamento">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Procedencia de recursos adicionales</label>
+        <input type="text" id="procedenciaRecursos" class="form-control">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">¿Declara renta? *</label>
+        <select id="declaraRenta" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="Sí">Sí</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">¿Tiene constituidos patrimonios autónomos o fideicomisos? *</label>
+        <select id="tienePatrimonios" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="Si">Sí</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 7: OPERACIONES INTERNACIONALES ── -->
+  <div class="seccion">
+    <h5>Sección 7 — Operaciones internacionales</h5>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">¿Realiza operaciones en moneda extranjera? *</label>
+        <select id="opMoneda" class="form-select" onchange="mostrarDetalleMoneda()">
+          <option value="">— Seleccione —</option>
+          <option value="No">No</option>
+          <option value="Sí">Sí</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">¿Posee productos en moneda extranjera? *</label>
+        <select id="poseeMoneda" class="form-select" onchange="mostrarDetalleMoneda()">
+          <option value="">— Seleccione —</option>
+          <option value="No">No</option>
+          <option value="Sí">Sí</option>
+        </select>
+      </div>
+      <div id="detalleMoneda" class="campo-oculto col-12">
+        <div class="row g-3 mt-1">
+          <div class="col-12"><p class="text-muted-sm">Complete los detalles de las operaciones en moneda extranjera:</p></div>
+          <div class="col-md-4"><label class="form-label">Texto69</label><input type="text" id="monedaDet1" class="form-control"></div>
+          <div class="col-md-4"><label class="form-label">Texto70</label><input type="text" id="monedaDet2" class="form-control"></div>
+          <div class="col-md-4"><label class="form-label">Texto71</label><input type="text" id="monedaDet3" class="form-control"></div>
+          <div class="col-md-4"><label class="form-label">Texto72</label><input type="text" id="monedaDet4" class="form-control"></div>
+          <div class="col-md-4"><label class="form-label">Texto73</label><input type="text" id="monedaDet5" class="form-control"></div>
+          <div class="col-md-4"><label class="form-label">Texto74</label><input type="text" id="monedaDet6" class="form-control"></div>
+          <div class="col-md-4"><label class="form-label">Texto75</label><input type="text" id="monedaDet7" class="form-control"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 8: REFERENCIAS ── -->
+  <div class="seccion">
+    <h5>Sección 8 — Referencias (todas obligatorias)</h5>
+
+    <p class="text-muted-sm">Referencias familiares (que no convivan con el solicitante)</p>
+    <div class="row g-3 mb-3">
+      <div class="col-md-3"><label class="form-label">Familiar 1 — Nombre completo *</label><input type="text" id="fam1nombre" class="form-control"></div>
+      <div class="col-md-3"><label class="form-label">Parentesco *</label><input type="text" id="fam1parentesco" class="form-control"></div>
+      <div class="col-md-3"><label class="form-label">Ciudad *</label><input type="text" id="fam1ciudad" class="form-control"></div>
+      <div class="col-md-3"><label class="form-label">Teléfono *</label><input type="text" id="fam1tel" class="form-control"></div>
+
+      <div class="col-md-3"><label class="form-label">Familiar 2 — Nombre completo</label><input type="text" id="fam2nombre" class="form-control"></div>
+      <div class="col-md-3"><label class="form-label">Parentesco</label><input type="text" id="fam2parentesco" class="form-control"></div>
+      <div class="col-md-3"><label class="form-label">Ciudad</label><input type="text" id="fam2ciudad" class="form-control"></div>
+      <div class="col-md-3"><label class="form-label">Teléfono</label><input type="text" id="fam2tel" class="form-control"></div>
+    </div>
+
+    <p class="text-muted-sm">Referencias personales / comerciales</p>
+    <div class="row g-3">
+      <div class="col-md-3"><label class="form-label">Personal 1 — Nombre completo *</label><input type="text" id="per1nombre" class="form-control"></div>
+      <div class="col-md-3"><label class="form-label">Relación *</label><input type="text" id="per1relacion" class="form-control"></div>
+      <div class="col-md-3"><label class="form-label">Ciudad *</label><input type="text" id="per1ciudad" class="form-control"></div>
+      <div class="col-md-3"><label class="form-label">Teléfono *</label><input type="text" id="per1tel" class="form-control"></div>
+
+      <div class="col-md-3"><label class="form-label">Personal 2 — Nombre completo</label><input type="text" id="per2nombre" class="form-control"></div>
+      <div class="col-md-3"><label class="form-label">Relación</label><input type="text" id="per2relacion" class="form-control"></div>
+      <div class="col-md-3"><label class="form-label">Ciudad</label><input type="text" id="per2ciudad" class="form-control"></div>
+      <div class="col-md-3"><label class="form-label">Teléfono</label><input type="text" id="per2tel" class="form-control"></div>
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 9: CRÉDITO SOLICITADO ── -->
+  <div class="seccion">
+    <h5>Sección 9 — Crédito solicitado</h5>
+    <div class="row g-3">
+
+      <div class="col-md-6">
+        <label class="form-label">Monto del crédito ($) *</label>
+        <input type="text" id="monto" class="form-control" placeholder="Solo números">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Plazo en meses *</label>
+        <input type="text" id="plazo" class="form-control" placeholder="ej. 180">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Subproducto *</label>
+        <input type="text" id="subproducto" class="form-control" placeholder="Código numérico">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Día de pago *</label>
+        <input type="text" id="diaPago" class="form-control" placeholder="ej. 5">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">¿Recibe nómina a través de BBVA? *</label>
+        <select id="nominaBBVA" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="Sí">Sí</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Crédito hipotecario en *</label>
+        <select id="pesosUvr" class="form-select" onchange="actualizarTasaUVR()">
+          <option value="">— Seleccione —</option>
+          <option value="Pesos">Pesos</option>
+          <option value="UVR">UVR</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Estado del inmueble *</label>
+        <select id="estadoInmueble" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="Nuevo">Nuevo</option>
+          <option value="Usado">Usado</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Tipo de inmueble *</label>
+        <select id="tipoInmueble" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="Casa">Casa</option>
+          <option value="Apartamento">Apartamento</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Dirección del inmueble *</label>
+        <input type="text" id="direccionInmueble" class="form-control">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Valor del inmueble ($) *</label>
+        <input type="text" id="valorInmueble" class="form-control" placeholder="Solo números">
+      </div>
+
+      <!-- % Leasing (condicional) -->
+      <div class="col-md-6 campo-oculto" id="divPorcentajeLeasing">
+        <label class="form-label">% de opción de compra (Leasing habitacional) *</label>
+        <input type="text" id="porcentajeLeasing" class="form-control" placeholder="ej. 20">
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 10: COMPRA DE CARTERA (condicional) ── -->
+  <div class="seccion campo-oculto" id="seccionCartera">
+    <h5>Sección 10 — Compra de cartera</h5>
+    <p class="text-muted-sm">Solo se diligencia cuando el destino es "Compra de cartera".</p>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Entidad financiera a la que se le compra *</label>
+        <input type="text" id="entidadCartera" class="form-control" placeholder="Nombre del banco">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Número del crédito *</label>
+        <input type="text" id="numCreditoCartera" class="form-control">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Valor de la deuda actual ($) *</label>
+        <input type="text" id="valorCartera" class="form-control">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Plazo actual de la deuda *</label>
+        <input type="text" id="plazoCartera" class="form-control">
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN NÓMINA — Datos adicionales ── -->
+  <div class="seccion">
+    <h5>Datos adicionales — Nómina BBVA</h5>
+    <p class="text-muted-sm">El monto, plazo y tipo (Pesos/UVR) se toman de la Sección 9. Solo complete los datos exclusivos de nómina.</p>
+    <div class="row g-3">
+
+      <div class="col-md-6">
+        <label class="form-label">Valor de ahorro al tomar nómina ($) *</label>
+        <input type="text" id="nAhorro" class="form-control" placeholder="Solo números">
+        <small class="text-muted-sm">Cuánto ahorra el cliente si vincula su nómina. Se formatea con puntos.</small>
+      </div>
+
+      <div class="col-md-6" id="divNTasaConNomina">
+        <label class="form-label">Tasa con nómina (%) *</label>
+        <input type="text" id="nTasaConNomina" class="form-control" placeholder="ej. 10,20">
+        <small class="text-muted-sm">Resultado: «10,20 %» — debe ser MENOR que la tasa sin nómina (para UVR se autocompleta con 3,40 %)</small>
+      </div>
+      <div class="col-md-6 campo-oculto" id="divNTasaConNominaUVR">
+        <label class="form-label">Tasa con nómina</label>
+        <input type="text" class="form-control bg-light" value="3,40 %" readonly>
+        <small class="text-muted-sm">Valor fijo para créditos UVR</small>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Tasa sin nómina (%) *</label>
+        <input type="text" id="nTasaSinNomina" class="form-control" placeholder="ej. 8,90">
+        <small class="text-muted-sm" id="notaTasaSin">Resultado: «8,90 %» — debe ser MAYOR que la tasa con nómina</small>
+      </div>
+
+      <div class="col-md-12">
+        <label class="form-label">Estado de vinculación de nómina *</label>
+        <select id="nEstadoNomina" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="toma">Toma nómina (se vincula ahora)</option>
+          <option value="no">No quiere nómina</option>
+          <option value="tiene">Ya tiene nómina vinculada</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Celular del broker *</label>
+        <input type="text" id="nBrokerCelular" class="form-control" placeholder="Número celular">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Correo electrónico del broker *</label>
+        <input type="email" id="nBrokerCorreo" class="form-control" placeholder="correo@ejemplo.com">
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN CONOCIMIENTO DE CLIENTE — Datos adicionales ── -->
+  <div class="seccion">
+    <h5>Datos adicionales — Conocimiento de Cliente BBVA</h5>
+    <p class="text-muted-sm">Ciudad, cliente, coordinador, broker y analista se toman automáticamente del formulario.</p>
+    <div class="row g-3">
+
+      <div class="col-md-6">
+        <label class="form-label">Rango del inmueble *</label>
+        <select id="cVisNoVis" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="VIS">VIS (Vivienda de Interés Social)</option>
+          <option value="NO_VIS">No VIS</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Tipo de crédito *</label>
+        <select id="cTipoCredito" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="hipotecario">Hipotecario Tradicional</option>
+          <option value="leasing_familiar">Leasing Familiar</option>
+          <option value="leasing_no_familiar">Leasing No Familiar</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Línea del crédito *</label>
+        <select id="cLineaCredito" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="tradicional">Tradicional</option>
+          <option value="remodelacion">Remodelación</option>
+          <option value="const_individual">Const. Individual</option>
+          <option value="cesion">Cesión</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Ciudad o municipio de compra *</label>
+        <input type="text" id="ciudadCompra" class="form-control" placeholder="Ej: BOGOTÁ">
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SELECCIÓN DE FORMATOS ── -->
+  <div class="seccion">
+    <h5>Seleccione los formatos a descargar</h5>
+    <div class="d-flex flex-wrap gap-4 justify-content-center">
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" id="chkVinculacion" checked>
+        <label class="form-check-label fw-semibold" for="chkVinculacion">Vinculación</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" id="chkNomina" checked>
+        <label class="form-check-label fw-semibold" for="chkNomina">Nómina</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" id="chkConocimiento" checked>
+        <label class="form-check-label fw-semibold" for="chkConocimiento">Conocimiento de Cliente</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BOTÓN GENERAR ── -->
+  <div class="text-center py-4">
+    <div id="spinner" class="mb-3">
+      <div class="spinner-border text-primary" role="status"></div>
+      <p class="mt-2 text-muted">Generando los formatos, espere un momento...</p>
+    </div>
+    <button class="btn btn-generar" onclick="generarTodos()">
+      ⬇️ Generar y descargar formatos BBVA
+    </button>
+    <p class="text-muted-sm mt-2">Se descargan solo los formatos seleccionados arriba.</p>
+  </div>
+
+</div><!-- /container -->
+
+<!-- secciones separadas eliminadas — todo está integrado en el formulario principal -->
+
+
+<script>
+// ════════════════════════════════════════════════════════
+// DATOS DE RADICADORES
+// ════════════════════════════════════════════════════════
+const RADICADORES = {
+  'Bogotá': {
+    coordinador: { nombre: 'María Laura Ríos', cedula: '1000066151' },
+    directores: [
+      { nombre: 'Lorena Rico Avilés',      analista: { nombre: 'José Iván Motivar',          cedula: '1018454647', codigo: 'T070288' } },
+      { nombre: 'Juan Felipe Galán',        analista: { nombre: 'José Iván Motivar',          cedula: '1018454647', codigo: 'T070288' } },
+      { nombre: 'Carlos Giovanny Ríos',     analista: { nombre: 'Adriana Carolina Cortés',   cedula: '52986936',   codigo: 'T046516' } },
+      { nombre: 'Evelyn Tatiana Guzmán',    analista: { nombre: 'Laura Stephania Guzmán',    cedula: '1000776723', codigo: 'T069531' } },
+      { nombre: 'Lorena Gutiérrez',         analista: { nombre: 'Adriana Carolina Cortés',   cedula: '52986936',   codigo: 'T046516' } },
+      { nombre: 'Luisa Quijano',            analista: { nombre: 'Laura Stephania Guzmán',    cedula: '1000776723', codigo: 'T069531' } },
+      { nombre: 'Madelein González',        analista: { nombre: 'Laura Stephania Guzmán',    cedula: '1000776723', codigo: 'T069531' } },
+      { nombre: 'Madian Chitiva',           analista: { nombre: 'Adriana Carolina Cortés',   cedula: '52986936',   codigo: 'T046516' } },
+      { nombre: 'Paola Andrea Castro',      analista: { nombre: 'Laura Stephania Guzmán',    cedula: '1000776723', codigo: 'T069531' } },
+    ]
+  },
+  'Cali': {
+    coordinador: { nombre: 'María del Mar García', cedula: '1124618819' },
+    directores: [
+      { nombre: 'Raúl Fernando Erazo', analista: { nombre: 'Michel Daniela Rodríguez Jurado', cedula: '1113541579', codigo: 'OC01183' } },
+    ]
+  },
+  'Medellín': {
+    coordinador: { nombre: 'Yalila Sáenz', cedula: '52866977' },
+    directores: [
+      { nombre: 'Katherine Cuartas', analista: { nombre: 'Eurley Yajaira Murillo', cedula: '1152449335', codigo: 'T026681' } },
+    ]
+  },
+  'Barranquilla': {
+    coordinador: { nombre: 'Juan Carlos Contreras', cedula: '71747720' },
+    directores: [
+      { nombre: 'Andrea Álvarez', analista: { nombre: 'Nayelis de Jesús Toscano', cedula: '1001880819', codigo: '' } },
+    ]
+  }
+};
+
+// ════════════════════════════════════════════════════════
+// TABLAS DE MAPEO PDF — widgets reordenados en el AcroForm
+// ════════════════════════════════════════════════════════
+// Situación laboral: los onValues del PDF difieren del select del formulario
+const LABORAL  = {'1':'1', '2':'3', '3':'4', '4':'2', '5':'5'};
+// Nivel de estudios: ídem
+const ESTUDIOS = {'1':'1', '2':'3', '3':'4', '4':'2', '5':'5', '6':'6'};
+
+// ════════════════════════════════════════════════════════
+// HELPER — analista según ciudad de compra
+// Si ciudadCompra coincide con una ciudad diferente a la del director,
+// retorna el analista de esa ciudad; de lo contrario retorna el original.
+// ════════════════════════════════════════════════════════
+function normCiudad(str) {
+  return (str || '').trim().toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+const _CIUDADES_NORM = {
+  'bogota': 'Bogotá', 'cali': 'Cali',
+  'medellin': 'Medellín', 'barranquilla': 'Barranquilla'
+};
+function resolverAnalistaPorCompra(ciudadCompraRaw, ciudadSel, analistaDefault) {
+  const clave = normCiudad(ciudadCompraRaw);
+  const ciudadCompra = _CIUDADES_NORM[clave];
+  if (ciudadCompra && ciudadCompra !== ciudadSel && RADICADORES[ciudadCompra]) {
+    return RADICADORES[ciudadCompra].directores[0].analista;
+  }
+  return analistaDefault;
+}
+function resolverCoordinadorPorCompra(ciudadCompraRaw, ciudadSel, coordinadorDefault) {
+  const clave = normCiudad(ciudadCompraRaw);
+  const ciudadCompra = _CIUDADES_NORM[clave];
+  if (ciudadCompra && ciudadCompra !== ciudadSel && RADICADORES[ciudadCompra]) {
+    return RADICADORES[ciudadCompra].coordinador;
+  }
+  return coordinadorDefault;
+}
+
+// ════════════════════════════════════════════════════════
+// LÓGICA DE FORMULARIO — campos condicionales
+// ════════════════════════════════════════════════════════
+function actualizarDirectores() {
+  const ciudad = document.getElementById('ciudad').value;
+  const sel = document.getElementById('director');
+  sel.innerHTML = '<option value="">— Seleccione —</option>';
+  if (ciudad && RADICADORES[ciudad]) {
+    RADICADORES[ciudad].directores.forEach((d, i) => {
+      const opt = document.createElement('option');
+      opt.value = i;
+      opt.textContent = d.nombre;
+      sel.appendChild(opt);
+    });
+  }
+}
+
+function actualizarAnalista() { /* solo actualiza en tiempo de generación */ }
+
+function mostrarSeccionConyuge() {
+  const v = document.getElementById('estadoCivil').value;
+  mostrar('seccionConyuge', v === '2' || v === '6');
+}
+
+function mostrarSeccionLeasing() {
+  const v = document.getElementById('destino').value;
+  mostrar('divPorcentajeLeasing', v === 'Leasing habitacional');
+}
+
+function mostrarSeccionCartera() {
+  const v = document.getElementById('destino').value;
+  mostrar('seccionCartera', v === 'Compra de cartera');
+}
+
+function mostrarCualTipoId() {
+  mostrar('divCualTipoId', document.getElementById('tipoId').value === '5');
+}
+
+function mostrarCualVivienda() {
+  mostrar('divCualVivienda', document.getElementById('tipoVivienda').value === '5');
+}
+
+function mostrarValorVivienda() {
+  const v = document.getElementById('tipoVivienda').value;
+  mostrar('divValorVivienda', v === '1' || v === '2');
+}
+
+function mostrarCualPcd() {
+  mostrar('divCualPcd', document.getElementById('pcd').value === '2');
+}
+
+function mostrarCualLaboral() {
+  mostrar('divCualLaboral', document.getElementById('situacionLaboral').value === '5');
+}
+
+function mostrarVentasAnuales() {
+  const v = document.getElementById('situacionLaboral').value;
+  mostrar('divVentasAnuales', v === '3');
+}
+
+function mostrarCualConyuge() {
+  mostrar('divCualConyuge', document.getElementById('conyTipoId').value === '5');
+}
+
+function mostrarPepNacExt() {
+  mostrar('divPepNacExt', document.getElementById('pepSiNo').value === 'Sí');
+}
+
+function mostrarDetalleMoneda() {
+  const op = document.getElementById('opMoneda').value;
+  const po = document.getElementById('poseeMoneda').value;
+  mostrar('detalleMoneda', op === 'Sí' || po === 'Sí');
+}
+
+function mostrar(id, condicion) {
+  const el = document.getElementById(id);
+  if (condicion) { el.classList.remove('campo-oculto'); }
+  else           { el.classList.add('campo-oculto'); }
+}
+
+function calcularTotalIngresos() {
+  const a = parseFloat(limpiarNumero(document.getElementById('ingresos').value)) || 0;
+  const b = parseFloat(limpiarNumero(document.getElementById('otrosIngresos').value)) || 0;
+  document.getElementById('totalIngresos').value = (a + b).toLocaleString('es-CO');
+}
+
+function limpiarNumero(str) {
+  return (str || '').replace(/[^0-9]/g, '');
+}
+function fmt(str) {
+  const n = parseInt(limpiarNumero(str));
+  return isNaN(n) ? '' : n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+
+function validarObligatorios() {
+  let valido = true;
+  let primerInvalido = null;
+  document.querySelectorAll('label.form-label').forEach(label => {
+    if (!label.textContent.includes('*')) return;
+    const container = label.closest('[class*="col-"]');
+    if (!container) return;
+    const input = container.querySelector('input:not([readonly]), select');
+    if (!input) return;
+    if (input.offsetParent === null) { input.classList.remove('is-invalid'); return; }
+    // Nombre de empresa no es obligatorio si el cliente es pensionado
+    if (input.id === 'nombreEmpresa' && document.getElementById('situacionLaboral').value === '2') {
+      input.classList.remove('is-invalid'); return;
+    }
+    // Ingresos y otros ingresos tienen reglas condicionales — se validan fuera del loop
+    if (input.id === 'ingresos' || input.id === 'otrosIngresos') { input.classList.remove('is-invalid'); return; }
+    if (!input.value.trim()) {
+      input.classList.add('is-invalid');
+      if (!primerInvalido) primerInvalido = input;
+      valido = false;
+    } else {
+      input.classList.remove('is-invalid');
+    }
+  });
+  // Validaciones condicionales por situación laboral
+  const sl = document.getElementById('situacionLaboral').value;
+  // Ingresos mensuales: obligatorio para asalariado indefinido (1), pensionado (2), otro/prestación (5)
+  const ingField = document.getElementById('ingresos');
+  if (ingField) {
+    if (['1','2','4','5'].includes(sl) && !ingField.value.trim()) {
+      ingField.classList.add('is-invalid');
+      if (!primerInvalido) primerInvalido = ingField;
+      valido = false;
+    } else { ingField.classList.remove('is-invalid'); }
+  }
+  // Para independiente (3): otros ingresos, descripción y procedencia son obligatorios
+  ['otrosIngresos', 'descripcionOtrosIngresos', 'procedenciaRecursos'].forEach(id => {
+    const f = document.getElementById(id);
+    if (!f) return;
+    if (sl === '3' && !f.value.trim()) {
+      f.classList.add('is-invalid');
+      if (!primerInvalido) primerInvalido = f;
+      valido = false;
+    } else { f.classList.remove('is-invalid'); }
+  });
+
+  // Canon de arriendo es obligatorio si vivienda es "Propia con hipoteca" (2) o "Arriendo" (4)
+  const tviv  = document.getElementById('tipoVivienda').value;
+  const canon = document.getElementById('canonArriendo');
+  if (canon) {
+    if ((tviv === '2' || tviv === '4') && !canon.value.trim()) {
+      canon.classList.add('is-invalid');
+      if (!primerInvalido) primerInvalido = canon;
+      valido = false;
+    } else {
+      canon.classList.remove('is-invalid');
+    }
+  }
+
+  if (!valido && primerInvalido) primerInvalido.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  return valido;
+}
+
+function val(id) { return (document.getElementById(id).value || '').trim(); }
+
+// ════════════════════════════════════════════════════════
+// GENERACIÓN DEL PDF
+// ════════════════════════════════════════════════════════
+async function generarPDF() {
+  if (!validarObligatorios()) { alert('Por favor completa todos los campos obligatorios (*) antes de generar.'); return; }
+  document.getElementById('spinner').style.display = 'block';
+  try {
+    // 1. Cargar plantilla desde Drive vía Apps Script
+    const base64 = await new Promise((resolve, reject) => {
+      google.script.run
+        .withSuccessHandler(resolve)
+        .withFailureHandler(reject)
+        .getPlantilla();
+    });
+
+    // 2. Decodificar base64 → bytes
+    const bStr = atob(base64);
+    const bytes = new Uint8Array(bStr.length);
+    for (let i = 0; i < bStr.length; i++) bytes[i] = bStr.charCodeAt(i);
+
+    // 3. Abrir con pdf-lib
+    const pdfDoc = await PDFLib.PDFDocument.load(bytes.buffer);
+    const form = pdfDoc.getForm();
+
+    // Fix campos de texto que solo muestran al hacer clic (updateFieldAppearances solo afecta texto, no checkboxes)
+    let fuenteBase, fuenteBold;
+    try {
+      fuenteBase = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+      fuenteBold = await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
+    } catch(e) {}
+
+    // ── DIAGNÓSTICO: muestra los valores on de cada widget de selección ──
+    const selDiag = ['genero','tipo','grupo','estado civil','nivel estudios',
+                     'tipo vivienda','economica','destino','pc','tipo de vinculo',
+                     'correspondencia','banco','declara','bbva','Pesos','Nuevo','Casa',
+                     'empresa','pep','familiar','Sí_2','Nacional','cuentas','moneda','posee'];
+    selDiag.forEach(n => {
+      try {
+        const f = form.getField(n);
+        const ws = f.acroField.getWidgets();
+        const vals = ws.map(w => { try { return w.getOnValue()?.toString() || 'null'; } catch(e) { return '?'; } });
+        console.log('WIDGET', n, ':', vals.join(' | '));
+      } catch(e) { console.log('WIDGET', n, ': ERROR', e.message); }
+    });
+    // ────────────────────────────────────────────────────────────────────────────
+
+    // Helpers
+    const txt = (name, value) => {
+      try { form.getTextField(name).setText(String(value || '')); } catch(e) { console.warn('txt:', name, e.message); }
+    };
+    // txtFs: igual que txt pero fuerza tamaño de fuente para que la apariencia sea visible sin hacer clic
+    const txtFs = (name, value, size = 8) => {
+      try { const f = form.getTextField(name); f.setFontSize(size); f.setText(String(value || '')); } catch(e) { console.warn('txtFs:', name, e.message); }
+    };
+    // sel(): usa API de bajo nivel para establecer el valor en campos checkbox tipo radio
+    const radio = (name, value) => {
+      if (!value && value !== 0) return;
+      const strVal = String(value);
+      try {
+        const field = form.getField(name);
+        const acro  = field.acroField;
+        const pdfVal = PDFLib.PDFName.of(strVal);
+        acro.dict.set(PDFLib.PDFName.of('V'), pdfVal);
+        acro.getWidgets().forEach(w => {
+          try {
+            const onVal = w.getOnValue();
+            const isOn  = onVal?.toString() === '/' + strVal;
+            w.dict.set(PDFLib.PDFName.of('AS'), PDFLib.PDFName.of(isOn ? strVal : 'Off'));
+          } catch(we) {}
+        });
+      } catch(e) {
+        console.warn('sel:', name, '->', value, '|', e.message);
+      }
+    };
+    const chk = (name, marcar) => {
+      try { marcar ? form.getCheckBox(name).check() : form.getCheckBox(name).uncheck(); } catch(e) { console.warn('chk:', name, e.message); }
+    };
+    const radioOff = (name) => {
+      try {
+        const field = form.getField(name);
+        const acro  = field.acroField;
+        acro.dict.set(PDFLib.PDFName.of('V'), PDFLib.PDFName.of('Off'));
+        acro.getWidgets().forEach(w => {
+          try { w.dict.set(PDFLib.PDFName.of('AS'), PDFLib.PDFName.of('Off')); } catch(we) {}
+        });
+      } catch(e) { console.warn('radioOff:', name, e.message); }
+    };
+
+    // Tablas de conversión texto → valor PDF
+    const SN    = {'No':'2','Sí':'1'};   // /1=Sí, /2=No confirmado por prueba
+    const VINC  = {'Titular':'1','Avalista':'2'};
+    const DEST  = {'Compra de vivienda':'1','Construcción individual':'4','Remodelación de Vivienda':'3','Compra de cartera':'5','Leasing habitacional':'2'};
+    const PESUVR= {'Pesos':'1','UVR':'2'};
+    const ESTINM= {'Nuevo':'1','Usado':'2'};
+    const TINM  = {'Casa':'1','Apartamento':'2'};
+
+    // ── FECHA Y HORA actuales ──
+    const hoy = new Date();
+    const dia  = String(hoy.getDate()).padStart(2, '0');
+    const mes  = String(hoy.getMonth() + 1).padStart(2, '0');
+    const ano  = String(hoy.getFullYear());
+    const hora = hoy.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+    txt('Día', dia);  txt('Mes', mes);  txt('Año', ano);
+
+    // ── ENCABEZADO ──
+    txt('Texto1', 'FVE');
+    chk('Vinculación inicial', true);
+    radio('tipo de vinculo', VINC[val('tipoVinculo')]||'');
+
+    // ── DATOS PERSONALES ──
+    txt('Texto4',  val('nombres'));
+    txt('Texto5',  val('primerApellido'));
+    txt('Texto6',  val('segundoApellido'));
+    radio('genero', val('genero'));
+    txt('Día_2', val('diaNac'));
+    txt('Mes_2', val('mesNac'));
+    txt('Año_2', val('anoNac'));
+    txt('Texto7',  val('paisNac'));
+    txt('Texto8',  val('dptoNac'));
+    txt('Texto9',  val('ciudadNac'));
+    radio('tipo', val('tipoId'));
+    txt('Texto10', val('cualTipoId'));
+    txt('Texto11', val('numId'));
+    radio('grupo', val('grupoEtnico'));
+    radio('estado civil', val('estadoCivil'));
+    radio('nivel estudios', ESTUDIOS[val('nivelEstudios')]||'');
+    radio('tipo vivienda', val('tipoVivienda'));
+    txt('Cuál_2',  val('cualVivienda'));
+    txt('Texto22', fmt(val('valorVivienda')));
+    radio('pc', val('pcd'));
+    txt('Cuál',    val('cualPcd'));
+    txt('Texto13', val('tituloProfesional'));
+    txt('Texto14', val('correo'));
+    txt('Texto15', val('direccion'));
+    txt('Texto16', val('paisRes'));
+    txt('Texto17', val('dptoRes'));
+    txt('Texto18', val('ciudadRes'));
+    txt('Texto19', val('estrato'));
+    txt('Texto20', val('personasCargo'));
+    txt('Texto21', val('antiguedadCiudad'));
+    txt('Texto25', val('telefonoCelular'));
+    txt('Texto26', val('nacionalidad'));
+
+    // Fijos de datos personales
+    radio('correspondencia', '3');   // Correo electrónico
+    radio('banco', '3');              // Correo electrónico
+    txt('Texto30', 'Colombia');       // País obligación fiscal 1
+    txt('Texto34', val('numId'));     // N° identificación fiscal 1
+
+    // ── CÓNYUGE (condicional) ──
+    const estadoCivil = val('estadoCivil');
+    if (estadoCivil === '2' || estadoCivil === '6') {
+      txt('Texto38', val('conyNombres'));
+      txt('Texto39', val('conyApellido1'));
+      txt('Texto40', val('conyApellido2'));
+      radio('identificacion', val('conyTipoId'));
+      txt('Cuál_4', val('cualConyuge'));
+      txt('Texto41', val('conyNumId'));
+    }
+
+    // ── ACTIVIDAD ECONÓMICA ──
+    radio('economica', LABORAL[val('situacionLaboral')]||'');
+    txt('Cuál_5',  val('cualLaboral'));
+    txt('Texto48', val('nombreEmpresa'));
+    txt('Texto49', val('cargo'));
+    txt('Texto52', val('actividadEmpresa'));
+    radio('empresa', SN[val('esSocio')]||'');
+    txt('dia3',  val('diaIngreso'));
+    txt('mes3',  val('mesIngreso'));
+    txt('Año_3', val('anoIngreso'));
+
+    // PEP — campo 'pe' = ¿Es PEP? (Sí/No); campo 'Nacional' = ¿Nacional o Extranjero?
+    const pepSiNo = val('pepSiNo');
+    radio('pe', SN[pepSiNo]||'');
+    if (pepSiNo === 'Sí') {
+      radio('Nacional', {'Nacional':'1','Extranjero':'2'}[val('pepNacExt')]||'');
+    } else {
+      radioOff('Nacional');
+    }
+    radio('pep',      SN[val('asociadoPep')]||'');    // ¿Está asociado a un PEP?
+    radio('familiar', SN[val('familiarPep')]||'');     // ¿Familiar de PEP?
+    radio('Sí_2',     SN[val('campanaPolitica')]||''); // ¿Campaña política?
+    radio('cuentas',  SN[val('cuentaExtranjera')]||'');
+
+    // Fijos actividad — tiene: Widget[0]=/1=Sí, Widget[1]=/2=No → enviar '2' para No
+    radio('tiene', '2');
+
+    // ── INFORMACIÓN FINANCIERA ──
+    txt('undefined_4', fmt(val('ingresos')));
+    txt('undefined_5', fmt(val('otrosIngresos')));
+    txt('undefined_6', fmt(val('totalIngresos')));
+    txt('undefined_7', fmt(val('canonArriendo')));
+    txt('undefined_8', fmt(val('totalEgresos')));
+    txt('undefined_9', fmt(val('totalPasivos')));
+    txt('Valor de sus bienes', fmt(val('totalActivos')));
+    txt('Texto63', fmt(val('ventasAnuales')));
+    txt('Texto64', val('descripcionOtrosIngresos'));
+    txt('Texto65', val('procedenciaRecursos'));
+    radio('declara', SN[val('declaraRenta')]||'');
+    // Patrimonios / fideicomisos — campo "FIDUCIA": Widget[0]=Sí (x=210.3), Widget[1]=No (x=232.1)
+    try {
+      const patVal = val('tienePatrimonios');
+      const BLACKp = PDFLib.rgb(0, 0, 0);
+      const pPat = pdfDoc.getPage(0);
+      const fXp = fuenteBold || fuenteBase;
+      if (patVal === 'Si') pPat.drawText('X', { x: 210.5, y: 115.5, size: 6, font: fXp, color: BLACKp });
+      if (patVal === 'No') pPat.drawText('X', { x: 232.3, y: 115.5, size: 6, font: fXp, color: BLACKp });
+    } catch(e) { console.warn('patrimonios:', e.message); }
+
+    // ── OPERACIONES INTERNACIONALES ──
+    radio('moneda', SN[val('opMoneda')]||'');
+    radio('posee',  SN[val('poseeMoneda')]||'');
+    if (val('opMoneda') === 'Sí' || val('poseeMoneda') === 'Sí') {
+      txt('Texto69', val('monedaDet1'));
+      txt('Texto70', val('monedaDet2'));
+      txt('Texto71', val('monedaDet3'));
+      txt('Texto72', val('monedaDet4'));
+      txt('Texto73', val('monedaDet5'));
+      txt('Texto74', val('monedaDet6'));
+      txt('Texto75', val('monedaDet7'));
+    }
+
+    // ── REFERENCIAS ──
+    txt('Nombres y apellidos',  val('fam1nombre'));
+    txt('Parentesco',            val('fam1parentesco'));
+    txt('Ciudad',                val('fam1ciudad'));
+    txt('Teléfonos de contacto', val('fam1tel'));
+    txt('Nombres y apellidos1',  val('fam2nombre'));
+    txt('Parentesco1',           val('fam2parentesco'));
+    txt('Ciudad1',               val('fam2ciudad'));
+    txt('Teléfonos de contacto1',val('fam2tel'));
+    txt('Nombres y apellidos_2', val('per1nombre'));
+    txt('Relación',              val('per1relacion'));
+    txt('Ciudad_2',              val('per1ciudad'));
+    txt('Teléfonos de contacto_2', val('per1tel'));
+    txt('Nombres y apellidos_3', val('per2nombre'));
+    txt('Relación3',             val('per2relacion'));
+    txt('Ciudad_3',              val('per2ciudad'));
+    txt('Teléfonos de contacto_3', val('per2tel'));
+
+    // ── CRÉDITO SOLICITADO ──
+    txt('Texto76', fmt(val('monto')));
+    txt('Texto77', val('plazo'));
+    txt('Texto3',  val('subproducto'));
+    txt('Texto12', val('diaPago'));
+    radio('bbva',  SN[val('nominaBBVA')]||'');
+    radio('Pesos', PESUVR[val('pesosUvr')]||'');
+    radio('Nuevo', ESTINM[val('estadoInmueble')]||'');
+    radio('Casa',  TINM[val('tipoInmueble')]||'');
+    txt('Texto82', val('direccionInmueble'));
+    txt('Texto83', fmt(val('valorInmueble')));
+    radio('cuotas', '1');   // Siempre 12 cuotas = primera opción
+    radio('destino', DEST[val('destino')]||'');
+
+    // Línea de producto a contratar
+    const esLeasing = val('destino') === 'Leasing habitacional';
+    chk('Crédito de Vivienda', true);
+    chk('compra Leasing', esLeasing);
+
+    if (esLeasing) {
+      txt('Habitacional', val('porcentajeLeasing'));
+    }
+
+    // ── COMPRA DE CARTERA (condicional) ──
+    if (val('destino') === 'Compra de cartera') {
+      txt('Entidad financieraRow1', val('entidadCartera'));
+      txt('HipotecarioRow1',        'X');
+      txt('tarjetaRow1',            val('numCreditoCartera'));
+      txt('ValorRow1',              fmt(val('valorCartera')));
+      txt('PlazoValor',             val('plazoCartera'));
+    }
+
+    // ── SECCIONES FIJAS (14, 15, 16) ──
+    // BBVA Seguros — Seguro de Vida Vital
+    try { form.getCheckBox('Seguro de Vida Vital').check(); } catch(e) {}
+    // Canal comunicación — Cartas (no desea ser contactado por cartas)
+    try { form.getCheckBox('Casilla de verificación10').check(); } catch(e) {}
+    // Canal de pago — WhatsApp
+    try { form.getCheckBox('Casilla de verificación12').check(); } catch(e) {}
+
+    // Firma del solicitante — cédula del cliente
+    txt('Texto131',        val('numId'));
+
+    // ── ESPACIO EXCLUSIVO BBVA ──
+    const ciudadSel  = val('ciudad');
+    const dirIdx     = val('director');
+    const datosRad   = RADICADORES[ciudadSel];
+    let analista   = datosRad && dirIdx !== '' ? datosRad.directores[parseInt(dirIdx)].analista : null;
+    analista = resolverAnalistaPorCompra(val('ciudadCompra'), ciudadSel, analista);
+    let coordinador = datosRad ? datosRad.coordinador : null;
+    coordinador = resolverCoordinadorPorCompra(val('ciudadCompra'), ciudadSel, coordinador);
+
+    if (analista) {
+      txtFs('Código Nombre del funcionario', analista.nombre + ' ');
+      txt('Identificación', analista.cedula);
+      txt('Texto122', analista.codigo);
+    }
+    if (coordinador) {
+      txt('Nombre_3', coordinador.nombre);
+      txt('Identificación_4', coordinador.cedula);
+    }
+    txtFs('Nombre', 'HABICREDIT SAS ');
+    txt('Texto124',    ciudadSel);
+    txt('Texto125',    `${dia}/${mes}/${ano}`);
+    txt('Texto126',    hora);
+    txt('Texto127',    'HABICREDIT');
+    txt('Identificación_2',    '9010054701');
+    radio('Lugar', '2');   // Siempre Sede cliente (Widget[1]=/2)
+    radio('Resultado', '1');   // Siempre Satisfactorio (Widget[0]=/1)
+
+    // Regenerar apariencias solo de campos de texto (no afecta checkboxes)
+    try { if (fuenteBase) form.updateFieldAppearances(fuenteBase); } catch(e) {}
+
+    // Ciudad_3 tiene 2 widgets: Widget[0]=referencias (y≈540 — conservar), Widget[1]=BBVA valores (y≈286 — vaciar)
+    try {
+      const f3 = form.getTextField('Ciudad_3');
+      const ws3 = f3.acroField.getWidgets();
+      const bbvaW = ws3[1];
+      if (bbvaW) {
+        const rect = bbvaW.getRectangle();
+        const apStream = pdfDoc.context.stream('', {
+          Type: 'XObject', Subtype: 'Form',
+          BBox: pdfDoc.context.obj([0, 0, rect.width, rect.height]),
+        });
+        const apRef = pdfDoc.context.register(apStream);
+        const apDict = pdfDoc.context.obj({});
+        apDict.set(PDFLib.PDFName.of('N'), apRef);
+        bbvaW.dict.set(PDFLib.PDFName.of('AP'), apDict);
+      }
+    } catch(e) { console.warn('Ciudad_3 BBVA:', e.message); }
+
+    // Forzar visibilidad de campos que no muestran su apariencia (stream manual, fuente auto-ajustada)
+    const forceVisible1 = (name, value, fontRef) => {
+      try {
+        const raw  = String(value || '');
+        const text = raw.replace(/[()\\]/g, c => '\\' + c);
+        form.getTextField(name).acroField.getWidgets().forEach(w => {
+          const { width, height } = w.getRectangle();
+          // Ajustar tamaño: ~0.5 pts de ancho por char por pt de fuente; mínimo 5, máximo 8
+          const sz = raw.length > 0 ? Math.min(8, Math.max(5, Math.floor((width - 4) / (raw.length * 0.5)))) : 8;
+          const ap = pdfDoc.context.stream(
+            `q 1 1 1 rg 0 0 ${width.toFixed(2)} ${height.toFixed(2)} re f Q q BT /Helv ${sz} Tf 0 g 2 2 Td (${text}) Tj ET Q`,
+            { Type: 'XObject', Subtype: 'Form', BBox: pdfDoc.context.obj([0, 0, width, height]),
+              Resources: pdfDoc.context.obj({ Font: { Helv: fontRef } }) }
+          );
+          const apRef = pdfDoc.context.register(ap);
+          const apDict = pdfDoc.context.obj({});
+          apDict.set(PDFLib.PDFName.of('N'), apRef);
+          w.dict.set(PDFLib.PDFName.of('AP'), apDict);
+        });
+      } catch(e) { console.warn('forceVisible:', name, e.message); }
+    };
+    if (fuenteBase) {
+      forceVisible1('Código Nombre del funcionario', analista ? analista.nombre : '', fuenteBase.ref);
+      forceVisible1('Nombre', 'HABICREDIT SAS', fuenteBase.ref);
+      forceVisible1('Texto8', val('dptoNac').toLowerCase(), fuenteBase.ref);
+    }
+
+    // 4. Guardar PDF (editable — sin flatten)
+    const pdfBytes = await pdfDoc.save();
+
+    // 5. Descargar
+    const nombreCliente = [val('nombres'), val('primerApellido')].join('_').replace(/\s+/g, '_') || 'cliente';
+    const nombreArchivo = `Vinculacion_${nombreCliente}_${ano}${mes}${dia}.pdf`;
+    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url;  a.download = nombreArchivo;  a.click();
+    URL.revokeObjectURL(url);
+
+  } catch (err) {
+    alert('Error al generar el PDF:\n' + err.message);
+    console.error(err);
+  } finally {
+    document.getElementById('spinner').style.display = 'none';
+  }
+}
+
+// ════════════════════════════════════════════════════════
+// NÓMINA — tasa UVR (se activa cuando cambia pesosUvr)
+// ════════════════════════════════════════════════════════
+function actualizarTasaUVR() {
+  const esUVR = document.getElementById('pesosUvr').value === 'UVR';
+  mostrar('divNTasaConNominaUVR', esUVR);
+  mostrar('divNTasaConNomina', !esUVR);
+  const nota = document.getElementById('notaTasaSin');
+  if (nota) nota.textContent = esUVR
+    ? 'Ingrese la tasa sin nómina. Resultado: «X,XX %»'
+    : 'Resultado: «X,XX %» — debe ser MAYOR que la tasa con nómina';
+}
+
+// ════════════════════════════════════════════════════════
+// GENERACIÓN CONJUNTA — Vinculación + Nómina
+// ════════════════════════════════════════════════════════
+async function generarTodos() {
+  if (!validarObligatorios()) { alert('Por favor completa todos los campos obligatorios (*) antes de generar.'); return; }
+  const genVin = document.getElementById('chkVinculacion').checked;
+  const genNom = document.getElementById('chkNomina').checked;
+  const genCon = document.getElementById('chkConocimiento').checked;
+  if (!genVin && !genNom && !genCon) { alert('Selecciona al menos un formato para descargar.'); return; }
+  document.getElementById('spinner').style.display = 'block';
+  try {
+    const hoy = new Date();
+    const dia  = String(hoy.getDate()).padStart(2, '0');
+    const mes  = String(hoy.getMonth() + 1).padStart(2, '0');
+    const ano  = String(hoy.getFullYear());
+    const hora = hoy.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+
+    // ──────────────────────────────
+    // 1. PDF VINCULACIÓN
+    // ──────────────────────────────
+    if (genVin) {
+    const base64V = await new Promise((resolve, reject) => {
+      google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).getPlantilla();
+    });
+    {
+      const bStr = atob(base64V);
+      const bytes = new Uint8Array(bStr.length);
+      for (let i = 0; i < bStr.length; i++) bytes[i] = bStr.charCodeAt(i);
+      const pdfDoc = await PDFLib.PDFDocument.load(bytes.buffer);
+      const form = pdfDoc.getForm();
+      let fb, fbBold;
+      try { fb = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica); fbBold = await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold); } catch(e) {}
+
+      const txt = (n, v) => { try { form.getTextField(n).setText(String(v||'')); } catch(e) { console.warn('txt:',n,e.message); } };
+      const txtFs = (n, v, size = 8) => { try { const f = form.getTextField(n); f.setFontSize(size); f.setText(String(v||'')); } catch(e) { console.warn('txtFs:',n,e.message); } };
+      const radio = (name, value) => {
+        if (!value && value !== 0) return;
+        const sv = String(value);
+        try {
+          const f = form.getField(name), ac = f.acroField;
+          ac.dict.set(PDFLib.PDFName.of('V'), PDFLib.PDFName.of(sv));
+          ac.getWidgets().forEach(w => {
+            try { const on = w.getOnValue(); w.dict.set(PDFLib.PDFName.of('AS'), PDFLib.PDFName.of(on?.toString()==='/'+sv?sv:'Off')); } catch(e){}
+          });
+        } catch(e) { console.warn('radio:',name,'->',value,e.message); }
+      };
+      const chk = (n, m) => { try { m ? form.getCheckBox(n).check() : form.getCheckBox(n).uncheck(); } catch(e){} };
+      const radioOff = (n) => {
+        try { const f=form.getField(n),ac=f.acroField; ac.dict.set(PDFLib.PDFName.of('V'),PDFLib.PDFName.of('Off')); ac.getWidgets().forEach(w=>{try{w.dict.set(PDFLib.PDFName.of('AS'),PDFLib.PDFName.of('Off'));}catch(e){}});} catch(e){}
+      };
+      const SN={'No':'2','Sí':'1'}, VINC={'Titular':'1','Avalista':'2'};
+      const DEST={'Compra de vivienda':'1','Construcción individual':'4','Remodelación de Vivienda':'3','Compra de cartera':'5','Leasing habitacional':'2'};
+      const PESUVR={'Pesos':'1','UVR':'2'}, ESTINM={'Nuevo':'1','Usado':'2'}, TINM={'Casa':'1','Apartamento':'2'};
+
+      txt('Día',dia); txt('Mes',mes); txt('Año',ano);
+      txt('Texto1','FVE'); chk('Vinculación inicial',true); radio('tipo de vinculo',VINC[val('tipoVinculo')]||'');
+      txt('Texto4',val('nombres')); txt('Texto5',val('primerApellido')); txt('Texto6',val('segundoApellido'));
+      radio('genero',val('genero')); txt('Día_2',val('diaNac')); txt('Mes_2',val('mesNac')); txt('Año_2',val('anoNac'));
+      txt('Texto7',val('paisNac')); txt('Texto8',val('dptoNac')); txt('Texto9',val('ciudadNac'));
+      radio('tipo',val('tipoId')); txt('Texto10',val('cualTipoId')); txt('Texto11',val('numId'));
+      radio('grupo',val('grupoEtnico')); radio('estado civil',val('estadoCivil')); radio('nivel estudios',ESTUDIOS[val('nivelEstudios')]||'');
+      radio('tipo vivienda',val('tipoVivienda')); txt('Cuál_2',val('cualVivienda')); txt('Texto22',val('valorVivienda'));
+      radio('pc',val('pcd')); txt('Cuál',val('cualPcd')); txt('Texto13',val('tituloProfesional')); txt('Texto14',val('correo'));
+      txt('Texto15',val('direccion')); txt('Texto16',val('paisRes')); txt('Texto17',val('dptoRes')); txt('Texto18',val('ciudadRes'));
+      txt('Texto19',val('estrato')); txt('Texto20',val('personasCargo')); txt('Texto21',val('antiguedadCiudad'));
+      txt('Texto25',val('telefonoCelular')); txt('Texto26',val('nacionalidad'));
+      radio('correspondencia','3'); radio('banco','3'); txt('Texto30','Colombia'); txt('Texto34',val('numId'));
+
+      const ec = val('estadoCivil');
+      if (ec==='2'||ec==='6') {
+        txt('Texto38',val('conyNombres')); txt('Texto39',val('conyApellido1')); txt('Texto40',val('conyApellido2'));
+        radio('identificacion',val('conyTipoId')); txt('Cuál_4',val('cualConyuge')); txt('Texto41',val('conyNumId'));
+      }
+
+      radio('economica',LABORAL[val('situacionLaboral')]||''); txt('Cuál_5',val('cualLaboral'));
+      txt('Texto48',val('nombreEmpresa')); txt('Texto49',val('cargo')); txt('Texto52',val('actividadEmpresa'));
+      radio('empresa',SN[val('esSocio')]||''); txt('dia3',val('diaIngreso')); txt('mes3',val('mesIngreso')); txt('Año_3',val('anoIngreso'));
+
+      const pep = val('pepSiNo');
+      radio('pe',SN[pep]||'');
+      if (pep==='Sí') { radio('Nacional',{'Nacional':'1','Extranjero':'2'}[val('pepNacExt')]||''); } else { radioOff('Nacional'); }
+      radio('pep',SN[val('asociadoPep')]||''); radio('familiar',SN[val('familiarPep')]||'');
+      radio('Sí_2',SN[val('campanaPolitica')]||''); radio('cuentas',SN[val('cuentaExtranjera')]||'');
+      radio('tiene','2');
+
+      txt('undefined_4',fmt(val('ingresos'))); txt('undefined_5',fmt(val('otrosIngresos')));
+      txt('undefined_6',fmt(val('totalIngresos'))); txt('undefined_7',fmt(val('canonArriendo')));
+      txt('undefined_8',fmt(val('totalEgresos'))); txt('undefined_9',fmt(val('totalPasivos')));
+      txt('Valor de sus bienes',fmt(val('totalActivos'))); txt('Texto63',fmt(val('ventasAnuales')));
+      txt('Texto64',val('descripcionOtrosIngresos')); txt('Texto65',val('procedenciaRecursos'));
+      radio('declara',SN[val('declaraRenta')]||'');
+      // Patrimonios / fideicomisos — campo "FIDUCIA": Widget[0]=Sí (x=210.3), Widget[1]=No (x=232.1)
+      try {
+        const patVal = val('tienePatrimonios');
+        const BLACK2 = PDFLib.rgb(0, 0, 0);
+        const pPat = pdfDoc.getPage(0);
+        const fXb = fbBold || fb;
+        if (patVal === 'Si') pPat.drawText('X', { x: 210.5, y: 115.5, size: 6, font: fXb, color: BLACK2 });
+        if (patVal === 'No') pPat.drawText('X', { x: 232.3, y: 115.5, size: 6, font: fXb, color: BLACK2 });
+      } catch(e) { console.warn('patrimonios:', e.message); }
+
+      radio('moneda',SN[val('opMoneda')]||''); radio('posee',SN[val('poseeMoneda')]||'');
+      if (val('opMoneda')==='Sí'||val('poseeMoneda')==='Sí') {
+        txt('Texto69',val('monedaDet1')); txt('Texto70',val('monedaDet2')); txt('Texto71',val('monedaDet3'));
+        txt('Texto72',val('monedaDet4')); txt('Texto73',val('monedaDet5')); txt('Texto74',val('monedaDet6')); txt('Texto75',val('monedaDet7'));
+      }
+
+      txt('Nombres y apellidos',val('fam1nombre')); txt('Parentesco',val('fam1parentesco')); txt('Ciudad',val('fam1ciudad')); txt('Teléfonos de contacto',val('fam1tel'));
+      txt('Nombres y apellidos1',val('fam2nombre')); txt('Parentesco1',val('fam2parentesco')); txt('Ciudad1',val('fam2ciudad')); txt('Teléfonos de contacto1',val('fam2tel'));
+      txt('Nombres y apellidos_2',val('per1nombre')); txt('Relación',val('per1relacion')); txt('Ciudad_2',val('per1ciudad')); txt('Teléfonos de contacto_2',val('per1tel'));
+      txt('Nombres y apellidos_3',val('per2nombre')); txt('Relación3',val('per2relacion')); txt('Ciudad_3',val('per2ciudad')); txt('Teléfonos de contacto_3',val('per2tel'));
+
+      txt('Texto76',fmt(val('monto'))); txt('Texto77',val('plazo')); txt('Texto3',val('subproducto')); txt('Texto12',val('diaPago'));
+      radio('bbva',SN[val('nominaBBVA')]||''); radio('Pesos',PESUVR[val('pesosUvr')]||'');
+      radio('Nuevo',ESTINM[val('estadoInmueble')]||''); radio('Casa',TINM[val('tipoInmueble')]||'');
+      txt('Texto82',val('direccionInmueble')); txt('Texto83',fmt(val('valorInmueble')));
+      radio('cuotas','1'); radio('destino',DEST[val('destino')]||'');
+
+      const esLeasing = val('destino')==='Leasing habitacional';
+      chk('Crédito de Vivienda',true); chk('compra Leasing',esLeasing);
+      if (esLeasing) txt('Habitacional',val('porcentajeLeasing'));
+
+      if (val('destino')==='Compra de cartera') {
+        txt('Entidad financieraRow1',val('entidadCartera')); txt('HipotecarioRow1','X');
+        txt('tarjetaRow1',val('numCreditoCartera')); txt('ValorRow1',fmt(val('valorCartera'))); txt('PlazoValor',val('plazoCartera'));
+      }
+
+      try { form.getCheckBox('Seguro de Vida Vital').check(); } catch(e) {}
+      try { form.getCheckBox('Casilla de verificación10').check(); } catch(e) {}
+      try { form.getCheckBox('Casilla de verificación12').check(); } catch(e) {}
+      txt('Texto131',val('numId'));
+
+      const ciudadSel=val('ciudad'), dirIdx=val('director'), datosRad=RADICADORES[ciudadSel];
+      let analista=datosRad&&dirIdx!==''?datosRad.directores[parseInt(dirIdx)].analista:null;
+      analista = resolverAnalistaPorCompra(val('ciudadCompra'), ciudadSel, analista);
+      let coordinador=datosRad?datosRad.coordinador:null;
+      coordinador = resolverCoordinadorPorCompra(val('ciudadCompra'), ciudadSel, coordinador);
+      if (analista) { txtFs('Código Nombre del funcionario',analista.nombre + ' '); txt('Identificación',analista.cedula); txt('Texto122',analista.codigo); }
+      if (coordinador) { txt('Nombre_3',coordinador.nombre); txt('Identificación_4',coordinador.cedula); }
+      txtFs('Nombre','HABICREDIT SAS '); txt('Texto124',ciudadSel); txt('Texto125',`${dia}/${mes}/${ano}`);
+      txt('Texto126',hora); txt('Texto127','HABICREDIT'); txt('Identificación_2','9010054701');
+      radio('Lugar','2'); radio('Resultado','1');
+
+      try { if (fb) form.updateFieldAppearances(fb); } catch(e) {}
+
+      // Ciudad_3 tiene 2 widgets: Widget[0]=referencias (y≈540 — conservar), Widget[1]=BBVA valores (y≈286 — vaciar)
+      try {
+        const f3 = form.getTextField('Ciudad_3');
+        const ws3 = f3.acroField.getWidgets();
+        const bbvaW = ws3[1];
+        if (bbvaW) {
+          const rect = bbvaW.getRectangle();
+          const apStream = pdfDoc.context.stream('', {
+            Type: 'XObject', Subtype: 'Form',
+            BBox: pdfDoc.context.obj([0, 0, rect.width, rect.height]),
+          });
+          const apRef = pdfDoc.context.register(apStream);
+          const apDict = pdfDoc.context.obj({});
+          apDict.set(PDFLib.PDFName.of('N'), apRef);
+          bbvaW.dict.set(PDFLib.PDFName.of('AP'), apDict);
+        }
+      } catch(e) { console.warn('Ciudad_3 BBVA:', e.message); }
+
+      // Forzar visibilidad de campos que no muestran su apariencia (stream manual, fuente auto-ajustada)
+      const forceVisibleV = (name, value, fontRef) => {
+        try {
+          const raw  = String(value || '');
+          const text = raw.replace(/[()\\]/g, c => '\\' + c);
+          form.getTextField(name).acroField.getWidgets().forEach(w => {
+            const { width, height } = w.getRectangle();
+            const sz = raw.length > 0 ? Math.min(8, Math.max(5, Math.floor((width - 4) / (raw.length * 0.5)))) : 8;
+            const ap = pdfDoc.context.stream(
+              `q 1 1 1 rg 0 0 ${width.toFixed(2)} ${height.toFixed(2)} re f Q q BT /Helv ${sz} Tf 0 g 2 2 Td (${text}) Tj ET Q`,
+              { Type: 'XObject', Subtype: 'Form', BBox: pdfDoc.context.obj([0, 0, width, height]),
+                Resources: pdfDoc.context.obj({ Font: { Helv: fontRef } }) }
+            );
+            const apRef = pdfDoc.context.register(ap);
+            const apDict = pdfDoc.context.obj({});
+            apDict.set(PDFLib.PDFName.of('N'), apRef);
+            w.dict.set(PDFLib.PDFName.of('AP'), apDict);
+          });
+        } catch(e) { console.warn('forceVisible:', name, e.message); }
+      };
+      if (fb) {
+        forceVisibleV('Código Nombre del funcionario', analista ? analista.nombre : '', fb.ref);
+        forceVisibleV('Nombre', 'HABICREDIT SAS', fb.ref);
+        forceVisibleV('Texto8', val('dptoNac').toLowerCase(), fb.ref);
+      }
+
+      const pdfBytesV = await pdfDoc.save();
+      const nc = [val('nombres'),val('primerApellido')].join('_').replace(/\s+/g,'_')||'cliente';
+      const blobV = new Blob([pdfBytesV],{type:'application/pdf'});
+      const urlV = URL.createObjectURL(blobV);
+      const aV = document.createElement('a');
+      aV.href=urlV; aV.download=`Vinculacion_${nc}_${ano}${mes}${dia}.pdf`; aV.click();
+      URL.revokeObjectURL(urlV);
+    }
+    } // fin if (genVin)
+
+    if (genNom || genCon) await new Promise(r => setTimeout(r, 500));
+
+    // ──────────────────────────────
+    // 2. PDF NÓMINA
+    // ──────────────────────────────
+    if (genNom) {
+    const base64N = await new Promise((resolve, reject) => {
+      google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).getPlantillaNomina();
+    });
+    {
+      const bStr = atob(base64N);
+      const bytes = new Uint8Array(bStr.length);
+      for (let i = 0; i < bStr.length; i++) bytes[i] = bStr.charCodeAt(i);
+      const pdfDoc = await PDFLib.PDFDocument.load(bytes.buffer);
+      const form = pdfDoc.getForm();
+      let fb;
+      try { fb = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica); } catch(e) {}
+
+      const txtN = (n, v) => { try { form.getTextField(n).setText(String(v||'')); } catch(e) { console.warn('txtN:',n,e.message); } };
+      // txtNFit: reduce el tamaño de fuente si el texto es más largo que maxLen caracteres
+      const txtNFit = (n, v, maxLen = 22) => {
+        try {
+          const text = String(v || '');
+          const f = form.getTextField(n);
+          if (text.length > maxLen) f.setFontSize(Math.max(5, Math.floor(8 * maxLen / text.length)));
+          f.setText(text);
+        } catch(e) { console.warn('txtNFit:', n, e.message); }
+      };
+
+      const esUVR = val('pesosUvr') === 'UVR';
+      const plazoN = val('plazo') ? `${val('plazo')}meses` : '';
+      const tasaCon = esUVR ? '3,40%' : (val('nTasaConNomina') ? `${val('nTasaConNomina')}%` : '');
+      const tasaSin = val('nTasaSinNomina') ? `${val('nTasaSinNomina')}%` : '';
+
+      txtN('Texto1',  fmt(val('monto')));
+      txtN('Texto2',  fmt(val('nAhorro')));
+      txtNFit('Texto4',  tasaCon, 12);
+      txtNFit('Texto10', tasaSin, 12);
+      txtNFit('Texto9',  plazoN,  12);
+      txtNFit('Texto11', plazoN,  12);
+
+      const est = val('nEstadoNomina');
+      txtN('Texto12', est==='toma'  ? 'X' : '');
+      txtN('Texto13', est==='no'    ? 'X' : '');
+      txtN('Texto14', est==='tiene' ? 'X' : '');
+
+      txtN('Texto15', val('brokerNombre'));
+      txtN('Texto16', val('nBrokerCelular'));
+      txtNFit('Texto17', (val('nBrokerCorreo') || '').toLowerCase(), 25);
+      // Texto18: en blanco — firma física del cliente
+
+      try { if (fb) form.updateFieldAppearances(fb); } catch(e) {}
+      const pdfBytesN = await pdfDoc.save();
+      const blobN = new Blob([pdfBytesN],{type:'application/pdf'});
+      const urlN = URL.createObjectURL(blobN);
+      const aN = document.createElement('a');
+      aN.href=urlN; aN.download=`Nomina_${ano}${mes}${dia}.pdf`; aN.click();
+      URL.revokeObjectURL(urlN);
+    }
+    } // fin if (genNom)
+
+    if (genCon) await new Promise(r => setTimeout(r, 500));
+
+    // ──────────────────────────────
+    // 3. PDF CONOCIMIENTO DE CLIENTE
+    // ──────────────────────────────
+    if (genCon) {
+    const base64C = await new Promise((resolve, reject) => {
+      google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).getPlantillaConocimiento();
+    });
+    {
+      const bStr = atob(base64C);
+      const bytes = new Uint8Array(bStr.length);
+      for (let i = 0; i < bStr.length; i++) bytes[i] = bStr.charCodeAt(i);
+      const pdfDoc = await PDFLib.PDFDocument.load(bytes.buffer);
+      const font = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+      const BLACK = PDFLib.rgb(0, 0, 0);
+
+      const fontB = await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
+      const d = (page, text, x, y, sz, bold) => {
+        page.drawText(String(text || ''), { x, y, size: sz || 8, font: bold ? fontB : font, color: BLACK });
+      };
+
+      const ciudadSel   = val('ciudad');
+      const dirIdx      = val('director');
+      const datosRad    = RADICADORES[ciudadSel];
+      let coordinador = datosRad ? datosRad.coordinador : null;
+      coordinador = resolverCoordinadorPorCompra(val('ciudadCompra'), ciudadSel, coordinador);
+      let analista    = datosRad && dirIdx !== '' ? datosRad.directores[parseInt(dirIdx)].analista : null;
+      analista = resolverAnalistaPorCompra(val('ciudadCompra'), ciudadSel, analista);
+      const nombreCliente = [val('nombres'), val('primerApellido'), val('segundoApellido')].filter(Boolean).join(' ');
+      const hoyStr = `${dia}/${mes}/${ano}`;
+
+      // ── PÁGINA 1 — coordenadas confirmadas ──
+      const p1c = pdfDoc.getPage(0);
+      d(p1c, hoyStr,                                  137.5, 639.4);
+      d(p1c, 'HABICREDIT',                            139.4, 621.8);
+      d(p1c, '9010054701',                            116.5, 599.5);
+      d(p1c, ciudadSel,                               396.7, 600.8);
+      d(p1c, nombreCliente,                           137.5, 526.9);
+      d(p1c, val('numId'),                            391.4, 526.9);
+      d(p1c, coordinador ? coordinador.nombre : '',   218.0, 505.9);
+      d(p1c, val('ciudadRes'),                        392.1, 505.9);
+      d(p1c, 'X', 157.1, 339.7, 10, true);            // Sí validación identidad
+
+      // ── PÁGINA 2 — coordenadas confirmadas ──
+      const p2c = pdfDoc.getPage(1);
+      d(p2c, 'FAVORABLE', 71.3, 658.4, 9, true);      // conclusiones visita
+      d(p2c, 'X', 386.2, 377.0, 10, true);            // NO proyecto financiado banco
+
+      const visVal = val('cVisNoVis');
+      if (visVal === 'VIS')    d(p2c, 'X', 158.4, 298.4, 10, true);
+      if (visVal === 'NO_VIS') d(p2c, 'X', 379.0, 295.2, 10, true);
+
+      d(p2c, val('ciudadCompra'), 230.4, 471.9);       // Ciudad o municipio de compra
+
+      const tipoCoords = {
+        'hipotecario':        [157.7, 211.4],
+        'leasing_familiar':   [346.3, 210.1],
+        'leasing_no_familiar':[243.5, 170.8],
+      };
+      const tipoC = val('cTipoCredito');
+      if (tipoC && tipoCoords[tipoC]) {
+        const [tx, ty] = tipoCoords[tipoC];
+        d(p2c, 'X', tx, ty, 10, true);
+      }
+
+      // ── PÁGINA 3 — coordenadas confirmadas ──
+      const p3c = pdfDoc.getPage(2);
+
+      const lineaCoords = {
+        'tradicional':    [158.4, 678.1],
+        'remodelacion':   [157.7, 654.5],
+        'const_individual':[350.8, 678.1],
+        'cesion':         [350.8, 655.8],
+      };
+      const lineaC = val('cLineaCredito');
+      if (lineaC && lineaCoords[lineaC]) {
+        const [lx, ly] = lineaCoords[lineaC];
+        d(p3c, 'X', lx, ly, 10, true);
+      }
+
+      // Firmas — coordenadas confirmadas
+      const brokerN  = val('brokerNombre');
+      const brokerC  = val('brokerCedula');
+      const analistaN = analista ? analista.nombre : '';
+      const analistaC = analista ? analista.cedula : '';
+      const clienteN  = nombreCliente;
+      const clienteC  = val('numId');
+
+      d(p3c, brokerN,   91.0, 502.0, 8, true);   // broker sobre línea
+      d(p3c, brokerN,  132.2, 464.0);             // broker nombre campo
+      d(p3c, brokerC,  128.9, 445.7);             // broker cédula
+      d(p3c, analistaN, 75.9, 348.8, 8, true);   // analista sobre línea
+      d(p3c, analistaN,125.0, 319.4);             // analista nombre campo
+      d(p3c, analistaC,130.3, 304.3);             // analista cédula
+      d(p3c, clienteN, 367.9, 469.9, 8, true);   // cliente nombre
+      d(p3c, clienteC, 365.9, 450.9);             // cliente cédula
+
+      const pdfBytesC = await pdfDoc.save();
+      const blobC = new Blob([pdfBytesC], { type: 'application/pdf' });
+      const urlC  = URL.createObjectURL(blobC);
+      const aC    = document.createElement('a');
+      aC.href = urlC; aC.download = `ConocimientoCliente_${ano}${mes}${dia}.pdf`; aC.click();
+      URL.revokeObjectURL(urlC);
+    }
+    } // fin if (genCon)
+
+    // ── REGISTRO DE USO ──
+    try {
+      const ciudadSelReg = val('ciudad');
+      const dirIdxReg    = val('director');
+      const datosRadReg  = RADICADORES[ciudadSelReg];
+      const directorNombre = datosRadReg && dirIdxReg !== '' ? datosRadReg.directores[parseInt(dirIdxReg)].nombre : ciudadSelReg;
+      const formatosGen    = [genVin?'Vinculación':'', genNom?'Nómina':'', genCon?'Conocimiento de Cliente':''].filter(Boolean).join(', ');
+      await new Promise((res, rej) => {
+        google.script.run
+          .withSuccessHandler(res)
+          .withFailureHandler(rej)
+          .registrarUso({
+            fecha:        `${dia}/${mes}/${ano} ${hora}`,
+            director:     directorNombre,
+            brokerNombre: val('brokerNombre'),
+            brokerCedula: val('brokerCedula'),
+            brokerCorreo: val('nBrokerCorreo'),
+            formatos:     formatosGen
+          });
+      });
+    } catch(regErr) { console.warn('registrarUso:', regErr.message); }
+
+  } catch(err) {
+    alert('Error al generar los formatos BBVA:\n' + err.message);
+    console.error(err);
+  } finally {
+    document.getElementById('spinner').style.display = 'none';
+  }
+}
+</script>
+</body>
+</html>

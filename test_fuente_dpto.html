@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Test fuente departamento</title>
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #f0f4f8; }
+    iframe { width: 100%; height: 600px; border: 1px solid #ccc; border-radius: 8px; margin-top: 16px; }
+    #estado { color: #555; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <h3>Test fuente — campo departamento</h3>
+  <p id="estado">Generando PDF...</p>
+  <iframe id="visor"></iframe>
+  <script>
+    (async () => {
+      try {
+        const { PDFDocument, StandardFonts, rgb } = PDFLib;
+
+        const pdfDoc = await PDFDocument.create();
+        const page   = pdfDoc.addPage([595, 220]);
+
+        const fontH  = await pdfDoc.embedFont(StandardFonts.Helvetica);
+        const fontT  = await pdfDoc.embedFont(StandardFonts.TimesRoman);
+
+        const BLACK = rgb(0, 0, 0);
+        const GRAY  = rgb(0.85, 0.85, 0.85);
+
+        const dptos = ['NORTE DE SANTANDER', 'CUNDINAMARCA', 'BOGOTÁ D.C.', 'ATLÁNTICO'];
+
+        const fieldW = 130;
+        const fieldH = 14;
+
+        let yBase = 190;
+
+        // Encabezados columnas
+        page.drawText('ACTUAL (Helvetica)', { x: 50, y: yBase, size: 8, font: fontH, color: BLACK });
+        page.drawText('NUEVA (Times Roman)', { x: 220, y: yBase, size: 8, font: fontH, color: BLACK });
+        yBase -= 14;
+
+        for (const dpto of dptos) {
+          page.drawRectangle({ x: 50,  y: yBase, width: fieldW, height: fieldH, color: GRAY });
+          page.drawRectangle({ x: 220, y: yBase, width: fieldW, height: fieldH, color: GRAY });
+
+          const szH = Math.min(8, Math.max(5, Math.floor((fieldW - 4) / (dpto.length * 0.5))));
+          const szT = Math.min(8, Math.max(5, Math.floor((fieldW - 4) / (dpto.length * 0.6))));
+
+          page.drawText(dpto, { x: 52,  y: yBase + 3, size: szH, font: fontH, color: BLACK });
+          page.drawText(dpto, { x: 222, y: yBase + 3, size: szT, font: fontT, color: BLACK });
+
+          yBase -= 36;
+        }
+
+        const bytes = await pdfDoc.save();
+        const blob  = new Blob([bytes], { type: 'application/pdf' });
+        const url   = URL.createObjectURL(blob);
+        document.getElementById('visor').src = url;
+        document.getElementById('estado').textContent = 'PDF generado. Izquierda = Helvetica (actual) | Derecha = Times Roman (nueva)';
+      } catch(e) {
+        document.getElementById('estado').textContent = 'Error: ' + e.message;
+      }
+    })();
+  </script>
+</body>
+</html>
