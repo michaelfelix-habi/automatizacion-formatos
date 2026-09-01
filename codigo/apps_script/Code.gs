@@ -10,9 +10,12 @@ function doGet(e) {
 }
 
 // IDs de los PDFs plantilla en Google Drive
-const FILE_ID_VINCULACION  = '1fEK_DdjoPGc8qIeLibXBCvilN7sAPL6G';
-const FILE_ID_NOMINA       = '1UkZniPngtIKZjOrYBnYYEx4sQjEP8aJ4';
-const FILE_ID_CONOCIMIENTO = '1_N1py3FX-CtzN_gVdFhPOuItbYJ_90z6';
+const FILE_ID_VINCULACION   = '1fEK_DdjoPGc8qIeLibXBCvilN7sAPL6G';
+const FILE_ID_NOMINA        = '1UkZniPngtIKZjOrYBnYYEx4sQjEP8aJ4';
+const FILE_ID_CONOCIMIENTO  = '1_N1py3FX-CtzN_gVdFhPOuItbYJ_90z6';
+// COLEX
+const FILE_ID_CUOTA_INICIAL = '1AehZNAPRtPLUVBn2TFH-l0C_MtKIScKd';
+const FILE_ID_CREACION      = '1pBTc9OnJfeGhNktXwyRke1FIfbiLT7BF';
 
 function getPlantilla() {
   try {
@@ -35,6 +38,22 @@ function getPlantillaConocimiento() {
     return Utilities.base64Encode(DriveApp.getFileById(FILE_ID_CONOCIMIENTO).getBlob().getBytes());
   } catch (e) {
     throw new Error('No se pudo acceder al PDF Conocimiento de Cliente. Error: ' + e.message);
+  }
+}
+
+function getPlantillaCuotaInicial() {
+  try {
+    return Utilities.base64Encode(DriveApp.getFileById(FILE_ID_CUOTA_INICIAL).getBlob().getBytes());
+  } catch (e) {
+    throw new Error('No se pudo acceder al PDF Cuota Inicial COLEX. Error: ' + e.message);
+  }
+}
+
+function getPlantillaCreacion() {
+  try {
+    return Utilities.base64Encode(DriveApp.getFileById(FILE_ID_CREACION).getBlob().getBytes());
+  } catch (e) {
+    throw new Error('No se pudo acceder al PDF Creación de Cliente COLEX. Error: ' + e.message);
   }
 }
 
