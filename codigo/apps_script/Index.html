@@ -2793,7 +2793,11 @@ async function generarTodosColex() {
       d(p0cr, val('numId'),              411.5, 557.2);          // Número identificación
       d(p0cr, nombreCliente,             412.8, 538.0);          // Nombres y Apellidos
       d(p0cr, val('codigoPostal') ? val('direccion')+', CP '+val('codigoPostal') : val('direccion'), 411.9, 515.8); // Dirección
-      d(p0cr, `${val('ciudadRes')} - ${val('paisRes')}`, 226.0, 495.6); // Ciudad - País
+      // Ciudad - País: reducir fuente si el texto no cabe (~70 pts disponibles)
+      const cityPaisTxt = `${val('ciudadRes')} - ${val('paisRes')}`;
+      let cityPaisSize = 8;
+      if (fb) { while (cityPaisSize > 4.5 && fb.widthOfTextAtSize(cityPaisTxt, cityPaisSize) > 70) cityPaisSize -= 0.5; }
+      d(p0cr, cityPaisTxt, 226.0, 495.6, cityPaisSize);
       d(p0cr, val('telefonoCelular'),    301.8, 495.7);          // Teléfonos
       d(p0cr, val('correo'),             411.9, 495.6);          // Correo electrónico
       d(p0cr, 'X',                       566.8, 485.6, 9, true); // NO parentezco con empleado
