@@ -49,32 +49,21 @@
       font-weight: 700;
     }
     .header-app {
-      background: linear-gradient(135deg, var(--habi-purple-deep) 0%, var(--habi-purple) 100%);
-      color: #fff;
-      padding: 16px 24px;
+      background: #fff;
+      color: var(--habi-purple-deep);
+      padding: 14px 24px;
       border-radius: 14px;
       margin-bottom: 24px;
       display: flex;
       align-items: center;
-      gap: 16px;
-      box-shadow: 0 6px 24px rgba(124,58,237,.38);
+      gap: 20px;
+      box-shadow: 0 4px 18px rgba(124,58,237,.15);
+      border-bottom: 4px solid var(--habi-purple);
       position: relative;
-      overflow: hidden;
     }
-    .header-app::after {
-      content: '';
-      position: absolute;
-      right: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 80px;
-      height: 80px;
-      background: var(--habi-logo) center/contain no-repeat;
-      opacity: 0.12;
-    }
-    .header-logo { height: 56px; flex-shrink: 0; filter: drop-shadow(0 2px 6px rgba(0,0,0,.35)); }
-    .header-text h4 { font-size: 1.18rem; font-weight: 700; margin-bottom: 2px; }
-    .header-text small { color: rgba(255,255,255,.75); font-size: 0.80rem; }
+    .header-logo { height: 52px; flex-shrink: 0; }
+    .header-text h4 { font-size: 1.18rem; font-weight: 700; margin-bottom: 2px; color: var(--habi-purple-deep); }
+    .header-text small { color: #6B7280; font-size: 0.80rem; }
     .btn-generar {
       background: var(--habi-purple);
       color: #fff;
@@ -97,8 +86,8 @@
     .card-formato h5 { color: var(--habi-purple); margin-bottom: 6px; font-size: 1rem; }
     .card-formato p { font-size: 0.82rem; color: #666; margin: 0; }
     .formato-oculto { display: none; }
-    .btn-volver { background: rgba(255,255,255,.18); color: #fff; border: 1.5px solid rgba(255,255,255,.55); border-radius: 8px; padding: 5px 14px; cursor: pointer; font-size: 0.85rem; white-space: nowrap; flex-shrink: 0; }
-    .btn-volver:hover { background: rgba(255,255,255,.32); }
+    .btn-volver { background: var(--habi-light); color: var(--habi-purple); border: 1.5px solid var(--habi-purple); border-radius: 8px; padding: 5px 14px; cursor: pointer; font-size: 0.85rem; white-space: nowrap; flex-shrink: 0; }
+    .btn-volver:hover { background: var(--habi-purple); color: #fff; }
     .form-select:focus, .form-control:focus { border-color: var(--habi-purple); box-shadow: 0 0 0 0.2rem rgba(124,58,237,.18); }
     .badge-colex { background: var(--habi-green); color: #fff; border-radius: 6px; font-size: 0.72rem; padding: 2px 7px; vertical-align: middle; }
   </style>
