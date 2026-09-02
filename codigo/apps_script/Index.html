@@ -1437,12 +1437,13 @@ function cambiarLinea() {
     inputTel.placeholder = '';
   }
 
-  // Cuenta en exterior — para COLEX solo se permite "Sí"
+  // Cuenta en exterior — para COLEX siempre Sí (deshabilitar No y autoseleccionar)
   const selCuenta = document.getElementById('cuentaExtranjera');
   Array.from(selCuenta.options).forEach(opt => {
     if (opt.value === 'No') opt.disabled = esColex;
   });
-  if (esColex && selCuenta.value === 'No') { selCuenta.value = ''; mostrarDetallesCuentaExterior(); }
+  if (esColex) { selCuenta.value = 'Sí'; mostrarDetallesCuentaExterior(); }
+  else if (selCuenta.value === 'Sí') { selCuenta.value = ''; mostrarDetallesCuentaExterior(); }
 
   // Campos solo COLEX en datos personales
   mostrar('divCodigoPostal',        esColex);
@@ -2657,10 +2658,9 @@ async function generarTodosColex() {
       if(pepSiNo==='Sí'){radio('Nacional',{'Nacional':'1','Extranjero':'2'}[val('pepNacExt')]||'');}else{radioOff('Nacional');}
       radio('pep',SN[val('asociadoPep')]||''); radio('familiar',SN[val('familiarPep')]||'');
       radio('Sí_2',SN[val('campanaPolitica')]||'');
-      // Cuenta en exterior COLEX (campo unificado con Sección 5)
-      const cuentaCol = val('cuentaExtranjera');
-      radio('cuentas',SN[cuentaCol]||'');
-      if(cuentaCol==='Sí'){txt('Texto58',val('texto58')); txt('Texto59',val('texto59')); txt('Texto60',val('texto60'));}
+      // Cuenta en exterior COLEX — siempre Sí (línea COLEX exige cuenta exterior)
+      radio('cuentas',SN['Sí']);   // '1' = Sí
+      txt('Texto58',val('texto58')); txt('Texto59',val('texto59')); txt('Texto60',val('texto60'));
       // Operaciones moneda extranjera — COLEX: se dejan sin selección
       radioOff('moneda'); radioOff('posee');
       radio('tiene','2');
