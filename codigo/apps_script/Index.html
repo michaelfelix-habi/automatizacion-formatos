@@ -1437,6 +1437,13 @@ function cambiarLinea() {
     inputTel.placeholder = '';
   }
 
+  // Cuenta en exterior — para COLEX solo se permite "Sí"
+  const selCuenta = document.getElementById('cuentaExtranjera');
+  Array.from(selCuenta.options).forEach(opt => {
+    if (opt.value === 'No') opt.disabled = esColex;
+  });
+  if (esColex && selCuenta.value === 'No') { selCuenta.value = ''; mostrarDetallesCuentaExterior(); }
+
   // Campos solo COLEX en datos personales
   mostrar('divCodigoPostal',        esColex);
   mostrar('divNacionalidad2Colex',  esColex);
@@ -1479,7 +1486,7 @@ function mostrarDetallesCuentaExterior() {
 
 function alertarRut() {
   if (document.getElementById('tieneRut').value === 'Sí') {
-    alert('Recuerde: el RUT del cliente debe ser aportado físicamente para la radicación del crédito.');
+    alert('Recuerde: el RUT del cliente debe ser aportado en el expediente digital para la radicación del crédito.');
   }
 }
 
