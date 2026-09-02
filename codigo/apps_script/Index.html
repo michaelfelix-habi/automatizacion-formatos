@@ -52,6 +52,20 @@
     </div>
   </div>
 
+  <!-- ── SELECTOR N° TITULARES (solo Nacional) ── -->
+  <div class="seccion campo-oculto" id="seccionNumTitulares" style="border: 2px solid #e65100;">
+    <h5 style="color:#e65100; border-color:#e65100;">¿Cuántos titulares tiene el crédito?</h5>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Número de titulares *</label>
+        <select id="numTitulares" class="form-select" onchange="cambiarNumTitulares()">
+          <option value="1">1 Titular</option>
+          <option value="2">2 Titulares</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
   <!-- ── SECCIÓN: RADICACIÓN ── -->
   <div class="seccion">
     <h5>Información de radicación</h5>
@@ -76,8 +90,17 @@
       </div>
 
       <div class="col-md-6">
-        <label class="form-label">Tipo de vínculo *</label>
+        <label class="form-label">Tipo de vínculo — Titular 1 *</label>
         <select id="tipoVinculo" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option>Titular</option>
+          <option>Avalista</option>
+        </select>
+      </div>
+
+      <div class="col-md-6 campo-oculto" id="divTipoVinculo2">
+        <label class="form-label">Tipo de vínculo — Titular 2 *</label>
+        <select id="tipoVinculo2" class="form-select">
           <option value="">— Seleccione —</option>
           <option>Titular</option>
           <option>Avalista</option>
@@ -160,8 +183,8 @@
         <input type="text" id="paisNac" class="form-control" placeholder="Colombia">
       </div>
       <div class="col-md-4">
-        <label class="form-label">Departamento de nacimiento <span class="text-muted-sm">(llenar en el PDF)</span></label>
-        <input type="text" id="dptoNac" class="form-control" placeholder="Se diligencia en el PDF">
+        <label class="form-label">Departamento de nacimiento *</label>
+        <input type="text" id="dptoNac" class="form-control" placeholder="Ej: Cundinamarca">
       </div>
       <div class="col-md-4">
         <label class="form-label">Ciudad de nacimiento *</label>
@@ -452,11 +475,23 @@
       </div>
       <div class="col-md-6">
         <label class="form-label">¿Tiene cuenta financiera en país extranjero? *</label>
-        <select id="cuentaExtranjera" class="form-select">
+        <select id="cuentaExtranjera" class="form-select" onchange="mostrarDetallesCuentaExterior()">
           <option value="">— Seleccione —</option>
           <option value="No">No</option>
           <option value="Sí">Sí</option>
         </select>
+      </div>
+      <div class="col-md-6 campo-oculto" id="divTexto58">
+        <label class="form-label">Número de cuenta en exterior</label>
+        <input type="text" id="texto58" class="form-control">
+      </div>
+      <div class="col-md-6 campo-oculto" id="divTexto59">
+        <label class="form-label">País de la cuenta</label>
+        <input type="text" id="texto59" class="form-control">
+      </div>
+      <div class="col-md-6 campo-oculto" id="divTexto60">
+        <label class="form-label">Ciudad de la cuenta</label>
+        <input type="text" id="texto60" class="form-control">
       </div>
 
     </div>
@@ -566,6 +601,294 @@
     </div>
   </div>
 
+  <!-- ── SECCIÓN: TITULAR 2 (solo Nacional, 2 titulares) ── -->
+  <div class="seccion campo-oculto" id="seccionTitular2" style="border-left: 4px solid #e65100;">
+    <h5 style="color:#e65100; border-color:#e65100;">Datos del Titular 2</h5>
+
+    <!-- Datos personales T2 -->
+    <div class="row g-3 mb-3">
+      <div class="col-12"><h6 class="text-muted">Datos personales</h6></div>
+      <div class="col-md-4"><label class="form-label">Nombres *</label><input type="text" id="nombres2" class="form-control"></div>
+      <div class="col-md-4"><label class="form-label">Primer apellido *</label><input type="text" id="primerApellido2" class="form-control"></div>
+      <div class="col-md-4"><label class="form-label">Segundo apellido</label><input type="text" id="segundoApellido2" class="form-control"></div>
+      <div class="col-md-4">
+        <label class="form-label">Género *</label>
+        <select id="genero2" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="1">Hombre</option>
+          <option value="2">Mujer</option>
+          <option value="On">Otro</option>
+        </select>
+      </div>
+      <div class="col-md-2"><label class="form-label">Día nacimiento *</label><input type="text" id="diaNac2" class="form-control" maxlength="2" placeholder="DD"></div>
+      <div class="col-md-2"><label class="form-label">Mes nacimiento *</label><input type="text" id="mesNac2" class="form-control" maxlength="2" placeholder="MM"></div>
+      <div class="col-md-4"><label class="form-label">Año nacimiento *</label><input type="text" id="anoNac2" class="form-control" maxlength="4" placeholder="AAAA"></div>
+      <div class="col-md-4"><label class="form-label">País de nacimiento *</label><input type="text" id="paisNac2" class="form-control" placeholder="Colombia"></div>
+      <div class="col-md-4"><label class="form-label">Departamento de nacimiento *</label><input type="text" id="dptoNac2" class="form-control"></div>
+      <div class="col-md-4"><label class="form-label">Ciudad de nacimiento *</label><input type="text" id="ciudadNac2" class="form-control"></div>
+      <div class="col-md-4">
+        <label class="form-label">Tipo de identificación *</label>
+        <select id="tipoId2" class="form-select" onchange="mostrarCualTipoId2()">
+          <option value="">— Seleccione —</option>
+          <option value="1">CC — Cédula de ciudadanía</option>
+          <option value="2">CE — Cédula de extranjería</option>
+          <option value="3">TI — Tarjeta de identidad</option>
+          <option value="4">Pasaporte</option>
+          <option value="5">Otro</option>
+        </select>
+      </div>
+      <div class="col-md-4 campo-oculto" id="divCualTipoId2"><label class="form-label">¿Cuál tipo de identificación?</label><input type="text" id="cualTipoId2" class="form-control"></div>
+      <div class="col-md-4"><label class="form-label">Número de identificación *</label><input type="text" id="numId2" class="form-control" placeholder="Sin puntos ni comas"></div>
+      <div class="col-md-6">
+        <label class="form-label">Grupo étnico *</label>
+        <select id="grupoEtnico2" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="1">Indígena</option>
+          <option value="2">Gitano(a) o Rrom</option>
+          <option value="3">Raizal del Archipiélago de San Andrés, Providencia y Santa Catalina</option>
+          <option value="4">Palenquero(a) de San Basilio</option>
+          <option value="5">Negro(a), Mulato(a), Afrodescendiente, Afrocolombiano(a)</option>
+          <option value="6">Ningún grupo étnico</option>
+          <option value="7">Sin información</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Estado civil *</label>
+        <select id="estadoCivil2" class="form-select" onchange="mostrarSeccionConyuge2()">
+          <option value="">— Seleccione —</option>
+          <option value="1">Soltero</option>
+          <option value="2">Casado</option>
+          <option value="3">Viudo</option>
+          <option value="4">Divorciado</option>
+          <option value="5">Separado</option>
+          <option value="6">Unión Libre</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Nivel de estudios *</label>
+        <select id="nivelEstudios2" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="1">Ninguno</option>
+          <option value="2">Primaria</option>
+          <option value="5">Bachillerato</option>
+          <option value="4">Tecnólogo</option>
+          <option value="3">Universitario</option>
+          <option value="6">Especialización</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Tipo de vivienda *</label>
+        <select id="tipoVivienda2" class="form-select" onchange="mostrarCualVivienda2(); mostrarValorVivienda2()">
+          <option value="">— Seleccione —</option>
+          <option value="1">Propia sin hipoteca</option>
+          <option value="2">Propia con hipoteca</option>
+          <option value="3">Familiar</option>
+          <option value="4">Arriendo</option>
+          <option value="5">Otro</option>
+        </select>
+      </div>
+      <div class="col-md-6 campo-oculto" id="divCualVivienda2"><label class="form-label">¿Cuál tipo de vivienda?</label><input type="text" id="cualVivienda2" class="form-control"></div>
+      <div class="col-md-6 campo-oculto" id="divValorVivienda2"><label class="form-label">Valor de la vivienda propia ($) *</label><input type="text" id="valorVivienda2" class="form-control" placeholder="Solo números"></div>
+      <div class="col-md-6">
+        <label class="form-label">¿Persona con discapacidad (PcD)? *</label>
+        <select id="pcd2" class="form-select" onchange="mostrarCualPcd2()">
+          <option value="">— Seleccione —</option>
+          <option value="1">No</option>
+          <option value="2">Sí</option>
+        </select>
+      </div>
+      <div class="col-md-6 campo-oculto" id="divCualPcd2"><label class="form-label">¿Cuál discapacidad?</label><input type="text" id="cualPcd2" class="form-control"></div>
+      <div class="col-md-6"><label class="form-label">Título profesional</label><input type="text" id="tituloProfesional2" class="form-control"></div>
+      <div class="col-md-6"><label class="form-label">Correo electrónico *</label><input type="email" id="correo2" class="form-control"></div>
+      <div class="col-12"><label class="form-label">Dirección de residencia *</label><input type="text" id="direccion2" class="form-control"></div>
+      <div class="col-md-3"><label class="form-label">País de residencia *</label><input type="text" id="paisRes2" class="form-control" placeholder="Colombia"></div>
+      <div class="col-md-3"><label class="form-label">Departamento de residencia *</label><input type="text" id="dptoRes2" class="form-control"></div>
+      <div class="col-md-3"><label class="form-label">Ciudad de residencia *</label><input type="text" id="ciudadRes2" class="form-control"></div>
+      <div class="col-md-3"><label class="form-label">Estrato *</label><input type="text" id="estrato2" class="form-control" maxlength="1"></div>
+      <div class="col-md-4"><label class="form-label">N° personas a cargo *</label><input type="text" id="personasCargo2" class="form-control" placeholder="0 si no tiene"></div>
+      <div class="col-md-4"><label class="form-label">Antigüedad en la ciudad *</label><input type="text" id="antiguedadCiudad2" class="form-control" placeholder="ej. 5 años"></div>
+      <div class="col-md-4"><label class="form-label">Teléfono celular *</label><input type="text" id="telefonoCelular2" class="form-control"></div>
+      <div class="col-md-4"><label class="form-label">Teléfono adicional</label><input type="text" id="telefono2b" class="form-control" placeholder="Opcional"></div>
+      <div class="col-md-6"><label class="form-label">Nacionalidad *</label><input type="text" id="nacionalidad2" class="form-control" placeholder="ej. Colombiana"></div>
+    </div>
+
+    <!-- Cónyuge T2 -->
+    <div class="seccion campo-oculto" id="seccionConyuge2" style="border-left: 4px solid #e65100; margin-top:12px;">
+      <h6>Cónyuge / Compañero permanente — Titular 2</h6>
+      <div class="row g-3">
+        <div class="col-md-4"><label class="form-label">Nombres del cónyuge *</label><input type="text" id="conyNombres2" class="form-control"></div>
+        <div class="col-md-4"><label class="form-label">Primer apellido *</label><input type="text" id="conyApellido12" class="form-control"></div>
+        <div class="col-md-4"><label class="form-label">Segundo apellido</label><input type="text" id="conyApellido22" class="form-control"></div>
+        <div class="col-md-4">
+          <label class="form-label">Tipo de documento *</label>
+          <select id="conyTipoId2" class="form-select" onchange="mostrarCualConyuge2()">
+            <option value="">— Seleccione —</option>
+            <option value="1">CC</option>
+            <option value="2">CE</option>
+            <option value="3">TI</option>
+            <option value="4">Pasaporte</option>
+            <option value="5">Otro</option>
+          </select>
+        </div>
+        <div class="col-md-4 campo-oculto" id="divCualConyuge2"><label class="form-label">¿Cuál tipo de documento?</label><input type="text" id="cualConyuge2" class="form-control"></div>
+        <div class="col-md-4"><label class="form-label">Número de identificación *</label><input type="text" id="conyNumId2" class="form-control"></div>
+      </div>
+    </div>
+
+    <!-- Actividad económica T2 -->
+    <div class="row g-3 mt-2">
+      <div class="col-12"><h6 class="text-muted">Actividad económica</h6></div>
+      <div class="col-md-6">
+        <label class="form-label">Situación laboral *</label>
+        <select id="situacionLaboral2" class="form-select" onchange="mostrarCualLaboral2(); mostrarVentasAnuales2()">
+          <option value="">— Seleccione —</option>
+          <option value="1">Asalariado término indefinido</option>
+          <option value="2">Pensionado</option>
+          <option value="3">Independiente</option>
+          <option value="4">Asalariado temporal</option>
+          <option value="5">Otro</option>
+        </select>
+      </div>
+      <div class="col-md-6 campo-oculto" id="divCualLaboral2"><label class="form-label">¿Cuál situación laboral?</label><input type="text" id="cualLaboral2" class="form-control"></div>
+      <div class="col-md-6"><label class="form-label">Nombre de la empresa / empleador *</label><input type="text" id="nombreEmpresa2" class="form-control"></div>
+      <div class="col-md-6"><label class="form-label">Cargo / Ocupación / Oficio *</label><input type="text" id="cargo2" class="form-control"></div>
+      <div class="col-md-6"><label class="form-label">Actividad económica de la empresa *</label><input type="text" id="actividadEmpresa2" class="form-control"></div>
+      <div class="col-md-6">
+        <label class="form-label">¿Es socio de la empresa donde trabaja? *</label>
+        <select id="esSocio2" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="Sí">Sí</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+      <div class="col-md-2"><label class="form-label">Día inicio actividad *</label><input type="text" id="diaIngreso2" class="form-control" maxlength="2" placeholder="DD"></div>
+      <div class="col-md-2"><label class="form-label">Mes *</label><input type="text" id="mesIngreso2" class="form-control" maxlength="2" placeholder="MM"></div>
+      <div class="col-md-4"><label class="form-label">Año *</label><input type="text" id="anoIngreso2" class="form-control" maxlength="4" placeholder="AAAA"></div>
+      <div class="col-12"><hr class="my-1"><p class="text-muted-sm mb-0">Preguntas PEP</p></div>
+      <div class="col-md-6">
+        <label class="form-label">¿Es Persona Políticamente Expuesta (PEP)? *</label>
+        <select id="pepSiNo2" class="form-select" onchange="mostrarPepNacExt2()">
+          <option value="No">No</option>
+          <option value="Sí">Sí</option>
+        </select>
+      </div>
+      <div class="col-md-6 campo-oculto" id="divPepNacExt2">
+        <label class="form-label">¿Nacional o Extranjero? *</label>
+        <select id="pepNacExt2" class="form-select">
+          <option value="Nacional">Nacional</option>
+          <option value="Extranjero">Extranjero</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">¿Es familiar de un PEP? *</label>
+        <select id="familiarPep2" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="No">No</option>
+          <option value="Sí">Sí</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">¿Está asociado a un PEP? *</label>
+        <select id="asociadoPep2" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="No">No</option>
+          <option value="Sí">Sí</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">¿Los recursos corresponden a campaña política? *</label>
+        <select id="campanaPolitica2" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="No">No</option>
+          <option value="Sí">Sí</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">¿Tiene cuenta financiera en país extranjero? *</label>
+        <select id="cuentaExtranjera2" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="No">No</option>
+          <option value="Sí">Sí</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Información financiera T2 -->
+    <div class="row g-3 mt-2">
+      <div class="col-12"><h6 class="text-muted">Información financiera</h6></div>
+      <div class="col-md-6"><label class="form-label">Ingresos mensuales ($) *</label><input type="text" id="ingresos2" class="form-control" placeholder="Solo números" oninput="calcularTotalIngresos2()"></div>
+      <div class="col-md-6"><label class="form-label">Otros ingresos ($) *</label><input type="text" id="otrosIngresos2" class="form-control" placeholder="0 si no tiene" oninput="calcularTotalIngresos2()"></div>
+      <div class="col-md-6"><label class="form-label">Total ingresos ($)</label><input type="text" id="totalIngresos2" class="form-control bg-light" readonly><small class="text-muted-sm">Calculado automáticamente</small></div>
+      <div class="col-md-6"><label class="form-label">Canon de arriendo / cuota hipotecaria ($)</label><input type="text" id="canonArriendo2" class="form-control" placeholder="0 si no aplica"></div>
+      <div class="col-md-6"><label class="form-label">Total egresos mensuales ($) *</label><input type="text" id="totalEgresos2" class="form-control" placeholder="Solo números"></div>
+      <div class="col-md-6"><label class="form-label">Total pasivos ($) *</label><input type="text" id="totalPasivos2" class="form-control" placeholder="Solo números"></div>
+      <div class="col-md-6"><label class="form-label">Total activos ($) *</label><input type="text" id="totalActivos2" class="form-control" placeholder="Solo números"></div>
+      <div class="col-md-6 campo-oculto" id="divVentasAnuales2"><label class="form-label">Valor ventas anuales ($) *</label><input type="text" id="ventasAnuales2" class="form-control"></div>
+      <div class="col-md-6"><label class="form-label">¿A qué corresponden los otros ingresos?</label><input type="text" id="descripcionOtrosIngresos2" class="form-control"></div>
+      <div class="col-md-6"><label class="form-label">Procedencia de recursos adicionales</label><input type="text" id="procedenciaRecursos2" class="form-control"></div>
+      <div class="col-md-6">
+        <label class="form-label">¿Declara renta? *</label>
+        <select id="declaraRenta2" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="Sí">Sí</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">¿Tiene constituidos patrimonios autónomos o fideicomisos? *</label>
+        <select id="tienePatrimonios2" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="Si">Sí</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Operaciones internacionales T2 -->
+    <div class="row g-3 mt-2">
+      <div class="col-12"><h6 class="text-muted">Operaciones internacionales</h6></div>
+      <div class="col-md-6">
+        <label class="form-label">¿Realiza operaciones en moneda extranjera? *</label>
+        <select id="opMoneda2" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="No">No</option>
+          <option value="Sí">Sí</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">¿Posee productos en moneda extranjera? *</label>
+        <select id="poseeMoneda2" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="No">No</option>
+          <option value="Sí">Sí</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Referencias T2 -->
+    <div class="row g-3 mt-2">
+      <div class="col-12"><h6 class="text-muted">Referencias — Titular 2</h6></div>
+      <p class="text-muted-sm mb-0">Referencias familiares</p>
+      <div class="col-md-3"><label class="form-label">Familiar 1 — Nombre *</label><input type="text" id="fam1nombre2" class="form-control"></div>
+      <div class="col-md-3"><label class="form-label">Parentesco *</label><input type="text" id="fam1parentesco2" class="form-control"></div>
+      <div class="col-md-3"><label class="form-label">Ciudad *</label><input type="text" id="fam1ciudad2" class="form-control"></div>
+      <div class="col-md-3"><label class="form-label">Teléfono *</label><input type="text" id="fam1tel2" class="form-control"></div>
+      <div class="col-md-3"><label class="form-label">Familiar 2 — Nombre</label><input type="text" id="fam2nombre2" class="form-control"></div>
+      <div class="col-md-3"><label class="form-label">Parentesco</label><input type="text" id="fam2parentesco2" class="form-control"></div>
+      <div class="col-md-3"><label class="form-label">Ciudad</label><input type="text" id="fam2ciudad2" class="form-control"></div>
+      <div class="col-md-3"><label class="form-label">Teléfono</label><input type="text" id="fam2tel2" class="form-control"></div>
+      <p class="text-muted-sm mb-0 mt-2">Referencias personales / comerciales</p>
+      <div class="col-md-3"><label class="form-label">Personal 1 — Nombre *</label><input type="text" id="per1nombre2" class="form-control"></div>
+      <div class="col-md-3"><label class="form-label">Relación *</label><input type="text" id="per1relacion2" class="form-control"></div>
+      <div class="col-md-3"><label class="form-label">Ciudad *</label><input type="text" id="per1ciudad2" class="form-control"></div>
+      <div class="col-md-3"><label class="form-label">Teléfono *</label><input type="text" id="per1tel2" class="form-control"></div>
+      <div class="col-md-3"><label class="form-label">Personal 2 — Nombre</label><input type="text" id="per2nombre2" class="form-control"></div>
+      <div class="col-md-3"><label class="form-label">Relación</label><input type="text" id="per2relacion2" class="form-control"></div>
+      <div class="col-md-3"><label class="form-label">Ciudad</label><input type="text" id="per2ciudad2" class="form-control"></div>
+      <div class="col-md-3"><label class="form-label">Teléfono</label><input type="text" id="per2tel2" class="form-control"></div>
+    </div>
+  </div>
+
   <!-- ── SECCIÓN COLEX: APODERADO ── -->
   <div class="seccion campo-oculto" id="seccionApoderado">
     <h5>Datos del Apoderado en Colombia (COLEX)</h5>
@@ -621,32 +944,6 @@
     </div>
   </div>
 
-  <!-- ── SECCIÓN COLEX: CUENTA EN EL EXTERIOR ── -->
-  <div class="seccion campo-oculto" id="seccionCuentaExterior">
-    <h5>Cuenta financiera en el exterior (COLEX)</h5>
-    <div class="row g-3">
-      <div class="col-md-6">
-        <label class="form-label">¿Tiene cuenta financiera en país extranjero? *</label>
-        <select id="cuentaExteriorColex" class="form-select" onchange="mostrarDetallesCuentaExterior()">
-          <option value="">— Seleccione —</option>
-          <option value="No">No</option>
-          <option value="Sí">Sí</option>
-        </select>
-      </div>
-      <div class="col-md-6 campo-oculto" id="divTexto58">
-        <label class="form-label">Número de cuenta *</label>
-        <input type="text" id="texto58" class="form-control">
-      </div>
-      <div class="col-md-6 campo-oculto" id="divTexto59">
-        <label class="form-label">País de la cuenta *</label>
-        <input type="text" id="texto59" class="form-control">
-      </div>
-      <div class="col-md-6 campo-oculto" id="divTexto60">
-        <label class="form-label">Ciudad de la cuenta *</label>
-        <input type="text" id="texto60" class="form-control">
-      </div>
-    </div>
-  </div>
 
   <!-- ── SECCIÓN COLEX: DATOS ADICIONALES ── -->
   <div class="seccion campo-oculto" id="seccionColexAdicional">
@@ -1102,7 +1399,6 @@ function cambiarLinea() {
   const esColex = linea === 'colex';
   // Secciones COLEX
   mostrar('seccionApoderado',     esColex);
-  mostrar('seccionCuentaExterior',esColex);
   mostrar('seccionColexAdicional',esColex);
   // Sección Nómina y Conocimiento (solo Nacional)
   mostrar('seccionBroker',       !esColex);
@@ -1112,6 +1408,12 @@ function cambiarLinea() {
   mostrar('seccionFormatos', linea !== '');
   mostrar('chksNacional', !esColex);
   mostrar('chksColex',     esColex);
+  // Selector de titulares: solo para Nacional
+  mostrar('seccionNumTitulares', !esColex && linea !== '');
+  if (esColex || linea === '') {
+    document.getElementById('numTitulares').value = '1';
+    cambiarNumTitulares();
+  }
   // Destino del crédito: ocultar "Construcción individual" para COLEX
   const selDestino = document.getElementById('destino');
   Array.from(selDestino.options).forEach(opt => {
@@ -1129,10 +1431,33 @@ function mostrarCualApoderado() {
 }
 
 function mostrarDetallesCuentaExterior() {
-  const v = document.getElementById('cuentaExteriorColex').value === 'Sí';
+  const v = document.getElementById('cuentaExtranjera').value === 'Sí';
   mostrar('divTexto58', v);
   mostrar('divTexto59', v);
   mostrar('divTexto60', v);
+}
+
+function cambiarNumTitulares() {
+  const dos = document.getElementById('numTitulares').value === '2';
+  mostrar('seccionTitular2', dos);
+  mostrar('divTipoVinculo2', dos);
+}
+function mostrarSeccionConyuge2() {
+  const v = document.getElementById('estadoCivil2').value;
+  mostrar('seccionConyuge2', v === '2' || v === '6');
+}
+function mostrarCualTipoId2() { mostrar('divCualTipoId2', document.getElementById('tipoId2').value === '5'); }
+function mostrarCualVivienda2() { mostrar('divCualVivienda2', document.getElementById('tipoVivienda2').value === '5'); }
+function mostrarValorVivienda2() { const v = document.getElementById('tipoVivienda2').value; mostrar('divValorVivienda2', v === '1' || v === '2'); }
+function mostrarCualPcd2() { mostrar('divCualPcd2', document.getElementById('pcd2').value === '2'); }
+function mostrarCualLaboral2() { mostrar('divCualLaboral2', document.getElementById('situacionLaboral2').value === '5'); }
+function mostrarVentasAnuales2() { const v = document.getElementById('situacionLaboral2').value; mostrar('divVentasAnuales2', v === '3'); }
+function mostrarPepNacExt2() { mostrar('divPepNacExt2', document.getElementById('pepSiNo2').value === 'Sí'); }
+function mostrarCualConyuge2() { mostrar('divCualConyuge2', document.getElementById('conyTipoId2').value === '5'); }
+function calcularTotalIngresos2() {
+  const a = parseFloat(limpiarNumero(document.getElementById('ingresos2').value)) || 0;
+  const b = parseFloat(limpiarNumero(document.getElementById('otrosIngresos2').value)) || 0;
+  document.getElementById('totalIngresos2').value = (a + b).toLocaleString('es-CO');
 }
 
 function mostrar(id, condicion) {
@@ -1338,12 +1663,7 @@ async function generarPDF() {
     txt('Mes_2', val('mesNac'));
     txt('Año_2', val('anoNac'));
     txt('Texto7',  val('paisNac'));
-    // Texto8: se elimina el widget visualmente para evitar recuadro blanco en Edge
-    try {
-      form.getField('Texto8').acroField.getWidgets().forEach(w => {
-        w.dict.set(PDFLib.PDFName.of('Rect'), pdfDoc.context.obj([0, 0, 0, 0]));
-      });
-    } catch(e) { console.warn('texto8 widget:', e.message); }
+    txt('Texto8',  val('dptoNac'));
     txt('Texto9',  val('ciudadNac'));
     radio('tipo', val('tipoId'));
     txt('Texto10', val('cualTipoId'));
@@ -1382,7 +1702,7 @@ async function generarPDF() {
       txt('Texto39', val('conyApellido1'));
       txt('Texto40', val('conyApellido2'));
       radio('identificacion', val('conyTipoId'));
-      txt('Cuál_4', val('cualConyuge'));
+      txt('Cuál_3', val('cualConyuge'));
       txt('Texto41', val('conyNumId'));
     }
 
@@ -1584,8 +1904,7 @@ async function generarPDF() {
       // Texto8 omitido — widget ya reducido a cero para evitar recuadro blanco en Edge
     }
 
-    // 4. Aplanar y guardar (texto fijo — se ve igual en Edge, Acrobat y Chrome)
-    try { form.flatten(); } catch(e) { console.warn('flatten vinc:', e.message); }
+    // 4. Guardar (mantener formulario editable)
     const pdfBytes = await pdfDoc.save();
 
     // 5. Descargar
@@ -1679,9 +1998,7 @@ async function generarTodos() {
       txt('Texto1','FVE'); chk('Vinculación inicial',true); radio('tipo de vinculo',VINC[val('tipoVinculo')]||'');
       txt('Texto4',val('nombres')); txt('Texto5',val('primerApellido')); txt('Texto6',val('segundoApellido'));
       radio('genero',val('genero')); txt('Día_2',val('diaNac')); txt('Mes_2',val('mesNac')); txt('Año_2',val('anoNac'));
-      txt('Texto7',val('paisNac')); txt('Texto9',val('ciudadNac'));
-      // Texto8 omitido — widget reducido a cero para evitar recuadro blanco en Edge
-      try { form.getField('Texto8').acroField.getWidgets().forEach(w => { w.dict.set(PDFLib.PDFName.of('Rect'), pdfDoc.context.obj([0,0,0,0])); }); } catch(e) {}
+      txt('Texto7',val('paisNac')); txt('Texto8',val('dptoNac')); txt('Texto9',val('ciudadNac'));
       radio('tipo',val('tipoId')); txt('Texto10',val('cualTipoId')); txt('Texto11',val('numId'));
       radio('grupo',val('grupoEtnico')); radio('estado civil',CIVIL[val('estadoCivil')]||''); radio('nivel estudios',ESTUDIOS[val('nivelEstudios')]||'');
       radio('tipo vivienda',val('tipoVivienda')); txt('Cuál_2',val('cualVivienda')); txt('Texto22',val('valorVivienda'));
@@ -1694,7 +2011,7 @@ async function generarTodos() {
       const ec = val('estadoCivil');
       if (ec==='2'||ec==='6') {
         txt('Texto38',val('conyNombres')); txt('Texto39',val('conyApellido1')); txt('Texto40',val('conyApellido2'));
-        radio('identificacion',val('conyTipoId')); txt('Cuál_4',val('cualConyuge')); txt('Texto41',val('conyNumId'));
+        radio('identificacion',val('conyTipoId')); txt('Cuál_3',val('cualConyuge')); txt('Texto41',val('conyNumId'));
       }
 
       radio('economica',LABORAL[val('situacionLaboral')]||''); txt('Cuál_5',val('cualLaboral'));
@@ -1812,7 +2129,6 @@ async function generarTodos() {
         // Texto8 omitido — widget ya reducido a cero para evitar recuadro blanco en Edge
       }
 
-      try { form.flatten(); } catch(e) { console.warn('flatten vinc2:', e.message); }
       const pdfBytesV = await pdfDoc.save();
       const nc = [val('nombres'),val('primerApellido')].join('_').replace(/\s+/g,'_')||'cliente';
       const blobV = new Blob([pdfBytesV],{type:'application/pdf'});
@@ -1822,6 +2138,144 @@ async function generarTodos() {
       URL.revokeObjectURL(urlV);
     }
     } // fin if (genVin)
+
+    // ──────────────────────────────
+    // 1b. PDF VINCULACIÓN TITULAR 2 (solo si 2 titulares)
+    // ──────────────────────────────
+    const numTit = document.getElementById('numTitulares').value;
+    const esDos = numTit === '2';
+    if (genVin && esDos) {
+    await new Promise(r => setTimeout(r, 500));
+    const base64V2 = await new Promise((resolve, reject) => {
+      google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).getPlantilla();
+    });
+    {
+      const bStr = atob(base64V2);
+      const bytes = new Uint8Array(bStr.length);
+      for (let i = 0; i < bStr.length; i++) bytes[i] = bStr.charCodeAt(i);
+      const pdfDoc = await PDFLib.PDFDocument.load(bytes.buffer);
+      const form = pdfDoc.getForm();
+      let fb, fbBold;
+      try { fb = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica); fbBold = await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold); } catch(e) {}
+
+      const txt = (n, v) => { try { form.getTextField(n).setText(String(v||'')); } catch(e) { console.warn('txt2:',n,e.message); } };
+      const txtFs = (n, v, size = 8) => { try { const f = form.getTextField(n); f.setFontSize(size); f.setText(String(v||'')); } catch(e) {} };
+      const radio = (name, value) => {
+        if (!value && value !== 0) return;
+        const sv = String(value);
+        try {
+          const f = form.getField(name), ac = f.acroField;
+          ac.dict.set(PDFLib.PDFName.of('V'), PDFLib.PDFName.of(sv));
+          ac.getWidgets().forEach(w => {
+            try { const on = w.getOnValue(); w.dict.set(PDFLib.PDFName.of('AS'), PDFLib.PDFName.of(on?.toString()==='/'+sv?sv:'Off')); } catch(e){}
+          });
+        } catch(e) { console.warn('radio2:',name,'->',value,e.message); }
+      };
+      const chk = (n, m) => { try { m ? form.getCheckBox(n).check() : form.getCheckBox(n).uncheck(); } catch(e){} };
+      const radioOff = (n) => {
+        try { const f=form.getField(n),ac=f.acroField; ac.dict.set(PDFLib.PDFName.of('V'),PDFLib.PDFName.of('Off')); ac.getWidgets().forEach(w=>{try{w.dict.set(PDFLib.PDFName.of('AS'),PDFLib.PDFName.of('Off'));}catch(e){}});} catch(e){}
+      };
+      const SN={'No':'2','Sí':'1'}, VINC={'Titular':'1','Avalista':'2'};
+      const DEST={'Compra de vivienda':'1','Construcción individual':'4','Remodelación de Vivienda':'3','Compra de cartera':'5','Leasing habitacional':'2'};
+      const PESUVR={'Pesos':'1','UVR':'2'}, ESTINM={'Nuevo':'1','Usado':'2'}, TINM={'Casa':'1','Apartamento':'2'};
+
+      txt('Día',dia); txt('Mes',mes); txt('Año',ano);
+      txt('Texto1','FVE'); chk('Vinculación inicial',true);
+      radio('tipo de vinculo', VINC[val('tipoVinculo2')]||'');
+      txt('Texto4',val('nombres2')); txt('Texto5',val('primerApellido2')); txt('Texto6',val('segundoApellido2'));
+      radio('genero',val('genero2')); txt('Día_2',val('diaNac2')); txt('Mes_2',val('mesNac2')); txt('Año_2',val('anoNac2'));
+      txt('Texto7',val('paisNac2')); txt('Texto8',val('dptoNac2')); txt('Texto9',val('ciudadNac2'));
+      radio('tipo',val('tipoId2')); txt('Texto10',val('cualTipoId2')); txt('Texto11',val('numId2'));
+      radio('grupo',val('grupoEtnico2')); radio('estado civil',CIVIL[val('estadoCivil2')]||''); radio('nivel estudios',ESTUDIOS[val('nivelEstudios2')]||'');
+      radio('tipo vivienda',val('tipoVivienda2')); txt('Cuál_2',val('cualVivienda2')); txt('Texto22',fmt(val('valorVivienda2')));
+      radio('pc',val('pcd2')); txt('Cuál',val('cualPcd2')); txt('Texto13',val('tituloProfesional2')); txt('Texto14',val('correo2'));
+      txt('Texto15',val('direccion2')); txt('Texto16',val('paisRes2')); txt('Texto17',val('dptoRes2')); txt('Texto18',val('ciudadRes2'));
+      txt('Texto19',val('estrato2')); txt('Texto20',val('personasCargo2')); txt('Texto21',val('antiguedadCiudad2'));
+      txt('Texto25',val('telefonoCelular2')); txt('Texto24',val('telefono2b')); txt('Texto26',val('nacionalidad2'));
+      radio('correspondencia','3'); radio('banco','3'); txt('Texto30','Colombia'); txt('Texto34',val('numId2'));
+
+      const ec2 = val('estadoCivil2');
+      if (ec2==='2'||ec2==='6') {
+        txt('Texto38',val('conyNombres2')); txt('Texto39',val('conyApellido12')); txt('Texto40',val('conyApellido22'));
+        radio('identificacion',val('conyTipoId2')); txt('Cuál_4',val('cualConyuge2')); txt('Texto41',val('conyNumId2'));
+      }
+
+      radio('economica',LABORAL[val('situacionLaboral2')]||''); txt('Cuál_5',val('cualLaboral2'));
+      txt('Texto48',val('nombreEmpresa2')); txt('Texto49',val('cargo2')); txt('Texto52',val('actividadEmpresa2'));
+      radio('empresa',SN[val('esSocio2')]||''); txt('dia3',val('diaIngreso2')); txt('mes3',val('mesIngreso2')); txt('Año_3',val('anoIngreso2'));
+
+      const pep2 = val('pepSiNo2');
+      radio('pe',SN[pep2]||'');
+      if (pep2==='Sí') { radio('Nacional',{'Nacional':'1','Extranjero':'2'}[val('pepNacExt2')]||''); } else { radioOff('Nacional'); }
+      radio('pep',SN[val('asociadoPep2')]||''); radio('familiar',SN[val('familiarPep2')]||'');
+      radio('Sí_2',SN[val('campanaPolitica2')]||''); radio('cuentas',SN[val('cuentaExtranjera2')]||'');
+      radio('tiene','2');
+
+      txt('undefined_4',fmt(val('ingresos2'))); txt('undefined_5',fmt(val('otrosIngresos2')));
+      txt('undefined_6',fmt(val('totalIngresos2'))); txt('undefined_7',fmt(val('canonArriendo2')));
+      txt('undefined_8',fmt(val('totalEgresos2'))); txt('undefined_9',fmt(val('totalPasivos2')));
+      txt('Valor de sus bienes',fmt(val('totalActivos2'))); txt('Texto63',fmt(val('ventasAnuales2')));
+      txt('Texto64',val('descripcionOtrosIngresos2')); txt('Texto65',val('procedenciaRecursos2'));
+      radio('declara',SN[val('declaraRenta2')]||'');
+      try {
+        const patVal2=val('tienePatrimonios2'); const BLACKp2=PDFLib.rgb(0,0,0); const pPat2=pdfDoc.getPage(0); const fXb2=fbBold||fb;
+        if(patVal2==='Si') pPat2.drawText('X',{x:210.5,y:115.5,size:6,font:fXb2,color:BLACKp2});
+        if(patVal2==='No') pPat2.drawText('X',{x:232.3,y:115.5,size:6,font:fXb2,color:BLACKp2});
+      } catch(e) {}
+
+      radio('moneda',SN[val('opMoneda2')]||''); radio('posee',SN[val('poseeMoneda2')]||'');
+
+      txt('Nombres y apellidos',val('fam1nombre2')); txt('Parentesco',val('fam1parentesco2')); txt('Ciudad',val('fam1ciudad2')); txt('Teléfonos de contacto',val('fam1tel2'));
+      txt('Nombres y apellidos1',val('fam2nombre2')); txt('Parentesco1',val('fam2parentesco2')); txt('Ciudad1',val('fam2ciudad2')); txt('Teléfonos de contacto1',val('fam2tel2'));
+      txt('Nombres y apellidos_2',val('per1nombre2')); txt('Relación',val('per1relacion2')); txt('Ciudad_2',val('per1ciudad2')); txt('Teléfonos de contacto_2',val('per1tel2'));
+      txt('Nombres y apellidos_3',val('per2nombre2')); txt('Relación3',val('per2relacion2')); txt('Ciudad_3',val('per2ciudad2')); txt('Teléfonos de contacto_3',val('per2tel2'));
+
+      // Crédito — mismos datos que T1
+      txt('Texto76',fmt(val('monto'))); txt('Texto77',val('plazo')); txt('Texto3',val('subproducto')); txt('Texto12',val('diaPago'));
+      radio('bbva',SN[val('nominaBBVA')]||''); radio('Pesos',PESUVR[val('pesosUvr')]||'');
+      radio('Nuevo',ESTINM[val('estadoInmueble')]||''); radio('Casa',TINM[val('tipoInmueble')]||'');
+      txt('Texto82',val('direccionInmueble')); txt('Texto83',fmt(val('valorInmueble')));
+      radio('cuotas','1'); radio('destino',DEST[val('destino')]||'');
+
+      const esLeasing2=val('destino')==='Leasing habitacional';
+      chk('Crédito de Vivienda',true); chk('compra Leasing',esLeasing2);
+      if(esLeasing2){txt('Habitacional',val('porcentajeLeasing'));}
+      if(val('destino')==='Compra de cartera'){
+        txt('Entidad financieraRow1',val('entidadCartera')); txt('HipotecarioRow1','X');
+        txt('tarjetaRow1',val('numCreditoCartera')); txt('ValorRow1',fmt(val('valorCartera'))); txt('PlazoValor',val('plazoCartera'));
+      }
+      try{form.getCheckBox('Seguro de Vida Vital').check();}catch(e){}
+      try{form.getCheckBox('Casilla de verificación10').check();}catch(e){}
+      try{form.getCheckBox('Casilla de verificación12').check();}catch(e){}
+      txt('Texto131',val('numId2'));
+
+      const ciudadSel2=val('ciudad'), dirIdx2=val('director'), datosRad2=RADICADORES[ciudadSel2];
+      let analista2=datosRad2&&dirIdx2!==''?datosRad2.directores[parseInt(dirIdx2)].analista:null;
+      analista2=resolverAnalistaPorCompra(val('ciudadCompra'), ciudadSel2, analista2);
+      let coordinador2=datosRad2?datosRad2.coordinador:null;
+      coordinador2=resolverCoordinadorPorCompra(val('ciudadCompra'), ciudadSel2, coordinador2);
+      if(analista2){txtFs('Código Nombre del funcionario',analista2.nombre+' '); txt('Identificación',analista2.cedula); txt('Texto122',analista2.codigo);}
+      if(coordinador2){txt('Nombre_3',coordinador2.nombre); txt('Identificación_4',coordinador2.cedula);}
+      txtFs('Nombre','HABICREDIT SAS '); txt('Texto124',ciudadSel2); txt('Texto125',`${dia}/${mes}/${ano}`);
+      txt('Texto126',hora); txt('Texto127','HABICREDIT'); txt('Identificación_2','9010054701');
+      radio('Lugar','2'); radio('Resultado','1');
+      try{if(fb)form.updateFieldAppearances(fb);}catch(e){}
+
+      // Ciudad_3 — limpiar widget BBVA
+      try {
+        const f3=form.getTextField('Ciudad_3'); const ws3=f3.acroField.getWidgets(); const bbvaW=ws3[1];
+        if(bbvaW){ const rect=bbvaW.getRectangle(); const aps=pdfDoc.context.stream('',{Type:'XObject',Subtype:'Form',BBox:pdfDoc.context.obj([0,0,rect.width,rect.height])});
+          const apRef=pdfDoc.context.register(aps); const apDict=pdfDoc.context.obj({}); apDict.set(PDFLib.PDFName.of('N'),apRef); bbvaW.dict.set(PDFLib.PDFName.of('AP'),apDict); }
+      } catch(e){}
+
+      const pdfBytesV2=await pdfDoc.save();
+      const nc2=[val('nombres2'),val('primerApellido2')].join('_').replace(/\s+/g,'_')||'titular2';
+      const blobV2=new Blob([pdfBytesV2],{type:'application/pdf'});
+      const urlV2=URL.createObjectURL(blobV2);
+      const aV2=document.createElement('a'); aV2.href=urlV2; aV2.download=`Vinculacion_T2_${nc2}_${ano}${mes}${dia}.pdf`; aV2.click();
+      URL.revokeObjectURL(urlV2);
+    }
+    } // fin if (genVin && esDos)
 
     if (genNom || genCon) await new Promise(r => setTimeout(r, 500));
 
@@ -1923,8 +2377,16 @@ async function generarTodos() {
       d(p1c, 'HABICREDIT',                            139.4, 621.8);
       d(p1c, '9010054701',                            116.5, 599.5);
       d(p1c, ciudadSel,                               396.7, 600.8);
-      d(p1c, nombreCliente,                           137.5, 526.9);
-      d(p1c, val('numId'),                            391.4, 526.9);
+      if (esDos) {
+        const nombreCliente2 = [val('nombres2'), val('primerApellido2'), val('segundoApellido2')].filter(Boolean).join(' ');
+        d(p1c, nombreCliente,   137.5, 529, 7);
+        d(p1c, val('numId'),    391.4, 529, 7);
+        d(p1c, nombreCliente2,  137.5, 519, 7);
+        d(p1c, val('numId2'),   391.4, 519, 7);
+      } else {
+        d(p1c, nombreCliente,   137.5, 526.9);
+        d(p1c, val('numId'),    391.4, 526.9);
+      }
       d(p1c, coordinador ? coordinador.nombre : '',   218.0, 505.9);
       d(p1c, val('ciudadRes'),                        392.1, 505.9);
       d(p1c, 'X', 157.1, 339.7, 10, true);            // Sí validación identidad
@@ -1980,8 +2442,16 @@ async function generarTodos() {
       d(p3c, analistaN, 75.9, 348.8, 8, true);   // analista sobre línea
       d(p3c, analistaN,125.0, 319.4);             // analista nombre campo
       d(p3c, analistaC,130.3, 304.3);             // analista cédula
-      d(p3c, clienteN, 367.9, 469.9, 8, true);   // cliente nombre
-      d(p3c, clienteC, 365.9, 450.9);             // cliente cédula
+      if (esDos) {
+        const nombreCliente2 = [val('nombres2'), val('primerApellido2'), val('segundoApellido2')].filter(Boolean).join(' ');
+        d(p3c, clienteN,             367.9, 469.9, 7, true);
+        d(p3c, clienteC,             365.9, 450.9, 7);
+        d(p3c, nombreCliente2,       367.9, 440,   7, true);
+        d(p3c, val('numId2'),        365.9, 428,   7);
+      } else {
+        d(p3c, clienteN, 367.9, 469.9, 8, true);
+        d(p3c, clienteC, 365.9, 450.9);
+      }
 
       try { form.flatten(); } catch(e) { console.warn('flatten conoc:', e.message); }
       const pdfBytesC = await pdfDoc.save();
@@ -2098,10 +2568,7 @@ async function generarTodosColex() {
       txt('Texto1','FVE'); chk('Vinculación inicial',true); radio('tipo de vinculo',VINC[val('tipoVinculo')]||'');
       txt('Texto4',val('nombres')); txt('Texto5',val('primerApellido')); txt('Texto6',val('segundoApellido'));
       radio('genero',val('genero')); txt('Día_2',val('diaNac')); txt('Mes_2',val('mesNac')); txt('Año_2',val('anoNac'));
-      txt('Texto7',val('paisNac'));
-      // Texto8 (dptoNac) — widget reducido a cero
-      try { form.getField('Texto8').acroField.getWidgets().forEach(w => { w.dict.set(PDFLib.PDFName.of('Rect'), pdfDoc.context.obj([0,0,0,0])); }); } catch(e) {}
-      txt('Texto9',val('ciudadNac'));
+      txt('Texto7',val('paisNac')); txt('Texto8',val('dptoNac')); txt('Texto9',val('ciudadNac'));
       radio('tipo',val('tipoId')); txt('Texto10',val('cualTipoId')); txt('Texto11',val('numId'));
       radio('grupo',val('grupoEtnico')); radio('estado civil',CIVIL[val('estadoCivil')]||''); radio('nivel estudios',ESTUDIOS[val('nivelEstudios')]||'');
       radio('tipo vivienda',val('tipoVivienda')); txt('Cuál_2',val('cualVivienda')); txt('Texto22',fmt(val('valorVivienda')));
@@ -2113,17 +2580,17 @@ async function generarTodosColex() {
       txt('Texto30','Colombia');
       // Texto34 — COLEX: se deja en blanco (no se llena)
 
-      // Cónyuge
+      // Cónyuge (solo cuando estado civil es Casado o Unión Libre)
       const ecv = val('estadoCivil');
       if (ecv==='2'||ecv==='6') {
         txt('Texto38',val('conyNombres')); txt('Texto39',val('conyApellido1')); txt('Texto40',val('conyApellido2'));
-        radio('identificacion',val('conyTipoId')); txt('Cuál_4',val('cualConyuge')); txt('Texto41',val('conyNumId'));
+        radio('identificacion',val('conyTipoId')); txt('Cuál_3',val('cualConyuge')); txt('Texto41',val('conyNumId'));
       }
 
-      // Apoderado COLEX (Texto42-45 + tipo ID)
+      // Apoderado COLEX (Texto42-45) — identificacion3 es el campo propio del apoderado en el PDF
       txt('Texto42',val('apodNombres')); txt('Texto43',val('apodApellido1')); txt('Texto44',val('apodApellido2'));
-      radio('identificacion',APOD_ID[val('apodTipoId')]||'');
-      txt('Cuál_4',val('apodCualId'));
+      radio('identificacion3',val('apodTipoId')||'');
+      if (val('apodTipoId')==='5') txt('Cuál_4',val('apodCualId'));
       txt('Texto45',val('apodNumDoc'));
 
       // Actividad económica
@@ -2135,8 +2602,8 @@ async function generarTodosColex() {
       if(pepSiNo==='Sí'){radio('Nacional',{'Nacional':'1','Extranjero':'2'}[val('pepNacExt')]||'');}else{radioOff('Nacional');}
       radio('pep',SN[val('asociadoPep')]||''); radio('familiar',SN[val('familiarPep')]||'');
       radio('Sí_2',SN[val('campanaPolitica')]||'');
-      // Cuenta en exterior COLEX
-      const cuentaCol = val('cuentaExteriorColex');
+      // Cuenta en exterior COLEX (campo unificado con Sección 5)
+      const cuentaCol = val('cuentaExtranjera');
       radio('cuentas',SN[cuentaCol]||'');
       if(cuentaCol==='Sí'){txt('Texto58',val('texto58')); txt('Texto59',val('texto59')); txt('Texto60',val('texto60'));}
       // Operaciones moneda extranjera — COLEX: se dejan sin selección
@@ -2186,7 +2653,6 @@ async function generarTodosColex() {
       try{form.getCheckBox('Casilla de verificación12').check();}catch(e){}
       txt('Texto131',val('numId'));
       // COLEX: espacio exclusivo BBVA (ciudad, director, analista, coordinador) se omite
-      try{form.flatten();}catch(e){}
       const pdfBytesV=await pdfDoc.save();
       const blobV=new Blob([pdfBytesV],{type:'application/pdf'});
       const urlV=URL.createObjectURL(blobV);
