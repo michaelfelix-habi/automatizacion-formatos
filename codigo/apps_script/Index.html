@@ -323,17 +323,37 @@
         <input type="text" id="antiguedadCiudad" class="form-control" placeholder="ej. 5 años">
       </div>
       <div class="col-md-4">
-        <label class="form-label">Teléfono celular *</label>
+        <label class="form-label" id="labelTelCelular">Teléfono celular *</label>
         <input type="text" id="telefonoCelular" class="form-control">
       </div>
       <div class="col-md-4">
         <label class="form-label">Teléfono adicional</label>
         <input type="text" id="telefono2" class="form-control" placeholder="Opcional">
       </div>
+      <div class="col-md-4 campo-oculto" id="divCodigoPostal">
+        <label class="form-label">Código postal *</label>
+        <input type="text" id="codigoPostal" class="form-control" placeholder="ej. 110111">
+      </div>
 
       <div class="col-md-6">
         <label class="form-label">Nacionalidad *</label>
         <input type="text" id="nacionalidad" class="form-control" placeholder="ej. Colombiana">
+      </div>
+      <div class="col-md-6 campo-oculto" id="divNacionalidad2Colex">
+        <label class="form-label">Nacionalidad 2</label>
+        <input type="text" id="nacionalidadColex2" class="form-control">
+      </div>
+      <div class="col-md-6 campo-oculto" id="divNacionalidad3Colex">
+        <label class="form-label">Nacionalidad 3</label>
+        <input type="text" id="nacionalidadColex3" class="form-control">
+      </div>
+      <div class="col-md-6 campo-oculto" id="divNacionalidad4Colex">
+        <label class="form-label">Nacionalidad 4</label>
+        <input type="text" id="nacionalidadColex4" class="form-control">
+      </div>
+      <div class="col-md-6 campo-oculto" id="divPaisFiscal">
+        <label class="form-label">País de Obligación Fiscal (Residencia y/o Ciudadanía) *</label>
+        <input type="text" id="paisFiscal" class="form-control" placeholder="ej. Estados Unidos">
       </div>
 
     </div>
@@ -482,15 +502,15 @@
         </select>
       </div>
       <div class="col-md-6 campo-oculto" id="divTexto58">
-        <label class="form-label">Número de cuenta en exterior</label>
+        <label class="form-label">Número de cuenta en exterior *</label>
         <input type="text" id="texto58" class="form-control">
       </div>
       <div class="col-md-6 campo-oculto" id="divTexto59">
-        <label class="form-label">País de la cuenta</label>
+        <label class="form-label">País de la cuenta *</label>
         <input type="text" id="texto59" class="form-control">
       </div>
       <div class="col-md-6 campo-oculto" id="divTexto60">
-        <label class="form-label">Ciudad de la cuenta</label>
+        <label class="form-label">Ciudad de la cuenta *</label>
         <input type="text" id="texto60" class="form-control">
       </div>
 
@@ -956,7 +976,7 @@
       </div>
       <div class="col-md-6">
         <label class="form-label">¿El cliente tiene RUT en Colombia? *</label>
-        <select id="tieneRut" class="form-select">
+        <select id="tieneRut" class="form-select" onchange="alertarRut()">
           <option value="">— Seleccione —</option>
           <option value="Sí">Sí</option>
           <option value="No">No — se incluye Sección 3 en Creación de Cliente</option>
@@ -1017,15 +1037,7 @@
         <label class="form-label">Día de pago *</label>
         <input type="text" id="diaPago" class="form-control" placeholder="ej. 5">
       </div>
-      <div class="col-md-6">
-        <label class="form-label">¿Recibe nómina a través de BBVA? *</label>
-        <select id="nominaBBVA" class="form-select">
-          <option value="">— Seleccione —</option>
-          <option value="Sí">Sí</option>
-          <option value="No">No</option>
-        </select>
-      </div>
-      <div class="col-md-6">
+      <div class="col-md-6" id="divPesosUvr">
         <label class="form-label">Crédito hipotecario en *</label>
         <select id="pesosUvr" class="form-select" onchange="actualizarTasaUVR()">
           <option value="">— Seleccione —</option>
@@ -1414,6 +1426,34 @@ function cambiarLinea() {
     document.getElementById('numTitulares').value = '1';
     cambiarNumTitulares();
   }
+  // Teléfono celular — cambiar label e indicaciones para COLEX
+  const labelTel = document.getElementById('labelTelCelular');
+  const inputTel = document.getElementById('telefonoCelular');
+  if (esColex) {
+    labelTel.textContent = 'Teléfono en el exterior (con indicativo de país) *';
+    inputTel.placeholder = 'ej. +1 305 555 0000';
+  } else {
+    labelTel.textContent = 'Teléfono celular *';
+    inputTel.placeholder = '';
+  }
+
+  // Campos solo COLEX en datos personales
+  mostrar('divCodigoPostal',        esColex);
+  mostrar('divNacionalidad2Colex',  esColex);
+  mostrar('divNacionalidad3Colex',  esColex);
+  mostrar('divNacionalidad4Colex',  esColex);
+  mostrar('divPaisFiscal',          esColex);
+
+  // Pesos/UVR — para COLEX siempre Pesos (deshabilitar selección)
+  const selPesosUvr = document.getElementById('pesosUvr');
+  if (esColex) {
+    selPesosUvr.value = 'Pesos';
+    selPesosUvr.disabled = true;
+    actualizarTasaUVR();
+  } else {
+    selPesosUvr.disabled = false;
+  }
+
   // Destino del crédito: ocultar "Construcción individual" para COLEX
   const selDestino = document.getElementById('destino');
   Array.from(selDestino.options).forEach(opt => {
@@ -1435,6 +1475,12 @@ function mostrarDetallesCuentaExterior() {
   mostrar('divTexto58', v);
   mostrar('divTexto59', v);
   mostrar('divTexto60', v);
+}
+
+function alertarRut() {
+  if (document.getElementById('tieneRut').value === 'Sí') {
+    alert('Recuerde: el RUT del cliente debe ser aportado físicamente para la radicación del crédito.');
+  }
 }
 
 function cambiarNumTitulares() {
@@ -1791,7 +1837,7 @@ async function generarPDF() {
     txt('Texto77', val('plazo'));
     txt('Texto3',  val('subproducto'));
     txt('Texto12', val('diaPago'));
-    radio('bbva',  SN[val('nominaBBVA')]||'');
+    radio('bbva',  '2');   // Siempre No
     radio('Pesos', PESUVR[val('pesosUvr')]||'');
     radio('Nuevo', ESTINM[val('estadoInmueble')]||'');
     radio('Casa',  TINM[val('tipoInmueble')]||'');
@@ -2053,7 +2099,7 @@ async function generarTodos() {
       txt('Nombres y apellidos_3',val('per2nombre')); txt('Relación3',val('per2relacion')); txt('Ciudad_3',val('per2ciudad')); txt('Teléfonos de contacto_3',val('per2tel'));
 
       txt('Texto76',fmt(val('monto'))); txt('Texto77',val('plazo')); txt('Texto3',val('subproducto')); txt('Texto12',val('diaPago'));
-      radio('bbva',SN[val('nominaBBVA')]||''); radio('Pesos',PESUVR[val('pesosUvr')]||'');
+      radio('bbva','2'); radio('Pesos',PESUVR[val('pesosUvr')]||'');  // bbva siempre No
       radio('Nuevo',ESTINM[val('estadoInmueble')]||''); radio('Casa',TINM[val('tipoInmueble')]||'');
       txt('Texto82',val('direccionInmueble')); txt('Texto83',fmt(val('valorInmueble')));
       radio('cuotas','1'); radio('destino',DEST[val('destino')]||'');
@@ -2573,11 +2619,13 @@ async function generarTodosColex() {
       radio('grupo',val('grupoEtnico')); radio('estado civil',CIVIL[val('estadoCivil')]||''); radio('nivel estudios',ESTUDIOS[val('nivelEstudios')]||'');
       radio('tipo vivienda',val('tipoVivienda')); txt('Cuál_2',val('cualVivienda')); txt('Texto22',fmt(val('valorVivienda')));
       radio('pc',val('pcd')); txt('Cuál',val('cualPcd')); txt('Texto13',val('tituloProfesional')); txt('Texto14',val('correo'));
-      txt('Texto15',val('direccion')); txt('Texto16',val('paisRes')); txt('Texto17',val('dptoRes')); txt('Texto18',val('ciudadRes'));
+      txt('Texto15', val('codigoPostal') ? val('direccion')+', CP '+val('codigoPostal') : val('direccion'));
+      txt('Texto16',val('paisRes')); txt('Texto17',val('dptoRes')); txt('Texto18',val('ciudadRes'));
       txt('Texto19',val('estrato')); txt('Texto20',val('personasCargo')); txt('Texto21',val('antiguedadCiudad'));
       txt('Texto25',val('telefonoCelular')); txt('Texto24',val('telefono2')); txt('Texto26',val('nacionalidad'));
+      txt('Texto27',val('nacionalidadColex2')); txt('Texto28',val('nacionalidadColex3')); txt('Texto29',val('nacionalidadColex4'));
       radio('correspondencia','3'); radio('banco','3');
-      txt('Texto30','Colombia');
+      txt('Texto30', val('paisFiscal')||'');
       // Texto34 — COLEX: se deja en blanco (no se llena)
 
       // Cónyuge (solo cuando estado civil es Casado o Unión Libre)
@@ -2635,8 +2683,8 @@ async function generarTodosColex() {
 
       // Crédito
       txt('Texto76',fmt(val('monto'))); txt('Texto77',val('plazo')); txt('Texto3',val('subproducto'));
-      txt('Texto12',val('diaPago')); radio('bbva',SN[val('nominaBBVA')]||'');
-      radio('Pesos',PESUVR[val('pesosUvr')]||''); radio('Nuevo',ESTINM[val('estadoInmueble')]||'');
+      txt('Texto12',val('diaPago')); radio('bbva','2');  // siempre No
+      radio('Pesos','1'); radio('Nuevo',ESTINM[val('estadoInmueble')]||'');  // siempre Pesos
       radio('Casa',TINM[val('tipoInmueble')]||''); txt('Texto82',val('direccionInmueble'));
       txt('Texto83',fmt(val('valorInmueble'))); radio('cuotas','1');
       radio('destino',DEST[val('destino')]||'');
@@ -2737,7 +2785,7 @@ async function generarTodosColex() {
       d(p0cr, 'X',                       394.7, 557.9, 9, true); // Del Exterior
       d(p0cr, val('numId'),              411.5, 557.2);          // Número identificación
       d(p0cr, nombreCliente,             412.8, 538.0);          // Nombres y Apellidos
-      d(p0cr, val('direccion'),          411.9, 515.8);          // Dirección correspondencia
+      d(p0cr, val('codigoPostal') ? val('direccion')+', CP '+val('codigoPostal') : val('direccion'), 411.9, 515.8); // Dirección
       d(p0cr, `${val('ciudadRes')} - ${val('paisRes')}`, 226.0, 495.6); // Ciudad - País
       d(p0cr, val('telefonoCelular'),    301.8, 495.7);          // Teléfonos
       d(p0cr, val('correo'),             411.9, 495.6);          // Correo electrónico
