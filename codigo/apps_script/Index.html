@@ -2379,10 +2379,10 @@ async function generarTodos() {
       d(p1c, ciudadSel,                               396.7, 600.8);
       if (esDos) {
         const nombreCliente2 = [val('nombres2'), val('primerApellido2'), val('segundoApellido2')].filter(Boolean).join(' ');
-        d(p1c, nombreCliente,   137.5, 529, 7);
-        d(p1c, val('numId'),    391.4, 529, 7);
-        d(p1c, nombreCliente2,  137.5, 519, 7);
-        d(p1c, val('numId2'),   391.4, 519, 7);
+        d(p1c, nombreCliente,   137.5, 532, 7);
+        d(p1c, val('numId'),    391.4, 532, 7);
+        d(p1c, nombreCliente2,  137.5, 522, 7);
+        d(p1c, val('numId2'),   391.4, 522, 7);
       } else {
         d(p1c, nombreCliente,   137.5, 526.9);
         d(p1c, val('numId'),    391.4, 526.9);
@@ -2446,8 +2446,8 @@ async function generarTodos() {
         const nombreCliente2 = [val('nombres2'), val('primerApellido2'), val('segundoApellido2')].filter(Boolean).join(' ');
         d(p3c, clienteN,             367.9, 469.9, 7, true);
         d(p3c, clienteC,             365.9, 450.9, 7);
-        d(p3c, nombreCliente2,       367.9, 440,   7, true);
-        d(p3c, val('numId2'),        365.9, 428,   7);
+        d(p3c, nombreCliente2,       366.5, 320.4, 7, true);
+        d(p3c, val('numId2'),        369.8, 303.4, 7);
       } else {
         d(p3c, clienteN, 367.9, 469.9, 8, true);
         d(p3c, clienteC, 365.9, 450.9);
@@ -2686,22 +2686,23 @@ async function generarTodosColex() {
       const totalNum   = cuotaNum + montoNum;
       const fmtCI = n => n > 0 ? n.toLocaleString('es-CO') : '0';
 
-      d(p0ci, nombreCliente,           243, 703); // SOLICITANTE
-      d(p0ci, `${dia}/${mes}/${ano}`,  522, 703); // FECHA
-      d(p0ci, apodNombreCompleto,      243, 649); // NOMBRE CONTACTO EN COLOMBIA
-      d(p0ci, val('apodNumDoc'),       243, 630); // NUMERO CEDULA
-      d(p0ci, val('apodParentesco'),   243, 612); // PARENTESCO
-      d(p0ci, val('apodDireccion'),    243, 593); // DIRECCIÓN
-      d(p0ci, val('apodCiudad'),       243, 575); // CIUDAD
-      d(p0ci, val('apodCelular'),      340, 546); // CELULAR
-      d(p0ci, val('correo'),           243, 527); // CORREO ELECTRONICO
+      d(p0ci, nombreCliente,             166.3, 643.4); // SOLICITANTE
+      d(p0ci, `${dia} ${mes} ${ano}`,   449.7, 644.7); // FECHA
+      d(p0ci, apodNombreCompleto,        274.9, 582.5); // NOMBRE CONTACTO EN COLOMBIA
+      d(p0ci, val('apodNumDoc'),         163.6, 558.9); // NUMERO CEDULA
+      d(p0ci, val('apodParentesco'),     303.7, 532.8); // PARENTESCO
+      d(p0ci, val('apodDireccion'),      143.3, 508.5); // DIRECCIÓN
+      d(p0ci, val('apodCiudad'),         127.6, 484.3); // CIUDAD
+      d(p0ci, val('apodCelular'),        314.2, 449.1); // CELULAR
+      d(p0ci, val('correo'),             204.2, 422.8); // CORREO ELECTRONICO
       // Tabla recursos
-      d(p0ci, `$${fmtCI(cuotaNum)}`,  430, 436); // Ahorros = cuota inicial
-      d(p0ci, '$0',                    430, 416); // Liquidación inversiones
-      d(p0ci, '$0',                    430, 396); // Venta de inmueble
-      d(p0ci, '$0',                    430, 376); // Venta de otros activos
-      d(p0ci, `$${fmtCI(montoNum)}`,  430, 356); // Préstamo = monto crédito
-      d(p0ci, `$${fmtCI(totalNum)}`,  430, 316); // TOTAL
+      d(p0ci, fmtCI(cuotaNum),           350.8, 262.3); // Ahorros = cuota inicial
+      d(p0ci, '0',                       351.5, 249.6); // Liquidación inversiones
+      d(p0ci, '0',                       351.5, 237.1); // Venta de inmueble
+      d(p0ci, '0',                       351.5, 223.7); // Venta de otros activos
+      d(p0ci, fmtCI(montoNum),           352.1, 210.6); // Préstamo = monto crédito
+      d(p0ci, '0',                       352.8, 192.4); // Otros
+      d(p0ci, fmtCI(totalNum),           351.5, 171.0); // TOTAL
 
       try{form.flatten();}catch(e){}
       const pdfBytesCI=await pdfDoc.save();
@@ -2732,26 +2733,30 @@ async function generarTodosColex() {
         if(!f)return; pg.drawText(String(txt),{x,y,size,font:f,color:BLACK});
       };
 
-      // Coordenadas Creación de Cliente — calibrar si es necesario
-      d(p0cr, 'X',                     325, 719, 9, true); // Del Exterior
-      d(p0cr, val('numId'),             636, 719);          // Número identificación
-      d(p0cr, nombreCliente,            380, 700);          // Nombres y Apellidos
-      d(p0cr, val('direccion'),         380, 680);          // Dirección correspondencia
-      d(p0cr, `${val('ciudadRes')} - ${val('paisRes')}`, 150, 661); // Ciudad - País
-      d(p0cr, val('telefonoCelular'),   380, 661);          // Teléfonos
-      d(p0cr, val('correo'),            530, 642);          // Correo electrónico
-      d(p0cr, 'X',                      749, 634, 9, true); // NO parentezco con empleado
+      // Sección 1 — Datos del cliente
+      d(p0cr, 'X',                       394.7, 557.9, 9, true); // Del Exterior
+      d(p0cr, val('numId'),              411.5, 557.2);          // Número identificación
+      d(p0cr, nombreCliente,             412.8, 538.0);          // Nombres y Apellidos
+      d(p0cr, val('direccion'),          411.9, 515.8);          // Dirección correspondencia
+      d(p0cr, `${val('ciudadRes')} - ${val('paisRes')}`, 226.0, 495.6); // Ciudad - País
+      d(p0cr, val('telefonoCelular'),    301.8, 495.7);          // Teléfonos
+      d(p0cr, val('correo'),             411.9, 495.6);          // Correo electrónico
+      d(p0cr, 'X',                       566.8, 485.6, 9, true); // NO parentezco con empleado
 
-      // Sección 4 — Autorización datos personales (siempre)
-      d(p0cr, `${dia}/${mes}/${ano}`,  680, 260);           // Fecha sección 4
-      d(p0cr, nombreCliente,            300, 241);          // Nombre sección 4
-      d(p0cr, val('numId'),             300, 222);          // Cédula sección 4
+      // Sección 4 — Autorización tratamiento datos (siempre)
+      d(p0cr, dia,         513.2, 91.4);  // DD
+      d(p0cr, mes,         531.4, 91.4);  // MM
+      d(p0cr, ano,         551.4, 91.4);  // AAAA
+      d(p0cr, nombreCliente, 267.9, 79.2); // Nombre sección 4
+      d(p0cr, val('numId'),  267.5, 67.0); // Cédula sección 4
 
       // Sección 3 — Solo si NO tiene RUT
       if(val('tieneRut')==='No'){
-        d(p0cr, `${dia}/${mes}/${ano}`, 680, 404);          // Fecha sección 3
-        d(p0cr, nombreCliente,          300, 385);          // Nombre sección 3
-        d(p0cr, val('numId'),           300, 366);          // Cédula sección 3
+        d(p0cr, dia,         515.9, 310.6); // DD sección 3
+        d(p0cr, mes,         531.9, 310.6); // MM sección 3
+        d(p0cr, ano,         549.4, 310.6); // AAAA sección 3
+        d(p0cr, nombreCliente, 267.6, 300.6); // Nombre sección 3
+        d(p0cr, val('numId'),  267.0, 290.0); // Cédula sección 3
       }
 
       try{form.flatten();}catch(e){}
@@ -2761,6 +2766,22 @@ async function generarTodosColex() {
       const aCR=document.createElement('a'); aCR.href=urlCR; aCR.download=`CreacionCliente_COLEX_${nc}_${ano}${mes}${dia}.pdf`; aCR.click();
       URL.revokeObjectURL(urlCR);
     }
+
+    // Registro de uso — mismo Sheet que Nacional
+    try {
+      const directorNombreColex = datosRad && dirIdx !== '' ? datosRad.directores[parseInt(dirIdx)].nombre : ciudadSel;
+      const formatosColexGen = [genVin?'Vinculación COLEX':'', genCuo?'Cuota Inicial COLEX':'', genCre?'Creación de Cliente COLEX':''].filter(Boolean).join(', ');
+      await new Promise((res, rej) => {
+        google.script.run.withSuccessHandler(res).withFailureHandler(rej).registrarUso({
+          fecha:        `${dia}/${mes}/${ano} ${hora}`,
+          director:     directorNombreColex,
+          brokerNombre: val('brokerNombre'),
+          brokerCedula: val('brokerCedula'),
+          brokerCorreo: val('nBrokerCorreo'),
+          formatos:     formatosColexGen
+        });
+      });
+    } catch(regErr) { console.warn('registrarUso COLEX:', regErr.message); }
 
   } catch(err) {
     alert('Error al generar formatos COLEX:\n' + err.message);
