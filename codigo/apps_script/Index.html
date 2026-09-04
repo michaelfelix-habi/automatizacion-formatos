@@ -1650,7 +1650,7 @@ function validarObligatorios() {
   return valido;
 }
 
-function val(id) { return (document.getElementById(id).value || '').trim(); }
+function val(id) { const el = document.getElementById(id); return el ? (el.value || '').trim() : ''; }
 
 // ════════════════════════════════════════════════════════
 // GENERACIÓN DEL PDF
