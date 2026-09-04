@@ -1253,7 +1253,11 @@
     <div id="chksNacional" class="d-flex flex-wrap gap-4 justify-content-center campo-oculto">
       <div class="form-check form-check-inline">
         <input class="form-check-input" type="checkbox" id="chkVinculacion" checked>
-        <label class="form-check-label fw-semibold" for="chkVinculacion">Vinculación</label>
+        <label class="form-check-label fw-semibold" for="chkVinculacion">Vinculación Titular 1</label>
+      </div>
+      <div class="form-check form-check-inline campo-oculto" id="divChkVinculacion2">
+        <input class="form-check-input" type="checkbox" id="chkVinculacion2" checked>
+        <label class="form-check-label fw-semibold" for="chkVinculacion2">Vinculación Titular 2</label>
       </div>
       <div class="form-check form-check-inline">
         <input class="form-check-input" type="checkbox" id="chkNomina" checked>
@@ -1543,6 +1547,7 @@ function cambiarNumTitulares() {
   const dos = document.getElementById('numTitulares').value === '2';
   mostrar('seccionTitular2', dos);
   mostrar('divTipoVinculo2', dos);
+  mostrar('divChkVinculacion2', dos);
 }
 function mostrarSeccionConyuge2() {
   const v = document.getElementById('estadoCivil2').value;
@@ -2047,10 +2052,12 @@ async function generarTodos() {
   const linea = document.getElementById('lineaCredito').value;
   if (!linea) { alert('Por favor selecciona la línea de crédito (Nacional o COLEX).'); return; }
   if (linea === 'colex') { await generarTodosColex(); return; }
-  const genVin = document.getElementById('chkVinculacion').checked;
-  const genNom = document.getElementById('chkNomina').checked;
-  const genCon = document.getElementById('chkConocimiento').checked;
-  if (!genVin && !genNom && !genCon) { alert('Selecciona al menos un formato para descargar.'); return; }
+  const genVin  = document.getElementById('chkVinculacion').checked;
+  const esDos   = document.getElementById('numTitulares').value === '2';
+  const genVin2 = document.getElementById('chkVinculacion2').checked && esDos;
+  const genNom  = document.getElementById('chkNomina').checked;
+  const genCon  = document.getElementById('chkConocimiento').checked;
+  if (!genVin && !genVin2 && !genNom && !genCon) { alert('Selecciona al menos un formato para descargar.'); return; }
   document.getElementById('spinner').style.display = 'block';
   try {
     const hoy = new Date();
@@ -2242,11 +2249,9 @@ async function generarTodos() {
     } // fin if (genVin)
 
     // ──────────────────────────────
-    // 1b. PDF VINCULACIÓN TITULAR 2 (solo si 2 titulares)
+    // 1b. PDF VINCULACIÓN TITULAR 2
     // ──────────────────────────────
-    const numTit = document.getElementById('numTitulares').value;
-    const esDos = numTit === '2';
-    if (genVin && esDos) {
+    if (genVin2) {
     await new Promise(r => setTimeout(r, 500));
     const base64V2 = await new Promise((resolve, reject) => {
       google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).getPlantilla();
