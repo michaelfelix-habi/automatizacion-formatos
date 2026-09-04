@@ -552,6 +552,7 @@
       <div class="col-md-6 campo-oculto" id="divTexto58">
         <label class="form-label">Número de cuenta en exterior *</label>
         <input type="text" id="texto58" class="form-control">
+        <small class="text-muted-sm">⚠️ Por favor validar número de cuenta en el extracto del cliente</small>
       </div>
       <div class="col-md-6 campo-oculto" id="divTexto59">
         <label class="form-label">País de la cuenta *</label>
@@ -635,7 +636,7 @@
   </div>
 
   <!-- ── SECCIÓN 7: OPERACIONES INTERNACIONALES ── -->
-  <div class="seccion">
+  <div class="seccion" id="seccionOpMoneda">
     <h5>Sección 7 — Operaciones internacionales</h5>
     <div class="row g-3">
       <div class="col-md-6">
@@ -1524,6 +1525,23 @@ function cambiarLinea() {
       }
     }
   });
+
+  // Operaciones en moneda extranjera — ocultar sección completa en COLEX (siempre No)
+  mostrar('seccionOpMoneda', !esColex);
+  if (esColex) {
+    document.getElementById('opMoneda').value   = 'No';
+    document.getElementById('poseeMoneda').value = 'No';
+  }
+
+  // Antigüedad en la ciudad — placeholder numérico en COLEX
+  const inpAntig = document.getElementById('antiguedadCiudad');
+  inpAntig.placeholder = esColex ? 'Ej: 5  (solo número, se agregará "años")' : 'ej. 5 años';
+  inpAntig.type = esColex ? 'number' : 'text';
+
+  // Plazo — placeholder numérico en COLEX
+  const inpPlazo = document.getElementById('plazo');
+  inpPlazo.placeholder = esColex ? 'Ej: 180  (solo número, se agregará "meses")' : 'ej. 180';
+  inpPlazo.type = esColex ? 'number' : 'text';
 }
 
 function mostrarCualApoderado() {
@@ -2682,7 +2700,8 @@ async function generarTodosColex() {
       radio('pc',val('pcd')); txt('Cuál',val('cualPcd')); txt('Texto13',val('tituloProfesional')); txt('Texto14',val('correo'));
       txt('Texto15', val('codigoPostal') ? val('direccion')+', CP '+val('codigoPostal') : val('direccion'));
       txt('Texto16',val('paisRes')); txt('Texto17',val('dptoRes')); txt('Texto18',val('ciudadRes'));
-      txt('Texto19',val('estrato')); txt('Texto20',val('personasCargo')); txt('Texto21',val('antiguedadCiudad'));
+      txt('Texto19',val('estrato')); txt('Texto20',val('personasCargo'));
+      txt('Texto21', val('antiguedadCiudad') ? val('antiguedadCiudad') + ' años' : '');
       txt('Texto25',val('telefonoCelular')); txt('Texto24',val('telefono2')); txt('Texto26',val('nacionalidad'));
       txt('Texto27',val('nacionalidadColex2')); txt('Texto28',val('nacionalidadColex3')); txt('Texto29',val('nacionalidadColex4'));
       radio('correspondencia','3'); radio('banco','3');
@@ -2714,8 +2733,8 @@ async function generarTodosColex() {
       // Cuenta en exterior COLEX — siempre Sí (línea COLEX exige cuenta exterior)
       radio('cuentas',SN['Sí']);   // '1' = Sí
       txt('Texto58',val('texto58')); txt('Texto59',val('texto59')); txt('Texto60',val('texto60'));
-      // Operaciones moneda extranjera — COLEX: se dejan sin selección
-      radioOff('moneda'); radioOff('posee');
+      // Operaciones moneda extranjera — COLEX: siempre No
+      radio('moneda', SN['No']); radio('posee', SN['No']);
       radio('tiene','2');
 
       // Financiera
@@ -2742,7 +2761,9 @@ async function generarTodosColex() {
       txt('Ciudad_3',val('per2ciudad')); txt('Teléfonos de contacto_3',val('per2tel'));
 
       // Crédito
-      txt('Texto76',fmt(val('monto'))); txt('Texto77',val('plazo')); txt('Texto3',val('subproducto'));
+      txt('Texto76',fmt(val('monto')));
+      txt('Texto77', val('plazo') ? val('plazo') + ' meses' : '');
+      txt('Texto3',val('subproducto'));
       txt('Texto12',val('diaPago')); radio('bbva','2');  // siempre No
       radio('Pesos','1'); radio('Nuevo',ESTINM[val('estadoInmueble')]||'');  // siempre Pesos
       radio('Casa',TINM[val('tipoInmueble')]||''); txt('Texto82',val('direccionInmueble'));
