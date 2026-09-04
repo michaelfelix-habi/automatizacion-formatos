@@ -1030,6 +1030,7 @@
           <option value="Sí">Sí</option>
           <option value="No">No — se incluye Sección 3 en Creación de Cliente</option>
         </select>
+        <small id="avisoRut" class="text-muted-sm campo-oculto">⚠️ El RUT debe ser aportado en el expediente digital para la radicación del crédito</small>
       </div>
     </div>
   </div>
@@ -1554,9 +1555,8 @@ function mostrarDetallesCuentaExterior() {
 }
 
 function alertarRut() {
-  if (document.getElementById('tieneRut').value === 'Sí') {
-    alert('Recuerde: el RUT del cliente debe ser aportado en el expediente digital para la radicación del crédito.');
-  }
+  const esSi = document.getElementById('tieneRut').value === 'Sí';
+  mostrar('avisoRut', esSi);
 }
 
 function cambiarNumTitulares() {
