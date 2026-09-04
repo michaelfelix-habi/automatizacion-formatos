@@ -368,7 +368,7 @@
       </div>
       <div class="col-md-4">
         <label class="form-label">Antigüedad en la ciudad *</label>
-        <input type="text" id="antiguedadCiudad" class="form-control" placeholder="ej. 5 años">
+        <input type="number" id="antiguedadCiudad" class="form-control" placeholder="Ej: 5">
       </div>
       <div class="col-md-4">
         <label class="form-label" id="labelTelCelular">Teléfono celular *</label>
@@ -775,7 +775,7 @@
       <div class="col-md-3"><label class="form-label">Ciudad de residencia *</label><input type="text" id="ciudadRes2" class="form-control"></div>
       <div class="col-md-3"><label class="form-label">Estrato *</label><input type="text" id="estrato2" class="form-control" maxlength="1"></div>
       <div class="col-md-4"><label class="form-label">N° personas a cargo *</label><input type="text" id="personasCargo2" class="form-control" placeholder="0 si no tiene"></div>
-      <div class="col-md-4"><label class="form-label">Antigüedad en la ciudad *</label><input type="text" id="antiguedadCiudad2" class="form-control" placeholder="ej. 5 años"></div>
+      <div class="col-md-4"><label class="form-label">Antigüedad en la ciudad *</label><input type="number" id="antiguedadCiudad2" class="form-control" placeholder="Ej: 5"></div>
       <div class="col-md-4"><label class="form-label">Teléfono celular *</label><input type="text" id="telefonoCelular2" class="form-control"></div>
       <div class="col-md-4"><label class="form-label">Teléfono adicional</label><input type="text" id="telefono2b" class="form-control" placeholder="Opcional"></div>
       <div class="col-md-6"><label class="form-label">Nacionalidad *</label><input type="text" id="nacionalidad2" class="form-control" placeholder="ej. Colombiana"></div>
@@ -1533,10 +1533,8 @@ function cambiarLinea() {
     document.getElementById('poseeMoneda').value = 'No';
   }
 
-  // Antigüedad en la ciudad — placeholder numérico en COLEX
-  const inpAntig = document.getElementById('antiguedadCiudad');
-  inpAntig.placeholder = esColex ? 'Ej: 5  (solo número, se agregará "años")' : 'ej. 5 años';
-  inpAntig.type = esColex ? 'number' : 'text';
+  // Antigüedad en la ciudad — siempre numérico, se agrega "años" en el PDF
+  document.getElementById('antiguedadCiudad').placeholder = 'Ej: 5';
 
   // Plazo — placeholder numérico en COLEX
   const inpPlazo = document.getElementById('plazo');
@@ -1809,7 +1807,7 @@ async function generarPDF() {
     txt('Texto18', val('ciudadRes'));
     txt('Texto19', val('estrato'));
     txt('Texto20', val('personasCargo'));
-    txt('Texto21', val('antiguedadCiudad'));
+    txt('Texto21', val('antiguedadCiudad') ? val('antiguedadCiudad') + ' años' : '');
     txt('Texto25', val('telefonoCelular'));
     txt('Texto24', val('telefono2'));
     txt('Texto26', val('nacionalidad'));
@@ -2131,7 +2129,8 @@ async function generarTodos() {
       radio('tipo vivienda',val('tipoVivienda')); txt('Cuál_2',val('cualVivienda')); txt('Texto22',val('valorVivienda'));
       radio('pc',val('pcd')); txt('Cuál',val('cualPcd')); txt('Texto13',val('tituloProfesional')); txt('Texto14',val('correo'));
       txt('Texto15',val('direccion')); txt('Texto16',val('paisRes')); txt('Texto17',val('dptoRes')); txt('Texto18',val('ciudadRes'));
-      txt('Texto19',val('estrato')); txt('Texto20',val('personasCargo')); txt('Texto21',val('antiguedadCiudad'));
+      txt('Texto19',val('estrato')); txt('Texto20',val('personasCargo'));
+      txt('Texto21', val('antiguedadCiudad') ? val('antiguedadCiudad') + ' años' : '');
       txt('Texto25',val('telefonoCelular')); txt('Texto24',val('telefono2')); txt('Texto26',val('nacionalidad'));
       radio('correspondencia','3'); radio('banco','3'); txt('Texto30','Colombia'); txt('Texto34',val('numId'));
 
@@ -2315,7 +2314,8 @@ async function generarTodos() {
       radio('tipo vivienda',val('tipoVivienda2')); txt('Cuál_2',val('cualVivienda2')); txt('Texto22',fmt(val('valorVivienda2')));
       radio('pc',val('pcd2')); txt('Cuál',val('cualPcd2')); txt('Texto13',val('tituloProfesional2')); txt('Texto14',val('correo2'));
       txt('Texto15',val('direccion2')); txt('Texto16',val('paisRes2')); txt('Texto17',val('dptoRes2')); txt('Texto18',val('ciudadRes2'));
-      txt('Texto19',val('estrato2')); txt('Texto20',val('personasCargo2')); txt('Texto21',val('antiguedadCiudad2'));
+      txt('Texto19',val('estrato2')); txt('Texto20',val('personasCargo2'));
+      txt('Texto21', val('antiguedadCiudad2') ? val('antiguedadCiudad2') + ' años' : '');
       txt('Texto25',val('telefonoCelular2')); txt('Texto24',val('telefono2b')); txt('Texto26',val('nacionalidad2'));
       radio('correspondencia','3'); radio('banco','3'); txt('Texto30','Colombia'); txt('Texto34',val('numId2'));
 
