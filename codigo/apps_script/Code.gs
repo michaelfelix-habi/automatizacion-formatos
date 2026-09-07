@@ -6,7 +6,8 @@
 function doGet(e) {
   return HtmlService.createHtmlOutputFromFile('Index')
     .setTitle('Formatos BBVA — HABICREDIT')
-    .addMetaTag('viewport', 'width=device-width, initial-scale=1');
+    .addMetaTag('viewport', 'width=device-width, initial-scale=1')
+    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.DEFAULT); // X-Frame-Options: SAMEORIGIN
 }
 
 // IDs de los PDFs plantilla en Google Drive
