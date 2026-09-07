@@ -1950,8 +1950,7 @@ async function generarPDF() {
     }
 
     // ── SECCIONES FIJAS (14, 15, 16) ──
-    // BBVA Seguros — Seguro de Vida Vital
-    try { form.getCheckBox('Seguro de Vida Vital').check(); } catch(e) {}
+    // BBVA Seguros — Seguro de Vida Vital (se deja en blanco)
     // Canal comunicación — Cartas (no desea ser contactado por cartas)
     try { form.getCheckBox('Casilla de verificación10').check(); } catch(e) {}
     // Canal de pago — WhatsApp
@@ -2201,7 +2200,7 @@ async function generarTodos() {
         txt('tarjetaRow1',val('numCreditoCartera')); txt('ValorRow1',fmt(val('valorCartera'))); txt('PlazoValor',val('plazoCartera'));
       }
 
-      try { form.getCheckBox('Seguro de Vida Vital').check(); } catch(e) {}
+      // Seguro de Vida Vital — se deja en blanco
       try { form.getCheckBox('Casilla de verificación10').check(); } catch(e) {}
       try { form.getCheckBox('Casilla de verificación12').check(); } catch(e) {}
       txt('Texto131',val('numId'));
@@ -2377,7 +2376,7 @@ async function generarTodos() {
         txt('Entidad financieraRow1',val('entidadCartera')); txt('HipotecarioRow1','X');
         txt('tarjetaRow1',val('numCreditoCartera')); txt('ValorRow1',fmt(val('valorCartera'))); txt('PlazoValor',val('plazoCartera'));
       }
-      try{form.getCheckBox('Seguro de Vida Vital').check();}catch(e){}
+      // Seguro de Vida Vital — se deja en blanco
       try{form.getCheckBox('Casilla de verificación10').check();}catch(e){}
       try{form.getCheckBox('Casilla de verificación12').check();}catch(e){}
       txt('Texto131',val('numId2'));
@@ -2785,7 +2784,7 @@ async function generarTodosColex() {
         txt('tarjetaRow1',val('numCreditoCartera')); txt('ValorRow1',fmt(val('valorCartera')));
         txt('PlazoValor',val('plazoCartera'));
       }
-      try{form.getCheckBox('Seguro de Vida Vital').check();}catch(e){}
+      // Seguro de Vida Vital — se deja en blanco
       try{form.getCheckBox('Casilla de verificación10').check();}catch(e){}
       try{form.getCheckBox('Casilla de verificación12').check();}catch(e){}
       txt('Texto131',val('numId'));
