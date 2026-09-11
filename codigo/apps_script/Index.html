@@ -2930,6 +2930,74 @@ async function generarTodosColex() {
     document.getElementById('spinner').style.display = 'none';
   }
 }
+
+// ── Validación de campos — solo Nacional (maxlength 30, tipo de dato) ──────
+(function() {
+  function esNacional() {
+    const v = document.getElementById('lineaCredito');
+    return v && v.value !== 'COLEX';
+  }
+
+  // Campos con maxlength propio < 30 que no se deben sobreescribir
+  const ML_FIJO = { diaNac:2,mesNac:2,anoNac:4,diaIngreso:2,mesIngreso:2,anoIngreso:4,
+                    diaNac2:2,mesNac2:2,anoNac2:4,diaIngreso2:2,mesIngreso2:2,anoIngreso2:4,
+                    estrato:1,estrato2:1 };
+
+  const NUM = [
+    'diaNac','mesNac','anoNac','numId','estrato','personasCargo',
+    'telefonoCelular','telefono2','codigoPostal','valorVivienda','conyNumId',
+    'diaIngreso','mesIngreso','anoIngreso',
+    'ingresos','otrosIngresos','canonArriendo','totalEgresos','totalPasivos','totalActivos','ventasAnuales',
+    'numCreditoCartera','valorCartera','plazoCartera',
+    'diaNac2','mesNac2','anoNac2','numId2','estrato2','personasCargo2',
+    'telefonoCelular2','telefono2b','valorVivienda2','conyNumId2',
+    'diaIngreso2','mesIngreso2','anoIngreso2',
+    'ingresos2','otrosIngresos2','canonArriendo2','totalEgresos2','totalPasivos2','totalActivos2','ventasAnuales2'
+  ];
+
+  const ALFA = [
+    'nombres','primerApellido','segundoApellido',
+    'paisNac','dptoNac','ciudadNac','paisRes','dptoRes','ciudadRes',
+    'tituloProfesional','nacionalidad','conyNombres','conyApellido1','conyApellido2',
+    'nombres2','primerApellido2','segundoApellido2',
+    'paisNac2','dptoNac2','ciudadNac2','paisRes2','dptoRes2','ciudadRes2',
+    'tituloProfesional2','nacionalidad2','conyNombres2','conyApellido12','conyApellido22'
+  ];
+
+  const MIX = [
+    'direccion','direccion2','nombreEmpresa','nombreEmpresa2','cargo','cargo2',
+    'actividadEmpresa','actividadEmpresa2','descripcionOtrosIngresos','descripcionOtrosIngresos2',
+    'procedenciaRecursos','procedenciaRecursos2','texto58','texto59','texto60',
+    'cualLaboral','cualLaboral2','cualTipoId','cualTipoId2',
+    'cualVivienda','cualVivienda2','cualPcd','cualPcd2','cualConyuge','cualConyuge2'
+  ];
+
+  function registrar(ids, filtro) {
+    ids.forEach(function(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (!ML_FIJO[id]) el.setAttribute('maxlength', '30');
+      if (filtro) {
+        el.addEventListener('input', function() {
+          if (!esNacional()) return;
+          const pos = this.selectionStart;
+          const antes = this.value;
+          const despues = antes.replace(filtro, '');
+          if (antes !== despues) {
+            this.value = despues;
+            // mantener posición del cursor
+            const diff = antes.length - despues.length;
+            this.setSelectionRange(Math.max(0, pos - diff), Math.max(0, pos - diff));
+          }
+        });
+      }
+    });
+  }
+
+  registrar(NUM,  /[^0-9]/g);
+  registrar(ALFA, /[^A-Za-záéíóúüÁÉÍÓÚÜñÑ\s]/g);
+  registrar(MIX,  null);
+})();
 </script>
 </body>
 </html>
