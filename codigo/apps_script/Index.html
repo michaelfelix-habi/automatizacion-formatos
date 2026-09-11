@@ -2064,10 +2064,8 @@ function actualizarTasaUVR() {
   const esUVR = document.getElementById('pesosUvr').value === 'UVR';
   mostrar('divNTasaConNominaUVR', false);
   mostrar('divNTasaConNomina', true);
-  if (esUVR) {
-    const campo = document.getElementById('nTasaConNomina');
-    if (!campo.value) campo.value = '3,40';
-  }
+  const campo = document.getElementById('nTasaConNomina');
+  campo.placeholder = esUVR ? '3,40' : 'ej. 10,20';
   const nota = document.getElementById('notaTasaSin');
   if (nota) nota.textContent = esUVR
     ? 'Ingrese la tasa sin nómina. Resultado: «X,XX %»'
