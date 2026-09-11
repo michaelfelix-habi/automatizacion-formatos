@@ -1329,6 +1329,7 @@ const RADICADORES = {
       { nombre: 'Madelein González',        analista: { nombre: 'Laura Stephania Guzmán',    cedula: '1000776723', codigo: 'T069531' } },
       { nombre: 'Madian Chitiva',           analista: { nombre: 'Adriana Carolina Cortés',   cedula: '52986936',   codigo: 'T046516' } },
       { nombre: 'Paola Andrea Castro',      analista: { nombre: 'Laura Stephania Guzmán',    cedula: '1000776723', codigo: 'T069531' } },
+      { nombre: 'Nadia Pardo', analistaFijo: true, analista: { nombre: 'Linda Estefany Beltrán', cedula: '1110580226', codigo: 'OC00632' } },
     ]
   },
   'Cali': {
@@ -1374,7 +1375,8 @@ const _CIUDADES_NORM = {
   'bogota': 'Bogotá', 'cali': 'Cali',
   'medellin': 'Medellín', 'barranquilla': 'Barranquilla'
 };
-function resolverAnalistaPorCompra(ciudadCompraRaw, ciudadSel, analistaDefault) {
+function resolverAnalistaPorCompra(ciudadCompraRaw, ciudadSel, analistaDefault, fijo) {
+  if (fijo) return analistaDefault;
   const clave = normCiudad(ciudadCompraRaw);
   const ciudadCompra = _CIUDADES_NORM[clave];
   if (ciudadCompra && ciudadCompra !== ciudadSel && RADICADORES[ciudadCompra]) {
@@ -1963,8 +1965,9 @@ async function generarPDF() {
     const ciudadSel  = val('ciudad');
     const dirIdx     = val('director');
     const datosRad   = RADICADORES[ciudadSel];
-    let analista   = datosRad && dirIdx !== '' ? datosRad.directores[parseInt(dirIdx)].analista : null;
-    analista = resolverAnalistaPorCompra(val('ciudadCompra'), ciudadSel, analista);
+    const dirData  = datosRad && dirIdx !== '' ? datosRad.directores[parseInt(dirIdx)] : null;
+    let analista   = dirData ? dirData.analista : null;
+    analista = resolverAnalistaPorCompra(val('ciudadCompra'), ciudadSel, analista, dirData && dirData.analistaFijo);
     let coordinador = datosRad ? datosRad.coordinador : null;
     coordinador = resolverCoordinadorPorCompra(val('ciudadCompra'), ciudadSel, coordinador);
 
@@ -2206,8 +2209,9 @@ async function generarTodos() {
       txt('Texto131',val('numId'));
 
       const ciudadSel=val('ciudad'), dirIdx=val('director'), datosRad=RADICADORES[ciudadSel];
-      let analista=datosRad&&dirIdx!==''?datosRad.directores[parseInt(dirIdx)].analista:null;
-      analista = resolverAnalistaPorCompra(val('ciudadCompra'), ciudadSel, analista);
+      const dirDataN=datosRad&&dirIdx!==''?datosRad.directores[parseInt(dirIdx)]:null;
+      let analista=dirDataN?dirDataN.analista:null;
+      analista = resolverAnalistaPorCompra(val('ciudadCompra'), ciudadSel, analista, dirDataN&&dirDataN.analistaFijo);
       let coordinador=datosRad?datosRad.coordinador:null;
       coordinador = resolverCoordinadorPorCompra(val('ciudadCompra'), ciudadSel, coordinador);
       if (analista) { txtFs('Código Nombre del funcionario',analista.nombre + ' '); txt('Identificación',analista.cedula); txt('Texto122',analista.codigo); }
@@ -2382,8 +2386,9 @@ async function generarTodos() {
       txt('Texto131',val('numId2'));
 
       const ciudadSel2=val('ciudad'), dirIdx2=val('director'), datosRad2=RADICADORES[ciudadSel2];
-      let analista2=datosRad2&&dirIdx2!==''?datosRad2.directores[parseInt(dirIdx2)].analista:null;
-      analista2=resolverAnalistaPorCompra(val('ciudadCompra'), ciudadSel2, analista2);
+      const dirData2=datosRad2&&dirIdx2!==''?datosRad2.directores[parseInt(dirIdx2)]:null;
+      let analista2=dirData2?dirData2.analista:null;
+      analista2=resolverAnalistaPorCompra(val('ciudadCompra'), ciudadSel2, analista2, dirData2&&dirData2.analistaFijo);
       let coordinador2=datosRad2?datosRad2.coordinador:null;
       coordinador2=resolverCoordinadorPorCompra(val('ciudadCompra'), ciudadSel2, coordinador2);
       if(analista2){txtFs('Código Nombre del funcionario',analista2.nombre+' '); txt('Identificación',analista2.cedula); txt('Texto122',analista2.codigo);}
@@ -2498,8 +2503,9 @@ async function generarTodos() {
       const datosRad    = RADICADORES[ciudadSel];
       let coordinador = datosRad ? datosRad.coordinador : null;
       coordinador = resolverCoordinadorPorCompra(val('ciudadCompra'), ciudadSel, coordinador);
-      let analista    = datosRad && dirIdx !== '' ? datosRad.directores[parseInt(dirIdx)].analista : null;
-      analista = resolverAnalistaPorCompra(val('ciudadCompra'), ciudadSel, analista);
+      const dirDataC  = datosRad && dirIdx !== '' ? datosRad.directores[parseInt(dirIdx)] : null;
+      let analista    = dirDataC ? dirDataC.analista : null;
+      analista = resolverAnalistaPorCompra(val('ciudadCompra'), ciudadSel, analista, dirDataC && dirDataC.analistaFijo);
       const nombreCliente = [val('nombres'), val('primerApellido'), val('segundoApellido')].filter(Boolean).join(' ');
       const hoyStr = `${dia}/${mes}/${ano}`;
 
@@ -2646,8 +2652,9 @@ async function generarTodosColex() {
     const ciudadSel = val('ciudad');
     const dirIdx    = val('director');
     const datosRad  = RADICADORES[ciudadSel];
-    let analista    = datosRad && dirIdx !== '' ? datosRad.directores[parseInt(dirIdx)].analista : null;
-    analista        = resolverAnalistaPorCompra(val('ciudadCompra'), ciudadSel, analista);
+    const dirDataCx = datosRad && dirIdx !== '' ? datosRad.directores[parseInt(dirIdx)] : null;
+    let analista    = dirDataCx ? dirDataCx.analista : null;
+    analista        = resolverAnalistaPorCompra(val('ciudadCompra'), ciudadSel, analista, dirDataCx && dirDataCx.analistaFijo);
     let coordinador = datosRad ? datosRad.coordinador : null;
     coordinador     = resolverCoordinadorPorCompra(val('ciudadCompra'), ciudadSel, coordinador);
     const nombreCliente = [val('nombres'), val('primerApellido'), val('segundoApellido')].filter(Boolean).join(' ');
