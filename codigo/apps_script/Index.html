@@ -2062,8 +2062,12 @@ async function generarPDF() {
 // ════════════════════════════════════════════════════════
 function actualizarTasaUVR() {
   const esUVR = document.getElementById('pesosUvr').value === 'UVR';
-  mostrar('divNTasaConNominaUVR', esUVR);
-  mostrar('divNTasaConNomina', !esUVR);
+  mostrar('divNTasaConNominaUVR', false);
+  mostrar('divNTasaConNomina', true);
+  if (esUVR) {
+    const campo = document.getElementById('nTasaConNomina');
+    if (!campo.value) campo.value = '3,40';
+  }
   const nota = document.getElementById('notaTasaSin');
   if (nota) nota.textContent = esUVR
     ? 'Ingrese la tasa sin nómina. Resultado: «X,XX %»'
@@ -2445,7 +2449,7 @@ async function generarTodos() {
 
       const esUVR = val('pesosUvr') === 'UVR';
       const plazoN = val('plazo') ? `${val('plazo')}meses` : '';
-      const tasaCon = esUVR ? '3,40%' : (val('nTasaConNomina') ? `${val('nTasaConNomina')}%` : '');
+      const tasaCon = val('nTasaConNomina') ? `${val('nTasaConNomina')}%` : '';
       const tasaSin = val('nTasaSinNomina') ? `${val('nTasaSinNomina')}%` : '';
 
       txtN('Texto1',  fmt(val('monto')));
