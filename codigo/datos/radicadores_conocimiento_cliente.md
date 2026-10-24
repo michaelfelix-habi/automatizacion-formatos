@@ -36,35 +36,36 @@ Los 3 roles del formato se llenan así:
 - 📝 **Nota Vinculación:** ahí sí se requiere nombre + cédula → **C.C. 1000066151**.
 
 ### Gestor / Analista — por Director Comercial
-> Desplegable de 9 directores. Solo hay **3 analistas distintos** (el analista NO es el director).
+> Desplegable de 9 directores. Solo hay **2 analistas distintos** (el analista NO es el director).
 
 **Desplegable "Director Comercial" (Bogotá) → Analista asignado:**
 
 | # | Director Comercial | Analista asignado |
 |---|--------------------|-------------------|
-| 1 | Lorena Rico Avilés | Juan Felipe Pinilla |
-| 2 | Juan Felipe Galán | Juan Felipe Pinilla |
+| 1 | Lorena Rico Avilés | Linda Estefany Beltrán |
+| 2 | Juan Felipe Galán | Linda Estefany Beltrán |
 | 3 | Carlos Giovanny Ríos | Adriana Carolina Cortés |
-| 4 | Evelyn Tatiana Guzmán | Laura Stephania Guzmán |
-| 5 | Lorena Gutiérrez | Adriana Carolina Cortés |
-| 6 | Luisa Quijano | Laura Stephania Guzmán |
-| 7 | Madelein González | Laura Stephania Guzmán |
-| 8 | Madian Chitiva | Adriana Carolina Cortés |
-| 9 | Paola Andrea Castro | Laura Stephania Guzmán |
+| 4 | Lorena Gutiérrez | Adriana Carolina Cortés |
+| 5 | Luisa Quijano | Linda Estefany Beltrán |
+| 6 | Madelein González | Adriana Carolina Cortés |
+| 7 | Madian Chitiva | Adriana Carolina Cortés |
+| 8 | Paola Andrea Castro | Linda Estefany Beltrán |
+| 9 | Nadia Pardo (fija) | Linda Estefany Beltrán |
 
-**Datos de los 3 analistas (para el formato):**
+> 📝 Evelyn Tatiana Guzmán (directora) y José Iván Motivar y Laura Stephania Guzmán (analistas)
+> se retiraron del desplegable: ya no laboran con nosotros / no están en esta área (2026-10-24).
+
+**Datos de los 2 analistas activos (para el formato):**
 
 | Analista | Cédula | Firma |
 |----------|--------|-------|
-| Juan Felipe Pinilla | 1.012.316.687 | = su nombre escrito (sin imagen) |
 | Adriana Carolina Cortés | 52.986.936 | = su nombre escrito (sin imagen) |
-| Laura Stephania Guzmán | ⏳ pendiente | = su nombre escrito (sin imagen) |
+| Linda Estefany Beltrán | 1.110.580.226 | = su nombre escrito (sin imagen) |
 
 > 📝 **Nota para el formato de Vinculación (no aplica aquí):** cada analista tiene un **código**
 > que SOLO se usa en la Vinculación. Se guardan aquí para no perderlos:
-> - Juan Felipe Pinilla → código **OC01166**
 > - Adriana Carolina Cortés → código **T046516**
-> - Laura Stephania Guzmán → código ⏳ pendiente
+> - Linda Estefany Beltrán → código **OC00632**
 
 ---
 
@@ -134,16 +135,15 @@ Los 3 roles del formato se llenan así:
 ---
 
 ## 📌 Estado de las 4 ciudades
-- [x] **Bogotá** — completa (falta solo la cédula de la analista Laura Stephania Guzmán).
+- [x] **Bogotá** — completa.
 - [x] **Cali** — completa.
 - [x] **Medellín** — completa.
 - [x] **Barranquilla** — completa.
 - [x] Firmas: NADIE lleva imagen en este formato; siempre va solo el nombre escrito.
 
 ### Pendientes menores (no bloquean el diseño; se completan luego)
-- [ ] Cédula de la analista **Laura Stephania Guzmán** (Bogotá).
-- [ ] Códigos de Vinculación de: Laura Stephania Guzmán (Bogotá) y Nayelis de Jesús Toscano
-      (Barranquilla). *(Solo se usan en el formato de Vinculación, no aquí.)*
+- [ ] Código de Vinculación de Nayelis de Jesús Toscano
+      (Barranquilla). *(Solo se usa en el formato de Vinculación, no aquí.)*
 - [ ] Datos de Cali, Medellín y Barranquilla.
 - [ ] Confirmar si la lógica (Prescriptor=broker, Coordinador fijo, Analista por director)
       es igual en las otras 3 ciudades.

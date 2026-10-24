@@ -184,11 +184,11 @@
     <div class="row g-3">
       <div class="col-md-6">
         <label class="form-label">Nombre completo del broker *</label>
-        <input type="text" id="brokerNombre" class="form-control" placeholder="Nombres y apellidos">
+        <input type="text" id="brokerNombre" class="form-control" placeholder="Nombres y apellidos" oninput="soloTexto(this)">
       </div>
       <div class="col-md-6">
         <label class="form-label">Cédula del broker *</label>
-        <input type="text" id="brokerCedula" class="form-control" placeholder="Sin puntos ni comas">
+        <input type="text" id="brokerCedula" class="form-control" placeholder="Sin puntos ni comas" oninput="soloNumeros(this)">
       </div>
     </div>
   </div>
@@ -888,6 +888,14 @@
           <option value="Sí">Sí</option>
         </select>
       </div>
+      <div class="col-md-6">
+        <label class="form-label">¿Recibe el pago de su nómina a través de BBVA? *</label>
+        <select id="nominaBBVA2" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="Sí">Sí</option>
+          <option value="No">No</option>
+        </select>
+      </div>
     </div>
 
     <!-- Información financiera T2 -->
@@ -1081,19 +1089,27 @@
 
       <div class="col-md-6">
         <label class="form-label">Monto del crédito ($) *</label>
-        <input type="text" id="monto" class="form-control" placeholder="Solo números">
+        <input type="text" id="monto" class="form-control" placeholder="Solo números" oninput="soloNumeros(this)">
       </div>
       <div class="col-md-6">
         <label class="form-label">Plazo en meses *</label>
-        <input type="text" id="plazo" class="form-control" placeholder="ej. 180">
+        <input type="text" id="plazo" class="form-control" placeholder="ej. 180" oninput="soloNumeros(this)" maxlength="3">
       </div>
       <div class="col-md-6">
         <label class="form-label">Subproducto *</label>
-        <input type="text" id="subproducto" class="form-control" placeholder="Código numérico">
+        <input type="text" id="subproducto" class="form-control" placeholder="Código numérico" oninput="soloNumeros(this)" maxlength="4">
       </div>
       <div class="col-md-6">
         <label class="form-label">Día de pago *</label>
-        <input type="text" id="diaPago" class="form-control" placeholder="ej. 5">
+        <input type="text" id="diaPago" class="form-control" placeholder="ej. 5" oninput="soloNumeros(this)" maxlength="2">
+      </div>
+      <div class="col-md-6" id="divNominaBBVA">
+        <label class="form-label">¿Recibe el pago de su nómina a través de BBVA? *</label>
+        <select id="nominaBBVA" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="Sí">Sí</option>
+          <option value="No">No</option>
+        </select>
       </div>
       <div class="col-md-6" id="divPesosUvr">
         <label class="form-label">Crédito hipotecario en *</label>
@@ -1125,7 +1141,7 @@
       </div>
       <div class="col-md-6">
         <label class="form-label">Valor del inmueble ($) *</label>
-        <input type="text" id="valorInmueble" class="form-control" placeholder="Solo números">
+        <input type="text" id="valorInmueble" class="form-control" placeholder="Solo números" oninput="soloNumeros(this)">
       </div>
 
       <!-- % Leasing (condicional) -->
@@ -1144,11 +1160,11 @@
     <div class="row g-3">
       <div class="col-md-6">
         <label class="form-label">Entidad financiera a la que se le compra *</label>
-        <input type="text" id="entidadCartera" class="form-control" placeholder="Nombre del banco">
+        <input type="text" id="entidadCartera" class="form-control" placeholder="Nombre del banco" oninput="soloLetras(this)" maxlength="20">
       </div>
       <div class="col-md-4">
         <label class="form-label">Número del crédito *</label>
-        <input type="text" id="numCreditoCartera" class="form-control">
+        <input type="text" id="numCreditoCartera" class="form-control" oninput="soloNumeros(this)">
       </div>
       <div class="col-md-4">
         <label class="form-label">Valor de la deuda actual ($) *</label>
@@ -1156,7 +1172,7 @@
       </div>
       <div class="col-md-4">
         <label class="form-label">Plazo actual de la deuda *</label>
-        <input type="text" id="plazoCartera" class="form-control">
+        <input type="text" id="plazoCartera" class="form-control" oninput="soloNumeros(this)" maxlength="3">
       </div>
     </div>
   </div>
@@ -1169,13 +1185,13 @@
 
       <div class="col-md-6">
         <label class="form-label">Valor de ahorro al tomar nómina ($) *</label>
-        <input type="text" id="nAhorro" class="form-control" placeholder="Solo números">
+        <input type="text" id="nAhorro" class="form-control" placeholder="Solo números" oninput="soloNumerosYComa(this)">
         <small class="text-muted-sm">Cuánto ahorra el cliente si vincula su nómina. Se formatea con puntos.</small>
       </div>
 
       <div class="col-md-6" id="divNTasaConNomina">
         <label class="form-label">Tasa con nómina (%) *</label>
-        <input type="text" id="nTasaConNomina" class="form-control" placeholder="ej. 10,20">
+        <input type="text" id="nTasaConNomina" class="form-control" placeholder="ej. 10,20" oninput="soloNumerosYComa(this)" maxlength="6">
         <small class="text-muted-sm">Resultado: «10,20 %» — debe ser MENOR que la tasa sin nómina (para UVR se autocompleta con 3,40 %)</small>
       </div>
       <div class="col-md-6 campo-oculto" id="divNTasaConNominaUVR">
@@ -1186,7 +1202,7 @@
 
       <div class="col-md-6">
         <label class="form-label">Tasa sin nómina (%) *</label>
-        <input type="text" id="nTasaSinNomina" class="form-control" placeholder="ej. 8,90">
+        <input type="text" id="nTasaSinNomina" class="form-control" placeholder="ej. 8,90" oninput="soloNumerosYComa(this)" maxlength="6">
         <small class="text-muted-sm" id="notaTasaSin">Resultado: «8,90 %» — debe ser MAYOR que la tasa con nómina</small>
       </div>
 
@@ -1202,7 +1218,7 @@
 
       <div class="col-md-6">
         <label class="form-label">Celular del broker *</label>
-        <input type="text" id="nBrokerCelular" class="form-control" placeholder="Número celular">
+        <input type="text" id="nBrokerCelular" class="form-control" placeholder="Número celular" oninput="soloNumeros(this)" maxlength="12">
       </div>
       <div class="col-md-6">
         <label class="form-label">Correo electrónico del broker *</label>
@@ -1250,7 +1266,7 @@
 
       <div class="col-md-6">
         <label class="form-label">Ciudad o municipio de compra *</label>
-        <input type="text" id="ciudadCompra" class="form-control" placeholder="Ej: BOGOTÁ">
+        <input type="text" id="ciudadCompra" class="form-control" placeholder="Ej: BOGOTÁ" oninput="soloLetras(this)" maxlength="20">
       </div>
 
     </div>
@@ -1320,15 +1336,14 @@ const RADICADORES = {
   'Bogotá': {
     coordinador: { nombre: 'María Laura Ríos', cedula: '1000066151' },
     directores: [
-      { nombre: 'Lorena Rico Avilés',      analista: { nombre: 'José Iván Motivar',          cedula: '1018454647', codigo: 'T070288' } },
-      { nombre: 'Juan Felipe Galán',        analista: { nombre: 'José Iván Motivar',          cedula: '1018454647', codigo: 'T070288' } },
+      { nombre: 'Lorena Rico Avilés',      analista: { nombre: 'Linda Estefany Beltrán',    cedula: '1110580226', codigo: 'OC00632' } },
+      { nombre: 'Juan Felipe Galán',        analista: { nombre: 'Linda Estefany Beltrán',    cedula: '1110580226', codigo: 'OC00632' } },
       { nombre: 'Carlos Giovanny Ríos',     analista: { nombre: 'Adriana Carolina Cortés',   cedula: '52986936',   codigo: 'T046516' } },
-      { nombre: 'Evelyn Tatiana Guzmán',    analista: { nombre: 'Laura Stephania Guzmán',    cedula: '1000776723', codigo: 'T069531' } },
       { nombre: 'Lorena Gutiérrez',         analista: { nombre: 'Adriana Carolina Cortés',   cedula: '52986936',   codigo: 'T046516' } },
-      { nombre: 'Luisa Quijano',            analista: { nombre: 'Laura Stephania Guzmán',    cedula: '1000776723', codigo: 'T069531' } },
-      { nombre: 'Madelein González',        analista: { nombre: 'Laura Stephania Guzmán',    cedula: '1000776723', codigo: 'T069531' } },
+      { nombre: 'Luisa Quijano',            analista: { nombre: 'Linda Estefany Beltrán',    cedula: '1110580226', codigo: 'OC00632' } },
+      { nombre: 'Madelein González',        analista: { nombre: 'Adriana Carolina Cortés',   cedula: '52986936',   codigo: 'T046516' } },
       { nombre: 'Madian Chitiva',           analista: { nombre: 'Adriana Carolina Cortés',   cedula: '52986936',   codigo: 'T046516' } },
-      { nombre: 'Paola Andrea Castro',      analista: { nombre: 'Laura Stephania Guzmán',    cedula: '1000776723', codigo: 'T069531' } },
+      { nombre: 'Paola Andrea Castro',      analista: { nombre: 'Linda Estefany Beltrán',    cedula: '1110580226', codigo: 'OC00632' } },
       { nombre: 'Nadia Pardo', analistaFijo: true, analista: { nombre: 'Linda Estefany Beltrán', cedula: '1110580226', codigo: 'OC00632' } },
     ]
   },
@@ -1412,6 +1427,12 @@ function actualizarDirectores() {
 
 function actualizarAnalista() { /* solo actualiza en tiempo de generación */ }
 
+// ── FILTROS DE ENTRADA ──
+function soloNumeros(el) { el.value = el.value.replace(/[^0-9]/g, ''); }
+function soloNumerosYComa(el) { el.value = el.value.replace(/[^0-9,]/g, ''); }
+function soloTexto(el) { el.value = el.value.replace(/[0-9]/g, ''); }
+function soloLetras(el) { el.value = el.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]/g, ''); }
+
 function mostrarSeccionConyuge() {
   const v = document.getElementById('estadoCivil').value;
   mostrar('seccionConyuge', v === '2' || v === '6');
@@ -1480,6 +1501,7 @@ function cambiarLinea() {
   mostrar('seccionBroker',       !esColex);
   mostrar('seccionNomina',       !esColex);
   mostrar('seccionConocimiento', !esColex);
+  mostrar('divNominaBBVA',       !esColex);
   // Checkboxes — la sección entera solo aparece tras seleccionar línea
   mostrar('seccionFormatos', linea !== '');
   mostrar('chksNacional', !esColex);
@@ -1924,13 +1946,13 @@ async function generarPDF() {
     txt('Texto77', val('plazo'));
     txt('Texto3',  val('subproducto'));
     txt('Texto12', val('diaPago'));
-    radio('bbva',  '2');   // Siempre No
+    radio('bbva',  SN[val('nominaBBVA')]||'');
     radio('Pesos', PESUVR[val('pesosUvr')]||'');
     radio('Nuevo', ESTINM[val('estadoInmueble')]||'');
     radio('Casa',  TINM[val('tipoInmueble')]||'');
     txt('Texto82', val('direccionInmueble'));
     txt('Texto83', fmt(val('valorInmueble')));
-    radio('cuotas', '1');   // Siempre 12 cuotas = primera opción
+    radio('cuotas', '1');
     radio('destino', DEST[val('destino')]||'');
 
     // Línea de producto a contratar
@@ -2191,7 +2213,7 @@ async function generarTodos() {
       txt('Nombres y apellidos_3',val('per2nombre')); txt('Relación3',val('per2relacion')); txt('Ciudad_3',val('per2ciudad')); txt('Teléfonos de contacto_3',val('per2tel'));
 
       txt('Texto76',fmt(val('monto'))); txt('Texto77',val('plazo')); txt('Texto3',val('subproducto')); txt('Texto12',val('diaPago'));
-      radio('bbva','2'); radio('Pesos',PESUVR[val('pesosUvr')]||'');  // bbva siempre No
+      radio('bbva',SN[val('nominaBBVA')]||''); radio('Pesos',PESUVR[val('pesosUvr')]||'');
       radio('Nuevo',ESTINM[val('estadoInmueble')]||''); radio('Casa',TINM[val('tipoInmueble')]||'');
       txt('Texto82',val('direccionInmueble')); txt('Texto83',fmt(val('valorInmueble')));
       radio('cuotas','1'); radio('destino',DEST[val('destino')]||'');
@@ -2370,7 +2392,7 @@ async function generarTodos() {
 
       // Crédito — mismos datos que T1
       txt('Texto76',fmt(val('monto'))); txt('Texto77',val('plazo')); txt('Texto3',val('subproducto')); txt('Texto12',val('diaPago'));
-      radio('bbva',SN[val('nominaBBVA')]||''); radio('Pesos',PESUVR[val('pesosUvr')]||'');
+      radio('bbva',SN[val('nominaBBVA2')]||''); radio('Pesos',PESUVR[val('pesosUvr')]||'');
       radio('Nuevo',ESTINM[val('estadoInmueble')]||''); radio('Casa',TINM[val('tipoInmueble')]||'');
       txt('Texto82',val('direccionInmueble')); txt('Texto83',fmt(val('valorInmueble')));
       radio('cuotas','1'); radio('destino',DEST[val('destino')]||'');
