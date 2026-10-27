@@ -30,10 +30,10 @@ Los 3 roles del formato se llenan así:
 ## 🏙️ BOGOTÁ
 
 ### Coordinador (fijo)
-- **Nombre:** María Laura Ríos
+- **Nombre:** Jessica Galindo
 - **Cédula:** no se requiere en el Conocimiento de Cliente (solo va el nombre).
 - **Firma:** NO lleva imagen; en el campo firma va solo el nombre escrito.
-- 📝 **Nota Vinculación:** ahí sí se requiere nombre + cédula → **C.C. 1000066151**.
+- 📝 **Nota Vinculación:** ahí sí se requiere nombre + cédula → **C.C. 1030687987**.
 
 ### Gestor / Analista — por Director Comercial
 > Desplegable de 9 directores. Solo hay **2 analistas distintos** (el analista NO es el director).

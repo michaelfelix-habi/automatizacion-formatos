@@ -131,7 +131,7 @@ Una **aplicación web** accesible desde el navegador (sin instalación), que:
 |---|---|
 | **Michael Felix (Líder del proyecto)** | Diseño, construcción, pruebas y documentación |
 | **Brokers / asesores comerciales** | Usuarios finales — validan que los PDFs generados sean correctos |
-| **Coordinadores por ciudad** (María Laura Ríos, María del Mar García, Yalila Sáenz, Juan Carlos Contreras) | Datos fijos que se insertan automáticamente según la ciudad |
+| **Coordinadores por ciudad** (Jessica Galindo, María del Mar García, Yalila Sáenz, Juan Carlos Contreras) | Datos fijos que se insertan automáticamente según la ciudad |
 | **Analistas por ciudad** (Adriana Carolina Cortés, Linda Estefany Beltrán, Michel Daniela Rodríguez Jurado, Eurley Yajaira Murillo, Nayelis de Jesús Toscano) | Datos que se asignan automáticamente según el director comercial seleccionado |
 | **Área de crédito hipotecario** | Área beneficiaria directa — reducción de errores y devoluciones |
 
