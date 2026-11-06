@@ -2007,7 +2007,48 @@ function validarObligatorios() {
   return valido;
 }
 
-function val(id) { const el = document.getElementById(id); return el ? (el.value || '').trim() : ''; }
+function val(id) { const el = document.getElementById(id); return el ? limpiarTextoPdf(el.value || '').trim() : ''; }
+
+// ════════════════════════════════════════════════════════
+// TEXTO SEGURO PARA PDF
+// pdf-lib solo escribe caracteres WinAnsi. Al pegar texto de WhatsApp, Word o correos pueden venir caracteres
+// invisibles (p. ej. U+2060 "word joiner", espacios de ancho cero) o símbolos no soportados que rompen la
+// generación ("WinAnsi cannot encode ..."). Se limpian al leer el campo (val) y, como red de seguridad,
+// al escribir en cualquier campo o página del PDF.
+// ════════════════════════════════════════════════════════
+const _WINANSI_EXTRA = new Set('€‚ƒ„…†‡ˆ‰Š‹ŒŽ‘’“”•–—˜™š›œžŸ');
+function limpiarTextoPdf(s) {
+  if (typeof s !== 'string' || !s) return s;
+  let t = s.normalize('NFC')                                   // acentos decompuestos (e + ´) → é
+    .replace(/[­᠎​-‏‪-‮⁠-⁯﻿]/g, '')   // invisibles / de formato
+    .replace(/[ -   　\t]/g, ' ');     // espacios raros → espacio normal
+  let out = '';
+  for (const ch of t) {
+    const c = ch.codePointAt(0);
+    if (ch === '\n' || ch === '\r' || (c >= 0x20 && c <= 0xFF && c !== 0x7F && !(c >= 0x80 && c <= 0x9F)) || _WINANSI_EXTRA.has(ch)) out += ch;
+    else {
+      // letra con acento fuera de WinAnsi (ũ, č, ś…): se conserva la letra base; el resto (emojis, símbolos, control) se descarta
+      const base = ch.normalize('NFD')[0], b = base.codePointAt(0);
+      if (base !== ch && b >= 0x20 && b <= 0x7E) out += base;
+    }
+  }
+  return out;
+}
+(function protegerPdfLib() {
+  try {
+    if (typeof PDFLib === 'undefined') return;
+    const TF = PDFLib.PDFTextField && PDFLib.PDFTextField.prototype;
+    if (TF && TF.setText) {
+      const o = TF.setText;
+      TF.setText = function (t, ...r) { return o.call(this, typeof t === 'string' ? limpiarTextoPdf(t) : t, ...r); };
+    }
+    const PG = PDFLib.PDFPage && PDFLib.PDFPage.prototype;
+    if (PG && PG.drawText) {
+      const o = PG.drawText;
+      PG.drawText = function (t, opts) { return o.call(this, typeof t === 'string' ? limpiarTextoPdf(t) : t, opts); };
+    }
+  } catch (e) { console.warn('protegerPdfLib:', e.message); }
+})();
 
 // ════════════════════════════════════════════════════════
 // GENERACIÓN DEL PDF
