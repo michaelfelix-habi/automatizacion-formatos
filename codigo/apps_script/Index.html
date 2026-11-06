@@ -1096,10 +1096,6 @@
         <input type="text" id="plazo" class="form-control" placeholder="ej. 180" oninput="soloNumeros(this)" maxlength="3">
       </div>
       <div class="col-md-6">
-        <label class="form-label">Subproducto *</label>
-        <input type="text" id="subproducto" class="form-control" placeholder="Código numérico" oninput="soloNumeros(this)" maxlength="4">
-      </div>
-      <div class="col-md-6">
         <label class="form-label">Día de pago *</label>
         <input type="text" id="diaPago" class="form-control" placeholder="ej. 5" oninput="soloNumeros(this)" maxlength="2">
       </div>
@@ -1144,6 +1140,81 @@
         <input type="text" id="valorInmueble" class="form-control" placeholder="Solo números" oninput="soloNumeros(this)">
       </div>
 
+      <div class="col-md-6">
+        <label class="form-label">Ciudad o municipio de compra *</label>
+        <input type="text" id="ciudadCompra" class="form-control" list="listaMunicipios" placeholder="Ej: BOGOTÁ" oninput="soloLetras(this)" maxlength="20">
+        <small class="text-muted-sm">Se usa también para deducir el subproducto (municipios de aglomeración urbana).</small>
+        <datalist id="listaMunicipios"></datalist>
+      </div>
+
+      <!-- ── Datos para deducir el SUBPRODUCTO (norma de tasas BBVA) ── -->
+      <div class="col-md-6">
+        <label class="form-label">¿Es renovación urbana? *</label>
+        <select id="renovacionUrbana" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="No">No</option>
+          <option value="Sí">Sí</option>
+        </select>
+        <small class="text-muted-sm">Solo "Sí" si el inmueble cuenta con licencia de construcción en modalidad de redesarrollo (tope VIS 175 SMMLV).</small>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">¿Crédito hipotecario sostenible? *</label>
+        <select id="sostenible" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="No">No</option>
+          <option value="Sí">Sí</option>
+        </select>
+      </div>
+      <div class="col-md-6" id="divUsoMixto">
+        <label class="form-label">¿Es uso mixto? *</label>
+        <select id="usoMixto" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="No">No</option>
+          <option value="Sí">Sí</option>
+        </select>
+      </div>
+      <div class="col-md-6 campo-oculto" id="divAliada">
+        <label class="form-label">Tipo de proyecto (COLEX) *</label>
+        <select id="aliadaColex" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="Tradicional">Tradicional</option>
+          <option value="Aliada">Constructora aliada (no financiado)</option>
+          <option value="Financiado">Proyecto financiado (subrogación)</option>
+        </select>
+        <small class="text-muted-sm">Solo aplica en la línea COLEX.</small>
+      </div>
+      <div class="col-md-6 campo-oculto" id="divBaseRemodelacion">
+        <label class="form-label">Producto base de la remodelación *</label>
+        <select id="baseRemodelacion" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="Hipotecario">Hipotecario</option>
+          <option value="Leasing habitacional">Leasing habitacional</option>
+        </select>
+      </div>
+      <div class="col-md-6 campo-oculto" id="divModalidadLeasing">
+        <label class="form-label">Modalidad del leasing habitacional *</label>
+        <select id="modalidadLeasing" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="Familiar">Familiar</option>
+          <option value="No familiar">No familiar</option>
+        </select>
+      </div>
+      <div class="col-md-6 campo-oculto" id="divTipoCuota">
+        <label class="form-label">Tipo de cuota (UVR) *</label>
+        <select id="tipoCuota" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="Cuota constante">Cuota constante</option>
+          <option value="Capital constante">Capital constante</option>
+        </select>
+      </div>
+
+      <div class="col-md-12">
+        <label class="form-label">Subproducto * <span class="badge bg-secondary fw-normal">se calcula automáticamente</span></label>
+        <input type="text" id="subproducto" class="form-control bg-light fw-bold" placeholder="Completa los datos del crédito para calcularlo" readonly maxlength="4">
+        <small class="text-muted-sm" id="descSubproducto"></small>
+        <div id="avisoSubproducto" class="mt-1" style="display:none; font-size:0.85rem;"></div>
+      </div>
+
       <!-- % Leasing (condicional) -->
       <div class="col-md-6 campo-oculto" id="divPorcentajeLeasing">
         <label class="form-label">% de opción de compra (Leasing habitacional) *</label>
@@ -1174,57 +1245,6 @@
         <label class="form-label">Plazo actual de la deuda *</label>
         <input type="text" id="plazoCartera" class="form-control" oninput="soloNumeros(this)" maxlength="3">
       </div>
-    </div>
-  </div>
-
-  <!-- ── SECCIÓN NÓMINA — Datos adicionales ── -->
-  <div class="seccion" id="seccionNomina">
-    <h5>Datos adicionales — Nómina BBVA</h5>
-    <p class="text-muted-sm">El monto, plazo y tipo (Pesos/UVR) se toman de la Sección 9. Solo complete los datos exclusivos de nómina.</p>
-    <div class="row g-3">
-
-      <div class="col-md-6">
-        <label class="form-label">Valor de ahorro al tomar nómina ($) *</label>
-        <input type="text" id="nAhorro" class="form-control" placeholder="Solo números" oninput="soloNumerosYComa(this)">
-        <small class="text-muted-sm">Cuánto ahorra el cliente si vincula su nómina. Se formatea con puntos.</small>
-      </div>
-
-      <div class="col-md-6" id="divNTasaConNomina">
-        <label class="form-label">Tasa con nómina (%) *</label>
-        <input type="text" id="nTasaConNomina" class="form-control" placeholder="ej. 10,20" oninput="soloNumerosYComa(this)" maxlength="6">
-        <small class="text-muted-sm">Resultado: «10,20 %» — debe ser MENOR que la tasa sin nómina (para UVR se autocompleta con 3,40 %)</small>
-      </div>
-      <div class="col-md-6 campo-oculto" id="divNTasaConNominaUVR">
-        <label class="form-label">Tasa con nómina</label>
-        <input type="text" class="form-control bg-light" value="3,40 %" readonly>
-        <small class="text-muted-sm">Valor fijo para créditos UVR</small>
-      </div>
-
-      <div class="col-md-6">
-        <label class="form-label">Tasa sin nómina (%) *</label>
-        <input type="text" id="nTasaSinNomina" class="form-control" placeholder="ej. 8,90" oninput="soloNumerosYComa(this)" maxlength="6">
-        <small class="text-muted-sm" id="notaTasaSin">Resultado: «8,90 %» — debe ser MAYOR que la tasa con nómina</small>
-      </div>
-
-      <div class="col-md-12">
-        <label class="form-label">Estado de vinculación de nómina *</label>
-        <select id="nEstadoNomina" class="form-select">
-          <option value="">— Seleccione —</option>
-          <option value="toma">Toma nómina (se vincula ahora)</option>
-          <option value="no">No quiere nómina</option>
-          <option value="tiene">Ya tiene nómina vinculada</option>
-        </select>
-      </div>
-
-      <div class="col-md-6">
-        <label class="form-label">Celular del broker *</label>
-        <input type="text" id="nBrokerCelular" class="form-control" placeholder="Número celular" oninput="soloNumeros(this)" maxlength="12">
-      </div>
-      <div class="col-md-6">
-        <label class="form-label">Correo electrónico del broker *</label>
-        <input type="email" id="nBrokerCorreo" class="form-control" placeholder="correo@ejemplo.com">
-      </div>
-
     </div>
   </div>
 
@@ -1264,9 +1284,56 @@
         </select>
       </div>
 
+
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN NÓMINA — Datos adicionales ── -->
+  <div class="seccion" id="seccionNomina">
+    <h5>Datos adicionales — Nómina BBVA</h5>
+    <p class="text-muted-sm">El monto, plazo y tipo (Pesos/UVR) se toman de la Sección 9. Solo complete los datos exclusivos de nómina.</p>
+    <div class="row g-3">
+
       <div class="col-md-6">
-        <label class="form-label">Ciudad o municipio de compra *</label>
-        <input type="text" id="ciudadCompra" class="form-control" placeholder="Ej: BOGOTÁ" oninput="soloLetras(this)" maxlength="20">
+        <label class="form-label">Valor de ahorro al tomar nómina ($) *</label>
+        <input type="text" id="nAhorro" class="form-control" placeholder="Solo números" oninput="soloNumerosYComa(this)">
+        <small class="text-muted-sm">Cuánto ahorra el cliente si vincula su nómina. Se formatea con puntos.</small>
+      </div>
+
+      <div class="col-md-6" id="divNTasaConNomina">
+        <label class="form-label">Tasa con nómina (%) *</label>
+        <input type="text" id="nTasaConNomina" class="form-control" placeholder="ej. 10,20" oninput="soloNumerosYComa(this)" maxlength="6">
+        <small class="text-muted-sm" id="notaTasaCon">Se calcula con el subproducto (tasa sin nómina menos los puntos de nómina).</small>
+      </div>
+      <div class="col-md-6 campo-oculto" id="divNTasaConNominaUVR">
+        <label class="form-label">Tasa con nómina</label>
+        <input type="text" class="form-control bg-light" value="3,40 %" readonly>
+        <small class="text-muted-sm">Valor fijo para créditos UVR</small>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Tasa sin nómina (%) *</label>
+        <input type="text" id="nTasaSinNomina" class="form-control" placeholder="ej. 8,90" oninput="soloNumerosYComa(this)" maxlength="6">
+        <small class="text-muted-sm" id="notaTasaSin">Se calcula con el subproducto (tasa máxima de la norma).</small>
+      </div>
+
+      <div class="col-md-12">
+        <label class="form-label">Estado de vinculación de nómina *</label>
+        <select id="nEstadoNomina" class="form-select">
+          <option value="">— Seleccione —</option>
+          <option value="toma">Toma nómina (se vincula ahora)</option>
+          <option value="no">No quiere nómina</option>
+          <option value="tiene">Ya tiene nómina vinculada</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Celular del broker *</label>
+        <input type="text" id="nBrokerCelular" class="form-control" placeholder="Número celular" oninput="soloNumeros(this)" maxlength="12">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Correo electrónico del broker *</label>
+        <input type="email" id="nBrokerCorreo" class="form-control" placeholder="correo@ejemplo.com">
       </div>
 
     </div>
@@ -1329,6 +1396,231 @@
 
 
 <script>
+/*SUBPRODUCTOS:INICIO — generado por "Sub productos/generar_subproductos_js.mjs"; no editar a mano*/
+const SMMLV_2026 = 1750905;
+const MUNICIPIOS_AGLOMERADOS = ["Bogotá","Cajicá","Chía","Cota","Facatativá","Funza","La Calera","Madrid","Mosquera","Zipaquirá","Sibaté","Soacha","Tabio","Tocancipá","Bello","Caldas","Copacabana","Envigado","Girardota","Itagüí","La Estrella","Medellín","Sabaneta","Cali","Candelaria","Jamundí","Yumbo","Puerto Tejada","Cúcuta","Los Patios","San Cayetano","Villa del Rosario","Barranquilla","Galapa","Malambo","Palmar de Varela","Ponedera","Sabanagrande","Sabanalarga","Santo Tomás","Sitionuevo","Soledad","Cartagena","Clemencia","Turbaco","Bucaramanga","Floridablanca","Girón","Piedecuesta"];
+const SUBPRODUCTOS = [{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"VIP","zona":"N/A","mon":"Pesos","viv":"Nueva","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5117","desc":"Hipotecario VIP, pesos, vivienda nueva","max":16.16,"pb":150,"con":14.66},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"VIP","zona":"N/A","mon":"Pesos","viv":"Usada","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5117","desc":"Hipotecario VIP, pesos, vivienda usada","max":16.16,"pb":150,"con":14.66},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Resto del país","mon":"Pesos","viv":"Nueva","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"6032","desc":"Hipotecario VIS, resto del país (135 SMMLV), pesos, vivienda nueva","max":15.86,"pb":150,"con":14.36},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Resto del país","mon":"Pesos","viv":"Usada","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5233","desc":"Hipotecario VIS, resto del país (135 SMMLV), pesos, vivienda usada","max":16.16,"pb":150,"con":14.66},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Resto del país","mon":"UVR","viv":"Nueva","mod":"N/A","cuota":"Cuota constante","sost":"No","ing":"N/A","cod":"5874","desc":"Hipotecario VIS, resto del país (135 SMMLV), UVR cuota constante, vivienda nueva","max":9.41,"pb":100,"con":8.41},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Resto del país","mon":"UVR","viv":"Nueva","mod":"N/A","cuota":"Capital constante","sost":"No","ing":"N/A","cod":"5876","desc":"Hipotecario VIS, resto del país (135 SMMLV), UVR capital constante, vivienda nueva","max":9.41,"pb":100,"con":8.41},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Resto del país","mon":"UVR","viv":"Usada","mod":"N/A","cuota":"Cuota constante","sost":"No","ing":"N/A","cod":"5874","desc":"Hipotecario VIS, resto del país (135 SMMLV), UVR cuota constante, vivienda usada","max":9.41,"pb":100,"con":8.41},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Resto del país","mon":"UVR","viv":"Usada","mod":"N/A","cuota":"Capital constante","sost":"No","ing":"N/A","cod":"5876","desc":"Hipotecario VIS, resto del país (135 SMMLV), UVR capital constante, vivienda usada","max":9.41,"pb":100,"con":8.41},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Aglomeración","mon":"Pesos","viv":"Nueva","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"6052","desc":"Hipotecario VIS, aglomeración (150 SMMLV), pesos, vivienda nueva","max":15.86,"pb":150,"con":14.36},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Aglomeración","mon":"Pesos","viv":"Usada","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5862","desc":"Hipotecario VIS, aglomeración (150 SMMLV), pesos, vivienda usada","max":16.16,"pb":150,"con":14.66},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Aglomeración","mon":"UVR","viv":"Nueva","mod":"N/A","cuota":"Cuota constante","sost":"No","ing":"N/A","cod":"5866","desc":"Hipotecario VIS, aglomeración (150 SMMLV), UVR cuota constante, vivienda nueva","max":9.41,"pb":100,"con":8.41},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Aglomeración","mon":"UVR","viv":"Nueva","mod":"N/A","cuota":"Capital constante","sost":"No","ing":"N/A","cod":"5870","desc":"Hipotecario VIS, aglomeración (150 SMMLV), UVR capital constante, vivienda nueva","max":9.41,"pb":100,"con":8.41},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Aglomeración","mon":"UVR","viv":"Usada","mod":"N/A","cuota":"Cuota constante","sost":"No","ing":"N/A","cod":"5866","desc":"Hipotecario VIS, aglomeración (150 SMMLV), UVR cuota constante, vivienda usada","max":9.41,"pb":100,"con":8.41},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Aglomeración","mon":"UVR","viv":"Usada","mod":"N/A","cuota":"Capital constante","sost":"No","ing":"N/A","cod":"5870","desc":"Hipotecario VIS, aglomeración (150 SMMLV), UVR capital constante, vivienda usada","max":9.41,"pb":100,"con":8.41},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Renovación urbana","mon":"Pesos","viv":"Nueva","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"6056","desc":"Hipotecario VIS, renovación urbana (175 SMMLV), pesos, vivienda nueva","max":15.86,"pb":150,"con":14.36},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Renovación urbana","mon":"Pesos","viv":"Usada","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5766","desc":"Hipotecario VIS, renovación urbana (175 SMMLV), pesos, vivienda usada","max":16.16,"pb":150,"con":14.66},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Renovación urbana","mon":"UVR","viv":"Nueva","mod":"N/A","cuota":"Cuota constante","sost":"No","ing":"N/A","cod":"5926","desc":"Hipotecario VIS, renovación urbana (175 SMMLV), UVR cuota constante, vivienda nueva","max":7.45,"pb":100,"con":6.45},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Renovación urbana","mon":"UVR","viv":"Nueva","mod":"N/A","cuota":"Cuota constante","sost":"Sí","ing":"N/A","cod":"5926","desc":"Hipotecario sostenible VIS, renovación urbana (175 SMMLV), UVR cuota constante, vivienda nueva","max":7.45,"pb":100,"con":6.45},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Renovación urbana","mon":"UVR","viv":"Usada","mod":"N/A","cuota":"Cuota constante","sost":"No","ing":"N/A","cod":"5926","desc":"Hipotecario VIS, renovación urbana (175 SMMLV), UVR cuota constante, vivienda usada","max":7.45,"pb":100,"con":6.45},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"Nueva","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"6060","desc":"Hipotecario No VIS, pesos, vivienda nueva","max":17.41,"pb":180,"con":15.61},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"Nueva","mod":"N/A","cuota":"N/A","sost":"Sí","ing":"N/A","cod":"5910","desc":"Hipotecario sostenible No VIS, pesos, vivienda nueva","max":15.5,"pb":100,"con":14.5},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"Usada","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5106","desc":"Hipotecario No VIS, pesos, vivienda usada","max":17.71,"pb":180,"con":15.91},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"No VIS","zona":"N/A","mon":"UVR","viv":"Nueva","mod":"N/A","cuota":"Cuota constante","sost":"No","ing":"N/A","cod":"5071","desc":"Hipotecario No VIS, UVR cuota constante, vivienda nueva","max":11.88,"pb":100,"con":10.88},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"No VIS","zona":"N/A","mon":"UVR","viv":"Nueva","mod":"N/A","cuota":"Cuota constante","sost":"Sí","ing":"N/A","cod":"5912","desc":"Hipotecario sostenible No VIS, UVR cuota constante, vivienda nueva","max":8.9,"pb":100,"con":7.9},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"No VIS","zona":"N/A","mon":"UVR","viv":"Nueva","mod":"N/A","cuota":"Capital constante","sost":"No","ing":"N/A","cod":"5072","desc":"Hipotecario No VIS, UVR capital constante, vivienda nueva","max":11.88,"pb":100,"con":10.88},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"No VIS","zona":"N/A","mon":"UVR","viv":"Nueva","mod":"N/A","cuota":"Capital constante","sost":"Sí","ing":"N/A","cod":"5914","desc":"Hipotecario sostenible No VIS, UVR capital constante, vivienda nueva","max":8.9,"pb":100,"con":7.9},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"No VIS","zona":"N/A","mon":"UVR","viv":"Usada","mod":"N/A","cuota":"Cuota constante","sost":"No","ing":"N/A","cod":"5071","desc":"Hipotecario No VIS, UVR cuota constante, vivienda usada","max":11.88,"pb":100,"con":10.88},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"No VIS","zona":"N/A","mon":"UVR","viv":"Usada","mod":"N/A","cuota":"Capital constante","sost":"No","ing":"N/A","cod":"5072","desc":"Hipotecario No VIS, UVR capital constante, vivienda usada","max":11.88,"pb":100,"con":10.88},{"ctx":"Normal","lin":"Leasing habitacional","base":"N/A","seg":"VIS","zona":"Resto del país","mon":"Pesos","viv":"Nueva","mod":"Familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"7199","desc":"Leasing habitacional VIS, resto del país (135 SMMLV), pesos, familiar, vivienda nueva","max":13,"pb":150,"con":11.5},{"ctx":"Normal","lin":"Leasing habitacional","base":"N/A","seg":"VIS","zona":"Resto del país","mon":"Pesos","viv":"Usada","mod":"Familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"7199","desc":"Leasing habitacional VIS, resto del país (135 SMMLV), pesos, familiar, vivienda usada","max":13,"pb":150,"con":11.5},{"ctx":"Normal","lin":"Leasing habitacional","base":"N/A","seg":"VIS","zona":"Resto del país","mon":"Pesos","viv":"Nueva","mod":"No familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"7135","desc":"Leasing habitacional VIS, resto del país (135 SMMLV), pesos, no familiar, vivienda nueva","max":13,"pb":150,"con":11.5},{"ctx":"Normal","lin":"Leasing habitacional","base":"N/A","seg":"VIS","zona":"Resto del país","mon":"Pesos","viv":"Usada","mod":"No familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"7135","desc":"Leasing habitacional VIS, resto del país (135 SMMLV), pesos, no familiar, vivienda usada","max":13,"pb":150,"con":11.5},{"ctx":"Normal","lin":"Leasing habitacional","base":"N/A","seg":"VIS","zona":"Aglomeración","mon":"Pesos","viv":"Nueva","mod":"Familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"7137","desc":"Leasing habitacional VIS, aglomeración (150 SMMLV), pesos, familiar, vivienda nueva","max":13,"pb":150,"con":11.5},{"ctx":"Normal","lin":"Leasing habitacional","base":"N/A","seg":"VIS","zona":"Aglomeración","mon":"Pesos","viv":"Usada","mod":"Familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"7137","desc":"Leasing habitacional VIS, aglomeración (150 SMMLV), pesos, familiar, vivienda usada","max":13,"pb":150,"con":11.5},{"ctx":"Normal","lin":"Leasing habitacional","base":"N/A","seg":"VIS","zona":"Aglomeración","mon":"Pesos","viv":"Nueva","mod":"No familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"7154","desc":"Leasing habitacional VIS, aglomeración (150 SMMLV), pesos, no familiar, vivienda nueva","max":13,"pb":150,"con":11.5},{"ctx":"Normal","lin":"Leasing habitacional","base":"N/A","seg":"VIS","zona":"Aglomeración","mon":"Pesos","viv":"Usada","mod":"No familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"7154","desc":"Leasing habitacional VIS, aglomeración (150 SMMLV), pesos, no familiar, vivienda usada","max":13,"pb":150,"con":11.5},{"ctx":"Normal","lin":"Leasing habitacional","base":"N/A","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"Nueva","mod":"Familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"7129","desc":"Leasing habitacional No VIS, pesos, familiar, vivienda nueva","max":16.94,"pb":180,"con":15.14},{"ctx":"Normal","lin":"Leasing habitacional","base":"N/A","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"Nueva","mod":"Familiar","cuota":"N/A","sost":"Sí","ing":"N/A","cod":"5916","desc":"Leasing habitacional sostenible No VIS, pesos, familiar, vivienda nueva","max":15.17,"pb":150,"con":13.67},{"ctx":"Normal","lin":"Leasing habitacional","base":"N/A","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"Usada","mod":"Familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"7252","desc":"Leasing habitacional No VIS, pesos, familiar, vivienda usada","max":17.24,"pb":180,"con":15.44},{"ctx":"Normal","lin":"Leasing habitacional","base":"N/A","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"Nueva","mod":"No familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"7127","desc":"Leasing habitacional No VIS, pesos, no familiar, vivienda nueva","max":16.94,"pb":180,"con":15.14},{"ctx":"Normal","lin":"Leasing habitacional","base":"N/A","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"Nueva","mod":"No familiar","cuota":"N/A","sost":"Sí","ing":"N/A","cod":"5918","desc":"Leasing habitacional sostenible No VIS, pesos, no familiar, vivienda nueva","max":15.17,"pb":150,"con":13.67},{"ctx":"Normal","lin":"Leasing habitacional","base":"N/A","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"Usada","mod":"No familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"7127","desc":"Leasing habitacional No VIS, pesos, no familiar, vivienda usada","max":16.94,"pb":180,"con":15.14},{"ctx":"Normal","lin":"Remodelación","base":"Hipotecario","seg":"VIS","zona":"N/A","mon":"Pesos","viv":"N/A","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5485","desc":"Remodelación (base hipotecario) VIS, pesos","max":15.56,"pb":150,"con":14.06},{"ctx":"Normal","lin":"Remodelación","base":"Hipotecario","seg":"VIS","zona":"N/A","mon":"UVR","viv":"N/A","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5484","desc":"Remodelación (base hipotecario) VIS, UVR","max":8.1,"pb":100,"con":7.1},{"ctx":"Normal","lin":"Remodelación","base":"Leasing habitacional","seg":"VIS","zona":"N/A","mon":"Pesos","viv":"N/A","mod":"Familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"7167","desc":"Remodelación (base leasing habitacional) VIS, pesos, familiar","max":17.05,"pb":150,"con":15.55},{"ctx":"Normal","lin":"Remodelación","base":"Leasing habitacional","seg":"VIS","zona":"N/A","mon":"Pesos","viv":"N/A","mod":"No familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"7167","desc":"Remodelación (base leasing habitacional) VIS, pesos, no familiar","max":17.05,"pb":150,"con":15.55},{"ctx":"Normal","lin":"Remodelación","base":"Hipotecario","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"N/A","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5396","desc":"Remodelación (base hipotecario) No VIS, pesos","max":16.84,"pb":150,"con":15.34},{"ctx":"Normal","lin":"Remodelación","base":"Hipotecario","seg":"No VIS","zona":"N/A","mon":"UVR","viv":"N/A","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5397","desc":"Remodelación (base hipotecario) No VIS, UVR","max":8.67,"pb":150,"con":7.17},{"ctx":"Normal","lin":"Remodelación","base":"Leasing habitacional","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"N/A","mod":"Familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"5920","desc":"Remodelación (base leasing habitacional) No VIS, pesos, familiar","max":17.05,"pb":150,"con":15.55},{"ctx":"Normal","lin":"Remodelación","base":"Leasing habitacional","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"N/A","mod":"No familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"5922","desc":"Remodelación (base leasing habitacional) No VIS, pesos, no familiar","max":17.05,"pb":150,"con":15.55},{"ctx":"Normal","lin":"Retanqueo","base":"Hipotecario","seg":"VIS","zona":"N/A","mon":"Pesos","viv":"N/A","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5019","desc":"Retanqueo (base hipotecario) VIS, pesos","max":15.56,"pb":150,"con":14.06},{"ctx":"Normal","lin":"Retanqueo","base":"Hipotecario","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"N/A","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5025","desc":"Retanqueo (base hipotecario) No VIS, pesos","max":16.84,"pb":150,"con":15.34},{"ctx":"Normal","lin":"Retanqueo","base":"Leasing habitacional","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"N/A","mod":"Familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"5954","desc":"Retanqueo (base leasing habitacional) No VIS, pesos, familiar","max":17.05,"pb":150,"con":15.55},{"ctx":"Normal","lin":"Retanqueo","base":"Leasing habitacional","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"N/A","mod":"No familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"5956","desc":"Retanqueo (base leasing habitacional) No VIS, pesos, no familiar","max":17.05,"pb":150,"con":15.55},{"ctx":"Normal","lin":"Cesión","base":"N/A","seg":"VIS","zona":"N/A","mon":"Pesos","viv":"N/A","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5235","desc":"Cesión VIS, pesos","max":14.5,"pb":100,"con":13.5},{"ctx":"Normal","lin":"Cesión","base":"N/A","seg":"VIS","zona":"N/A","mon":"UVR","viv":"N/A","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5972","desc":"Cesión VIS, UVR","max":7.11,"pb":100,"con":6.11},{"ctx":"Normal","lin":"Cesión","base":"N/A","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"N/A","mod":"N/A","cuota":"N/A","sost":"No","ing":"Ingresos >= 10 millones (BPP)","cod":"5570","desc":"Cesión No VIS, pesos, Ingresos >= 10 millones (BPP)","max":14.5,"pb":100,"con":13.5},{"ctx":"Normal","lin":"Cesión","base":"N/A","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"N/A","mod":"N/A","cuota":"N/A","sost":"No","ing":"Ingresos < 10 millones (Clásico)","cod":"5122","desc":"Cesión No VIS, pesos, Ingresos < 10 millones (Clásico)","max":14.5,"pb":100,"con":13.5},{"ctx":"Normal","lin":"Cesión","base":"N/A","seg":"No VIS","zona":"N/A","mon":"UVR","viv":"N/A","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5974","desc":"Cesión No VIS, UVR","max":7.21,"pb":100,"con":6.21},{"ctx":"Normal","lin":"Constructor individual","base":"N/A","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"N/A","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5542","desc":"Constructor individual No VIS, pesos","max":17.41,"pb":180,"con":15.61},{"ctx":"Uso mixto","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Resto del país","mon":"Pesos","viv":"Nueva","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"6104","desc":"Uso mixto: Hipotecario VIS, resto del país (135 SMMLV), pesos, vivienda nueva","max":15.86,"pb":150,"con":14.36},{"ctx":"Uso mixto","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Aglomeración","mon":"Pesos","viv":"Nueva","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"6108","desc":"Uso mixto: Hipotecario VIS, aglomeración (150 SMMLV), pesos, vivienda nueva","max":15.86,"pb":150,"con":14.36},{"ctx":"Uso mixto","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Renovación urbana","mon":"Pesos","viv":"Nueva","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"6109","desc":"Uso mixto: Hipotecario VIS, renovación urbana (175 SMMLV), pesos, vivienda nueva","max":15.86,"pb":150,"con":14.36},{"ctx":"Uso mixto","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Aglomeración","mon":"UVR","viv":"Nueva","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"6125","desc":"Uso mixto: Hipotecario VIS, aglomeración (150 SMMLV), UVR, vivienda nueva","max":9.41,"pb":100,"con":8.41},{"ctx":"Uso mixto","lin":"Hipotecario","base":"N/A","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"Nueva","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"6111","desc":"Uso mixto: Hipotecario No VIS, pesos, vivienda nueva","max":17.41,"pb":180,"con":15.61},{"ctx":"Uso mixto","lin":"Hipotecario","base":"N/A","seg":"No VIS","zona":"N/A","mon":"UVR","viv":"Nueva","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"6127","desc":"Uso mixto: Hipotecario No VIS, UVR, vivienda nueva","max":11.88,"pb":100,"con":10.88},{"ctx":"Uso mixto","lin":"Leasing habitacional","base":"N/A","seg":"VIS","zona":"Resto del país","mon":"Pesos","viv":"Nueva","mod":"Familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"6115","desc":"Uso mixto: Leasing habitacional VIS, resto del país (135 SMMLV), pesos, familiar, vivienda nueva","max":13,"pb":150,"con":11.5},{"ctx":"Uso mixto","lin":"Leasing habitacional","base":"N/A","seg":"VIS","zona":"Aglomeración","mon":"Pesos","viv":"Nueva","mod":"Familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"6117","desc":"Uso mixto: Leasing habitacional VIS, aglomeración (150 SMMLV), pesos, familiar, vivienda nueva","max":13,"pb":150,"con":11.5},{"ctx":"Uso mixto","lin":"Leasing habitacional","base":"N/A","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"Nueva","mod":"Familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"6113","desc":"Uso mixto: Leasing habitacional No VIS, pesos, familiar, vivienda nueva","max":16.94,"pb":180,"con":15.14},{"ctx":"Residente en el exterior","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Resto del país","mon":"Pesos","viv":"Nueva","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5231","desc":"Residente en el exterior: Hipotecario VIS, resto del país (135 SMMLV), pesos, vivienda nueva","max":14.5,"pb":0,"con":null},{"ctx":"Residente en el exterior","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Aglomeración","mon":"Pesos","viv":"Nueva","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5013","desc":"Residente en el exterior: Hipotecario VIS, aglomeración (150 SMMLV), pesos, vivienda nueva","max":14.5,"pb":0,"con":null},{"ctx":"Residente en el exterior","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Renovación urbana","mon":"Pesos","viv":"Nueva","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5012","desc":"Residente en el exterior: Hipotecario VIS, renovación urbana (175 SMMLV), pesos, vivienda nueva","max":14.5,"pb":0,"con":null},{"ctx":"Residente en el exterior","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Resto del país","mon":"Pesos","viv":"Nueva","mod":"N/A","cuota":"N/A","sost":"Sí","ing":"N/A","cod":"5798","desc":"Residente en el exterior: Hipotecario sostenible VIS, resto del país (135 SMMLV), pesos, vivienda nueva","max":14.5,"pb":0,"con":null},{"ctx":"Residente en el exterior","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Aglomeración","mon":"Pesos","viv":"Nueva","mod":"N/A","cuota":"N/A","sost":"Sí","ing":"N/A","cod":"5800","desc":"Residente en el exterior: Hipotecario sostenible VIS, aglomeración (150 SMMLV), pesos, vivienda nueva","max":14.5,"pb":0,"con":null},{"ctx":"Residente en el exterior","lin":"Hipotecario","base":"N/A","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"Nueva","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5229","desc":"Residente en el exterior: Hipotecario No VIS, pesos, vivienda nueva","max":15,"pb":0,"con":null},{"ctx":"Residente en el exterior","lin":"Leasing habitacional","base":"N/A","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"Nueva","mod":"No familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"5667","desc":"Residente en el exterior: Leasing habitacional No VIS, pesos, no familiar, vivienda nueva","max":14.7,"pb":0,"con":null},{"ctx":"Residente en el exterior","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Resto del país","mon":"Pesos","viv":"Usada","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5231","desc":"Residente en el exterior: Hipotecario VIS, resto del país (135 SMMLV), pesos, vivienda usada","max":14.5,"pb":0,"con":null},{"ctx":"Residente en el exterior","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Aglomeración","mon":"Pesos","viv":"Usada","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5013","desc":"Residente en el exterior: Hipotecario VIS, aglomeración (150 SMMLV), pesos, vivienda usada","max":14.5,"pb":0,"con":null},{"ctx":"Residente en el exterior","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Renovación urbana","mon":"Pesos","viv":"Usada","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5012","desc":"Residente en el exterior: Hipotecario VIS, renovación urbana (175 SMMLV), pesos, vivienda usada","max":14.5,"pb":0,"con":null},{"ctx":"Residente en el exterior","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Resto del país","mon":"Pesos","viv":"Usada","mod":"N/A","cuota":"N/A","sost":"Sí","ing":"N/A","cod":"5798","desc":"Residente en el exterior: Hipotecario sostenible VIS, resto del país (135 SMMLV), pesos, vivienda usada","max":14.5,"pb":0,"con":null},{"ctx":"Residente en el exterior","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Aglomeración","mon":"Pesos","viv":"Usada","mod":"N/A","cuota":"N/A","sost":"Sí","ing":"N/A","cod":"5800","desc":"Residente en el exterior: Hipotecario sostenible VIS, aglomeración (150 SMMLV), pesos, vivienda usada","max":14.5,"pb":0,"con":null},{"ctx":"Residente en el exterior","lin":"Hipotecario","base":"N/A","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"Usada","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5229","desc":"Residente en el exterior: Hipotecario No VIS, pesos, vivienda usada","max":15,"pb":0,"con":null},{"ctx":"Residente en el exterior","lin":"Leasing habitacional","base":"N/A","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"Usada","mod":"No familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"5667","desc":"Residente en el exterior: Leasing habitacional No VIS, pesos, no familiar, vivienda usada","max":14.7,"pb":0,"con":null},{"ctx":"Residente en el exterior","lin":"Remodelación","base":"N/A","seg":"VIS","zona":"N/A","mon":"Pesos","viv":"N/A","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5015","desc":"Residente en el exterior: Remodelación VIS, pesos","max":16.36,"pb":0,"con":null},{"ctx":"Residente en el exterior","lin":"Remodelación","base":"N/A","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"N/A","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5539","desc":"Residente en el exterior: Remodelación No VIS, pesos","max":16.61,"pb":0,"con":null},{"ctx":"Residente en el exterior","lin":"Cesión","base":"N/A","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"N/A","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5540","desc":"Residente en el exterior: Cesión No VIS, pesos","max":14.5,"pb":0,"con":null},{"ctx":"Uso mixto","lin":"Leasing habitacional","base":"N/A","seg":"VIS","zona":"Resto del país","mon":"Pesos","viv":"Usada","mod":"Familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"6115","desc":"Uso mixto: Leasing habitacional VIS, resto del país (135 SMMLV), pesos, familiar, vivienda usada","max":13,"pb":150,"con":11.5},{"ctx":"Uso mixto","lin":"Leasing habitacional","base":"N/A","seg":"VIS","zona":"Aglomeración","mon":"Pesos","viv":"Usada","mod":"Familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"6117","desc":"Uso mixto: Leasing habitacional VIS, aglomeración (150 SMMLV), pesos, familiar, vivienda usada","max":13,"pb":150,"con":11.5},{"ctx":"Colex aliada","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Resto del país","mon":"Pesos","viv":"Nueva","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5378","desc":"Colex aliada: Hipotecario VIS, resto del país (135 SMMLV), pesos, vivienda nueva","max":14.5,"pb":0,"con":null},{"ctx":"Colex aliada","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Resto del país","mon":"Pesos","viv":"Usada","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5378","desc":"Colex aliada: Hipotecario VIS, resto del país (135 SMMLV), pesos, vivienda usada","max":14.5,"pb":0,"con":null},{"ctx":"Colex aliada","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Aglomeración","mon":"Pesos","viv":"Nueva","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5230","desc":"Colex aliada: Hipotecario VIS, aglomeración (150 SMMLV), pesos, vivienda nueva","max":14.5,"pb":0,"con":null},{"ctx":"Colex aliada","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Aglomeración","mon":"Pesos","viv":"Usada","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5230","desc":"Colex aliada: Hipotecario VIS, aglomeración (150 SMMLV), pesos, vivienda usada","max":14.5,"pb":0,"con":null},{"ctx":"Colex aliada","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Renovación urbana","mon":"Pesos","viv":"Nueva","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5116","desc":"Colex aliada: Hipotecario VIS, renovación urbana (175 SMMLV), pesos, vivienda nueva","max":14.5,"pb":0,"con":null},{"ctx":"Colex aliada","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Renovación urbana","mon":"Pesos","viv":"Usada","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5116","desc":"Colex aliada: Hipotecario VIS, renovación urbana (175 SMMLV), pesos, vivienda usada","max":14.5,"pb":0,"con":null},{"ctx":"Colex aliada","lin":"Hipotecario","base":"N/A","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"Nueva","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5111","desc":"Colex aliada: Hipotecario No VIS, pesos, vivienda nueva","max":15,"pb":0,"con":null},{"ctx":"Colex aliada","lin":"Hipotecario","base":"N/A","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"Usada","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5111","desc":"Colex aliada: Hipotecario No VIS, pesos, vivienda usada","max":15,"pb":0,"con":null},{"ctx":"Colex aliada","lin":"Leasing habitacional","base":"N/A","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"Nueva","mod":"No familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"7262","desc":"Colex aliada: Leasing habitacional No VIS, pesos, no familiar, vivienda nueva","max":14.7,"pb":0,"con":null},{"ctx":"Colex aliada","lin":"Leasing habitacional","base":"N/A","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"Usada","mod":"No familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"7262","desc":"Colex aliada: Leasing habitacional No VIS, pesos, no familiar, vivienda usada","max":14.7,"pb":0,"con":null},{"ctx":"Colex aliada","lin":"Leasing habitacional","base":"N/A","seg":"VIS","zona":"Aglomeración","mon":"Pesos","viv":"Nueva","mod":"No familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"7168","desc":"Colex aliada: Leasing habitacional VIS, aglomeración (150 SMMLV), pesos, no familiar, vivienda nueva","max":13,"pb":0,"con":null},{"ctx":"Colex aliada","lin":"Leasing habitacional","base":"N/A","seg":"VIS","zona":"Aglomeración","mon":"Pesos","viv":"Usada","mod":"No familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"7168","desc":"Colex aliada: Leasing habitacional VIS, aglomeración (150 SMMLV), pesos, no familiar, vivienda usada","max":13,"pb":0,"con":null},{"ctx":"Colex aliada","lin":"Leasing habitacional","base":"N/A","seg":"VIS","zona":"Renovación urbana","mon":"Pesos","viv":"Nueva","mod":"No familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"7200","desc":"Colex aliada: Leasing habitacional VIS, renovación urbana (175 SMMLV), pesos, no familiar, vivienda nueva","max":13,"pb":0,"con":null},{"ctx":"Colex aliada","lin":"Leasing habitacional","base":"N/A","seg":"VIS","zona":"Renovación urbana","mon":"Pesos","viv":"Usada","mod":"No familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"7200","desc":"Colex aliada: Leasing habitacional VIS, renovación urbana (175 SMMLV), pesos, no familiar, vivienda usada","max":13,"pb":0,"con":null},{"ctx":"Colex financiado","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Resto del país","mon":"Pesos","viv":"Nueva","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5773","desc":"Colex proyecto financiado (subrogación): Hipotecario VIS, resto del país (135 SMMLV), pesos, vivienda nueva","max":14.5,"pb":0,"con":null},{"ctx":"Colex financiado","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Resto del país","mon":"Pesos","viv":"Usada","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5773","desc":"Colex proyecto financiado (subrogación): Hipotecario VIS, resto del país (135 SMMLV), pesos, vivienda usada","max":14.5,"pb":0,"con":null},{"ctx":"Colex financiado","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Aglomeración","mon":"Pesos","viv":"Nueva","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5014","desc":"Colex proyecto financiado (subrogación): Hipotecario VIS, aglomeración (150 SMMLV), pesos, vivienda nueva","max":14.5,"pb":0,"con":null},{"ctx":"Colex financiado","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Aglomeración","mon":"Pesos","viv":"Usada","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5014","desc":"Colex proyecto financiado (subrogación): Hipotecario VIS, aglomeración (150 SMMLV), pesos, vivienda usada","max":14.5,"pb":0,"con":null},{"ctx":"Colex financiado","lin":"Hipotecario","base":"N/A","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"Nueva","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5774","desc":"Colex proyecto financiado (subrogación): Hipotecario No VIS, pesos, vivienda nueva","max":15,"pb":0,"con":null},{"ctx":"Colex financiado","lin":"Hipotecario","base":"N/A","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"Usada","mod":"N/A","cuota":"N/A","sost":"No","ing":"N/A","cod":"5774","desc":"Colex proyecto financiado (subrogación): Hipotecario No VIS, pesos, vivienda usada","max":15,"pb":0,"con":null},{"ctx":"Colex financiado","lin":"Leasing habitacional","base":"N/A","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"Nueva","mod":"No familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"5775","desc":"Colex proyecto financiado (subrogación): Leasing habitacional No VIS, pesos, no familiar, vivienda nueva","max":14.7,"pb":0,"con":null},{"ctx":"Colex financiado","lin":"Leasing habitacional","base":"N/A","seg":"No VIS","zona":"N/A","mon":"Pesos","viv":"Usada","mod":"No familiar","cuota":"N/A","sost":"No","ing":"N/A","cod":"5775","desc":"Colex proyecto financiado (subrogación): Leasing habitacional No VIS, pesos, no familiar, vivienda usada","max":14.7,"pb":0,"con":null},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Resto del país","mon":"Pesos","viv":"Nueva","mod":"N/A","cuota":"N/A","sost":"Sí","ing":"N/A","cod":"5924","desc":"Hipotecario sostenible VIS, resto del país (135 SMMLV), pesos, vivienda nueva","max":14.3,"pb":150,"con":12.8},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Aglomeración","mon":"Pesos","viv":"Nueva","mod":"N/A","cuota":"N/A","sost":"Sí","ing":"N/A","cod":"5795","desc":"Hipotecario sostenible VIS, aglomeración (150 SMMLV), pesos, vivienda nueva","max":14.3,"pb":150,"con":12.8},{"ctx":"Normal","lin":"Hipotecario","base":"N/A","seg":"VIS","zona":"Aglomeración","mon":"UVR","viv":"Nueva","mod":"N/A","cuota":"N/A","sost":"Sí","ing":"N/A","cod":"5797","desc":"Hipotecario sostenible VIS, aglomeración (150 SMMLV), UVR, vivienda nueva","max":7.45,"pb":100,"con":6.45}];
+/*SUBPRODUCTOS:FIN*/
+
+// ════════════════════════════════════════════════════════
+// SUBPRODUCTO Y TASAS — deducción automática (norma de tasas BBVA 14/10/2026)
+// Datos: "Sub productos/subproductos_fuvex.csv" → bloque SUBPRODUCTOS de arriba.
+// Tasa sin nómina = tasa máxima del subproducto; tasa con nómina = máxima − puntos de nómina.
+// ════════════════════════════════════════════════════════
+const _DIM_SUB = ['ctx','lin','base','seg','zona','mon','viv','mod','cuota','sost','ing'];
+const _LINEA_POR_DESTINO = {
+  'Compra de vivienda': 'Hipotecario',
+  'Construcción individual': 'Constructor individual',
+  'Remodelación de Vivienda': 'Remodelación',
+  'Compra de cartera': 'Cesión',
+  'Leasing habitacional': 'Leasing habitacional'
+};
+const _TOPE_VIS_SMMLV = { 'Resto del país': 135, 'Aglomeración': 150, 'Renovación urbana': 175 };
+const _TOPE_VIP_SMMLV = 90;
+const _INGRESO_BPP = 10000000; // Cesión No VIS pesos: ≥ 10 millones = BPP, < 10 millones = Clásico
+const _RANGO_BPP = 'Ingresos >= 10 millones (BPP)';
+const _RANGO_CLASICO = 'Ingresos < 10 millones (Clásico)';
+
+function _normMun(s) {
+  return normCiudad(s).replace(/\s+/g, ' ').replace(/\s+d\s?c$/, '').trim();
+}
+const _MUN_AGLOMERADOS_NORM = new Set(MUNICIPIOS_AGLOMERADOS.map(_normMun));
+
+// Un dato vacío ('') en la entrada es comodín; 'N/A' en la fila coincide con cualquier valor.
+function _coincide(fila, e, omitir) {
+  return _DIM_SUB.every(d => (omitir && omitir.includes(d)) || e[d] === '' || fila[d] === 'N/A' || fila[d] === e[d]);
+}
+
+function resolverSubproducto() {
+  const r = { estado: 'incompleto', msg: '', fila: null, entrada: null, needBase: false, needMod: false, needCuota: false, needIng: false };
+  const linea = val('lineaCredito');
+  if (!linea) { r.msg = 'Selecciona la línea de crédito (Nacional o COLEX).'; return r; }
+  const esColex = linea === 'colex';
+
+  const destino = val('destino');
+  const lin = _LINEA_POR_DESTINO[destino] || '';
+  const est = val('estadoInmueble');
+  const valor = parseInt(limpiarNumero(val('valorInmueble')), 10) || 0;
+  const muni = val('ciudadCompra');
+  const ren = val('renovacionUrbana');
+  const sost = val('sostenible');
+  const ctxElegido = esColex ? val('aliadaColex') : val('usoMixto');
+  const ctx = !ctxElegido ? '' : esColex
+    ? ({ 'Aliada': 'Colex aliada', 'Financiado': 'Colex financiado' }[ctxElegido] || 'Residente en el exterior')
+    : (ctxElegido === 'Sí' ? 'Uso mixto' : 'Normal');
+
+  r.needBase = lin === 'Remodelación' && ctx === 'Normal';
+  const base = r.needBase ? val('baseRemodelacion') : (lin ? 'N/A' : '');
+  const zona = !ren ? '' : ren === 'Sí' ? 'Renovación urbana'
+             : (muni && _MUN_AGLOMERADOS_NORM.has(_normMun(muni)) ? 'Aglomeración' : (muni ? 'Resto del país' : ''));
+
+  // Segmento a probar, en orden: VIP (si aplica) → VIS → No VIS
+  let segs = [''];
+  if (valor > 0 && zona) {
+    const S = SMMLV_2026, tope = _TOPE_VIS_SMMLV[zona] * S;
+    segs = valor <= _TOPE_VIP_SMMLV * S ? ['VIP', 'VIS'] : valor <= tope ? ['VIS'] : ['No VIS'];
+  }
+
+  const e = {
+    ctx, lin, base, zona,
+    mon: val('pesosUvr'),
+    viv: est === 'Nuevo' ? 'Nueva' : est === 'Usado' ? 'Usada' : '',
+    sost, seg: '', mod: '', cuota: '', ing: ''
+  };
+
+  // ¿Qué datos adicionales hacen falta? (según las filas candidatas)
+  let cand = [];
+  if (!(r.needBase && !base)) {
+    for (const s of segs) {
+      e.seg = s;
+      cand = SUBPRODUCTOS.filter(f => _coincide(f, e, ['mod', 'cuota', 'ing']));
+      if (cand.length) break;
+    }
+    r.needMod = cand.some(f => f.mod !== 'N/A');
+    r.needCuota = cand.some(f => f.cuota !== 'N/A');
+    r.needIng = cand.some(f => f.ing !== 'N/A');
+  }
+
+  const faltan = [];
+  if (!destino) faltan.push('destino del crédito');
+  if (!e.mon) faltan.push('pesos o UVR');
+  if (!est) faltan.push('estado del inmueble');
+  if (!valor) faltan.push('valor del inmueble');
+  if (!muni) faltan.push('ciudad o municipio de compra');
+  if (!ren) faltan.push('renovación urbana');
+  if (!sost) faltan.push('crédito sostenible');
+  if (!ctxElegido) faltan.push(esColex ? 'tipo de proyecto' : 'uso mixto');
+  if (r.needBase && !base) faltan.push('producto base de la remodelación');
+
+  e.mod = r.needMod ? val('modalidadLeasing') : 'N/A';
+  e.cuota = r.needCuota ? val('tipoCuota') : 'N/A';
+  if (r.needMod && !e.mod) faltan.push('modalidad del leasing');
+  if (r.needCuota && !e.cuota) faltan.push('tipo de cuota');
+  if (r.needIng) {
+    const ing = parseInt(limpiarNumero(val('ingresos')), 10) || 0;
+    e.ing = ing ? (ing >= _INGRESO_BPP ? _RANGO_BPP : _RANGO_CLASICO) : '';
+    if (!e.ing) faltan.push('ingresos mensuales del titular');
+  } else e.ing = 'N/A';
+
+  r.entrada = e;
+  if (faltan.length) { r.msg = 'Faltan datos para calcular el subproducto: ' + faltan.join(', ') + '.'; return r; }
+
+  // Búsqueda estricta
+  let filas = [];
+  for (const s of segs) {
+    e.seg = s;
+    filas = SUBPRODUCTOS.filter(f => _coincide(f, e, null));
+    if (filas.length) break;
+  }
+  const codigos = [...new Set(filas.map(f => f.cod))];
+  if (codigos.length === 1) { r.estado = 'ok'; r.fila = filas[0]; return r; }
+  r.estado = codigos.length ? 'ambiguo' : 'sin_match';
+  r.msg = [e.ctx, e.lin + (e.base !== 'N/A' ? ' (base ' + e.base + ')' : ''), e.seg || '—',
+           e.zona, e.mon, e.viv, e.mod !== 'N/A' ? e.mod : '', e.cuota !== 'N/A' ? e.cuota : '',
+           e.sost === 'Sí' ? 'sostenible' : '', e.ing !== 'N/A' ? e.ing : ''].filter(Boolean).join(' · ');
+  return r;
+}
+
+function _fmtTasa(n) { return n.toFixed(2).replace('.', ','); }
+
+function _ponerTasa(id, notaId, politica, codigo) {
+  const el = document.getElementById(id), nota = document.getElementById(notaId);
+  if (!el) return;
+  if (politica === null) {                    // sin dato de política: solo limpiar lo que puso la herramienta
+    if (el.dataset.manual !== '1') el.value = '';
+    el.dataset.politica = ''; el.dataset.codigo = '';
+    return;
+  }
+  const cambioCodigo = el.dataset.codigo !== codigo;
+  if (cambioCodigo || el.dataset.manual !== '1' || !el.value.trim()) {
+    el.value = politica; el.dataset.manual = '';
+  }
+  el.dataset.politica = politica; el.dataset.codigo = codigo;
+  _notaTasa(id, notaId);
+}
+function _notaTasa(id, notaId) {
+  const el = document.getElementById(id), nota = document.getElementById(notaId);
+  if (!el || !nota) return;
+  const pol = el.dataset.politica;
+  if (!pol) return;
+  if (el.value.trim() !== pol) {
+    nota.innerHTML = '⚠️ <b>Tasa modificada.</b> Según política del banco para el subproducto ' + el.dataset.codigo + ' es <b>' + pol + ' %</b>.';
+    nota.style.color = '#b45309';
+  } else {
+    nota.innerHTML = 'Tasa según política del banco (subproducto ' + el.dataset.codigo + '). Puedes rectificarla si es necesario.';
+    nota.style.color = '';
+  }
+}
+
+function _autoSelect(id, valor) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (el.value === '' || el.dataset.auto === '1') { el.value = valor; el.dataset.auto = '1'; }
+}
+
+function recalcularSubproducto() {
+  const r = resolverSubproducto();
+  const esColex = val('lineaCredito') === 'colex';
+  mostrar('divBaseRemodelacion', r.needBase);
+  mostrar('divModalidadLeasing', r.needMod);
+  mostrar('divTipoCuota', r.needCuota);
+
+  const inp = document.getElementById('subproducto');
+  const desc = document.getElementById('descSubproducto');
+  const aviso = document.getElementById('avisoSubproducto');
+  if (!inp) return r;
+  const ver = (txt, color) => { aviso.style.display = txt ? 'block' : 'none'; aviso.innerHTML = txt; aviso.style.color = color || ''; };
+
+  if (r.estado === 'ok') {
+    const f = r.fila;
+    inp.value = f.cod; inp.classList.remove('is-invalid');
+    desc.textContent = f.desc; ver('');
+    if (!esColex) {
+      _ponerTasa('nTasaSinNomina', 'notaTasaSin', _fmtTasa(f.max), f.cod);
+      _ponerTasa('nTasaConNomina', 'notaTasaCon', f.pb > 0 && f.con !== null ? _fmtTasa(f.con) : null, f.cod);
+    }
+    // Conocimiento de cliente: se prellenan con lo deducido (el broker aún puede cambiarlos)
+    const e = r.entrada;
+    _autoSelect('cVisNoVis', e.seg === 'No VIS' ? 'NO_VIS' : 'VIS');
+    const esLeasing = e.lin === 'Leasing habitacional' || e.base === 'Leasing habitacional';
+    _autoSelect('cTipoCredito', esLeasing ? (e.mod === 'Familiar' ? 'leasing_familiar' : 'leasing_no_familiar') : 'hipotecario');
+    _autoSelect('cLineaCredito', { 'Hipotecario': 'tradicional', 'Leasing habitacional': 'tradicional', 'Remodelación': 'remodelacion',
+                                   'Constructor individual': 'const_individual', 'Cesión': 'cesion' }[e.lin]);
+    return r;
+  }
+
+  inp.value = ''; desc.textContent = '';
+  _ponerTasa('nTasaSinNomina', 'notaTasaSin', null, '');
+  _ponerTasa('nTasaConNomina', 'notaTasaCon', null, '');
+  if (r.estado === 'incompleto') ver(r.msg, '#6c757d');
+  else if (r.estado === 'sin_match') ver('⛔ <b>No existe un subproducto BBVA para esta combinación</b> (' + r.msg + '). No se puede continuar: revisa los datos del crédito o del inmueble.', '#b02a37');
+  else ver('⛔ <b>Combinación ambigua</b> (' + r.msg + '). Revisa los datos del crédito.', '#b02a37');
+  return r;
+}
+
+(function initSubproducto() {
+  const dl = document.getElementById('listaMunicipios');
+  if (dl) dl.innerHTML = MUNICIPIOS_AGLOMERADOS.map(m => '<option value="' + m.toUpperCase() + '"></option>').join('');
+  ['lineaCredito','destino','pesosUvr','estadoInmueble','valorInmueble','ciudadCompra','ingresos',
+   'renovacionUrbana','sostenible','usoMixto','aliadaColex','baseRemodelacion','modalidadLeasing','tipoCuota'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('input', recalcularSubproducto);
+    el.addEventListener('change', recalcularSubproducto);
+  });
+  // Si el broker corrige una tasa a mano, se marca y se avisa; si cambia un campo prellenado de Conocimiento, deja de ser automático
+  [['nTasaSinNomina', 'notaTasaSin'], ['nTasaConNomina', 'notaTasaCon']].forEach(([id, nota]) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('input', () => { el.dataset.manual = '1'; _notaTasa(id, nota); });
+  });
+  ['cVisNoVis', 'cTipoCredito', 'cLineaCredito'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('change', () => { el.dataset.auto = ''; });
+  });
+  recalcularSubproducto();
+})();
+
 // ════════════════════════════════════════════════════════
 // DATOS DE RADICADORES
 // ════════════════════════════════════════════════════════
@@ -1538,6 +1830,10 @@ function cambiarLinea() {
   mostrar('divNacionalidad4Colex',  esColex);
   mostrar('divPaisFiscal',          esColex);
 
+  // Datos para deducir el subproducto: uso mixto solo Nacional; tipo de proyecto (aliada/financiado) solo COLEX
+  mostrar('divUsoMixto', !esColex);
+  mostrar('divAliada',    esColex);
+
   // Pesos/UVR — para COLEX siempre Pesos (deshabilitar selección)
   const selPesosUvr = document.getElementById('pesosUvr');
   if (esColex) {
@@ -1573,6 +1869,8 @@ function cambiarLinea() {
   const inpPlazo = document.getElementById('plazo');
   inpPlazo.placeholder = esColex ? 'Ej: 180  (solo número, se agregará "meses")' : 'ej. 180';
   inpPlazo.type = esColex ? 'number' : 'text';
+
+  recalcularSubproducto();
 }
 
 function mostrarCualApoderado() {
@@ -1692,6 +1990,17 @@ function validarObligatorios() {
     } else {
       canon.classList.remove('is-invalid');
     }
+  }
+
+  // El subproducto se deduce automáticamente (campo de solo lectura): sin subproducto no se puede continuar
+  const sub = document.getElementById('subproducto');
+  if (sub) {
+    recalcularSubproducto();
+    if (!sub.value.trim()) {
+      sub.classList.add('is-invalid');
+      if (!primerInvalido) primerInvalido = sub;
+      valido = false;
+    } else sub.classList.remove('is-invalid');
   }
 
   if (!valido && primerInvalido) primerInvalido.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -2083,15 +2392,10 @@ async function generarPDF() {
 // NÓMINA — tasa UVR (se activa cuando cambia pesosUvr)
 // ════════════════════════════════════════════════════════
 function actualizarTasaUVR() {
-  const esUVR = document.getElementById('pesosUvr').value === 'UVR';
+  // Las tasas (UVR y pesos) se calculan con el subproducto: ver recalcularSubproducto()
   mostrar('divNTasaConNominaUVR', false);
   mostrar('divNTasaConNomina', true);
-  const campo = document.getElementById('nTasaConNomina');
-  campo.placeholder = esUVR ? '3,40' : 'ej. 10,20';
-  const nota = document.getElementById('notaTasaSin');
-  if (nota) nota.textContent = esUVR
-    ? 'Ingrese la tasa sin nómina. Resultado: «X,XX %»'
-    : 'Resultado: «X,XX %» — debe ser MAYOR que la tasa con nómina';
+  recalcularSubproducto();
 }
 
 // ════════════════════════════════════════════════════════
@@ -2678,9 +2982,10 @@ async function generarTodosColex() {
     const datosRad  = RADICADORES[ciudadSel];
     const dirDataCx = datosRad && dirIdx !== '' ? datosRad.directores[parseInt(dirIdx)] : null;
     let analista    = dirDataCx ? dirDataCx.analista : null;
-    analista        = resolverAnalistaPorCompra(val('ciudadCompra'), ciudadSel, analista, dirDataCx && dirDataCx.analistaFijo);
+    // COLEX: la ciudad de compra solo sirve para deducir el subproducto; no cambia analista ni coordinador (como antes)
+    analista        = resolverAnalistaPorCompra('', ciudadSel, analista, dirDataCx && dirDataCx.analistaFijo);
     let coordinador = datosRad ? datosRad.coordinador : null;
-    coordinador     = resolverCoordinadorPorCompra(val('ciudadCompra'), ciudadSel, coordinador);
+    coordinador     = resolverCoordinadorPorCompra('', ciudadSel, coordinador);
     const nombreCliente = [val('nombres'), val('primerApellido'), val('segundoApellido')].filter(Boolean).join(' ');
     const apodNombreCompleto = [val('apodNombres'), val('apodApellido1'), val('apodApellido2')].filter(Boolean).join(' ');
 

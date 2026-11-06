@@ -180,7 +180,7 @@
 | `Texto82` | Dirección del inmueble | Escritura | Campo abierto |
 | `Texto83` | Valor del inmueble | Escritura | Campo abierto |
 | % opción de compra | % de opción de compra | Escritura numérica (🔀 condicional) | **Solo si** línea = Leasing; si no → en blanco |
-| `Texto3` | Subproducto | Escritura numérica (obligatorio) | El broker lo escribe |
+| `Texto3` | Subproducto | Calculado automáticamente (obligatorio, solo lectura) | Se deduce de destino, pesos/UVR, nuevo/usado, valor del inmueble, municipio, renovación urbana, sostenible, uso mixto (Nacional) o constructora aliada (COLEX), y según el caso: tipo de cuota, modalidad de leasing, producto base de remodelación e ingresos. Datos en `Sub productos/`; ver `generar_subproductos_js.mjs`. Sin subproducto no se puede continuar |
 | `Texto12` | Día de pago | Escritura numérica | |
 | `Habitacional` | % de opción de compra (Leasing habitacional) | Escritura numérica (🔀 condicional) | **Solo si** `destino` = **Leasing habitacional** |
 
