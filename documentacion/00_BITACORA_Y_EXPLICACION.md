@@ -159,3 +159,35 @@ Automatizacion_diligenciamiento_formatos/
   - Próximos pasos al retomar: (1) mapear la Vinculación, (2) definir el formulario de captura,
     (3) construir interfaz + llenado en Apps Script. Requisito: una cuenta de Google (puede ser
     gratuita @gmail.com, sin permisos de admin).
+
+- **2026-11-05** — Subproducto y tasas automáticos (norma BBVA vigente desde 14/10/2026). Commit `560ace4`:
+  - El campo `subproducto` (Sección 9, `Texto3` en los PDF) pasó a solo lectura y se deduce solo con
+    destino, pesos/UVR, nueva/usada, valor (VIP/VIS/No VIS), ciudad de compra (aglomeración), renovación
+    urbana, sostenible, uso mixto y, según el caso, tipo de cuota, modalidad de leasing, producto base de
+    remodelación e ingresos (Cesión).
+  - También se escriben `nTasaSinNomina` (tasa máxima) y `nTasaConNomina` (máxima − puntos de nómina; solo
+    nómina da descuento). El broker puede rectificarlas y se le avisa.
+  - Reglas confirmadas: sin M.V.; sin Leaseback; Remodelación No VIS y leasing VIS (7167) = 150 PB;
+    combinación sin fila = se bloquea; Retanqueo fuera; línea COLEX = "Residente en el exterior".
+  - COLEX: select "Tipo de proyecto" (Tradicional / Constructora aliada / Proyecto financiado = subrogación).
+    En COLEX no cambia analista ni coordinador.
+  - Ciudad de compra pasó a la Sección 9; la sección Nómina quedó al final del formulario.
+  - Datos en `Sub productos/` (CSV fuente, Excel, municipios aglomerados, norma en PDF). El generador
+    `generar_subproductos_js.mjs` reescribe el bloque `SUBPRODUCTOS` de `Index.html`.
+    **No volver a correrlo con `--migrar`** (pisa las tasas COLEX y sostenibles).
+- **2026-11-06** — Error "WinAnsi cannot encode U+2060": un broker pegó texto con un carácter invisible.
+  Corregido con `limpiarTextoPdf()` en `val()` y parches a `PDFTextField.setText` y `PDFPage.drawText`.
+  Commit `f26eca2`, git push y clasp push hechos.
+- **2026-11-10** — Nueva norma de tasas BBVA vigente desde 06/11/2026 (`Tasas 6 Noviembre BBVA .pdf`).
+  - Validada contra el CSV: cambian solo las tasas máximas; códigos, combinaciones y puntos de nómina
+    quedan igual. Se actualizaron 38 códigos (54 filas):
+    VIP/VIS pesos +0,40 (VIS usada 16,56, nueva 16,26); VIS UVR 9,75; No VIS pesos 17,74 nueva / 18,04 usada
+    y UVR 12,22; leasing No VIS 17,27 / 17,57; leasing VIS 13,50; remodelación UVR VIS 9,10 y No VIS 9,67;
+    cesión UVR VIS 8,11 y No VIS 8,21.
+  - Tasa con nómina = máxima − PB (ej.: VIS pesos nueva 16,26 → 14,76 con nómina).
+  - La página 8 del PDF (Vivienda Digital, informativa) no se usa.
+  - Commit `e7c1911`, `git push` y `clasp push --force` hechos (este último desde `codigo/apps_script`,
+    donde está `.clasp.json`). Respaldo en `_copias_de_seguridad/2026-11-10/`.
+  - ⏳ Pendiente: probar en `/dev` y crear "Nueva versión" en la implementación de producción (mismo link).
+  - ⚠ El Excel `subproductos_fuvex_bbva.xlsx` quedó con las tasas anteriores; la fuente vigente es el CSV.
+  - El PDF de la norma está en `.gitignore`, no se sube al repositorio.
