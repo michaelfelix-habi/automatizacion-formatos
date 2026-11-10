@@ -188,6 +188,6 @@ Automatizacion_diligenciamiento_formatos/
   - La página 8 del PDF (Vivienda Digital, informativa) no se usa.
   - Commit `e7c1911`, `git push` y `clasp push --force` hechos (este último desde `codigo/apps_script`,
     donde está `.clasp.json`). Respaldo en `_copias_de_seguridad/2026-11-10/`.
-  - ⏳ Pendiente: probar en `/dev` y crear "Nueva versión" en la implementación de producción (mismo link).
+  - ✅ Probado en `/dev` y publicada en producción como versión 79 (mismo link).
   - ⚠ El Excel `subproductos_fuvex_bbva.xlsx` quedó con las tasas anteriores; la fuente vigente es el CSV.
   - El PDF de la norma está en `.gitignore`, no se sube al repositorio.
