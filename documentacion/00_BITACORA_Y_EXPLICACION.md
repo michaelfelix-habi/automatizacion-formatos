@@ -200,3 +200,4 @@ Automatizacion_diligenciamiento_formatos/
     `analistaFijo`**. El parámetro `fijo` de `resolverAnalistaPorCompra` quedó sin efecto.
   - Nadia Pardo se quitó del desplegable de directores de Bogotá (ya no está vinculada a la empresa).
   - Respaldo en `_copias_de_seguridad/2026-11-18/`.
+  - ✅ Publicada en producción como versión 80 (despliegue `AKfycbz7rvcu8...`, mismo link). Commit `07e72ec`, git push y clasp push hechos.
