@@ -191,3 +191,12 @@ Automatizacion_diligenciamiento_formatos/
   - ✅ Probado en `/dev` y publicada en producción como versión 79 (mismo link).
   - ⚠ El Excel `subproductos_fuvex_bbva.xlsx` quedó con las tasas anteriores; la fuente vigente es el CSV.
   - El PDF de la norma está en `.gitignore`, no se sube al repositorio.
+- **2026-11-18** — Gestor de Santander y salida de Nadia Pardo.
+  - Si la **ciudad de compra** es un municipio del departamento de Santander (87), el gestor es
+    **Daniela Santiago Sánchez**, C.C. 1004945289, código T074586 (`GESTOR_SANTANDER`, `esMunicipioSantander()`).
+    No aplica a COLEX; el coordinador no cambia.
+  - Regla general: el analista del director rige cuando la compra es en su ciudad (o el campo está vacío);
+    si el broker indica otra ciudad con radicadores (o Santander), manda la regla por ciudad, **incluso con
+    `analistaFijo`**. El parámetro `fijo` de `resolverAnalistaPorCompra` quedó sin efecto.
+  - Nadia Pardo se quitó del desplegable de directores de Bogotá (ya no está vinculada a la empresa).
+  - Respaldo en `_copias_de_seguridad/2026-11-18/`.

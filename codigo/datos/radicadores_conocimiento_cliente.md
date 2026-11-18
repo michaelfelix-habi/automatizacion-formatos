@@ -50,8 +50,12 @@ Los 3 roles del formato se llenan así:
 | 6 | Madelein González | Adriana Carolina Cortés |
 | 7 | Madian Chitiva | Adriana Carolina Cortés |
 | 8 | Paola Andrea Castro | Linda Estefany Beltrán |
-| 9 | Nadia Pardo (fija) | Linda Estefany Beltrán |
 
+> 📝 Nadia Pardo (directora) se retiró del desplegable: ya no está vinculada a la empresa (2026-11-18).
+>
+> 📍 **Santander:** si la **ciudad de compra** es un municipio del departamento de Santander, el gestor es
+> **Daniela Santiago Sánchez** (C.C. 1004945289, código T074586), sin importar el director elegido (no aplica a COLEX).
+>
 > 📝 Evelyn Tatiana Guzmán (directora) y José Iván Motivar y Laura Stephania Guzmán (analistas)
 > se retiraron del desplegable: ya no laboran con nosotros / no están en esta área (2026-10-24).
 
