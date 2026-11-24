@@ -201,3 +201,15 @@ Automatizacion_diligenciamiento_formatos/
   - Nadia Pardo se quitó del desplegable de directores de Bogotá (ya no está vinculada a la empresa).
   - Respaldo en `_copias_de_seguridad/2026-11-18/`.
   - ✅ Publicada en producción como versión 80 (despliegue `AKfycbz7rvcu8...`, mismo link). Commit `07e72ec`, git push y clasp push hechos.
+- **2026-11-24** — Zona Tolima y coordinadora de Santander; la ciudad de compra prima sobre el director.
+  - Nueva ciudad de radicación **Tolima** (`RADICADORES['Tolima']`): coordinadora Mayerly Maldonado Angarita
+    (C.C. 1098664403). El desplegable lista directamente a los gestores (no hay director comercial definido):
+    Leidy Johana Barajas Gómez (C.C. 1110586087, T039867) y Luisa María Henao (C.C. 1088350905, T054643).
+  - Por ciudad de compra (`_GESTOR_ZONA_TOLIMA`): Ibagué, Tolima y Neiva → Leidy; Armenia y Manizales → Luisa;
+    coordinadora siempre Mayerly. Aplica sin importar la ciudad/director del broker.
+  - Santander: además del gestor (Daniela, ya verificado contra los datos recibidos), la coordinadora pasa a ser
+    **Rocío del Pilar Suárez Gómez, C.C. 37746484** (`COORDINADOR_SANTANDER`). Correo y teléfono de Daniela
+    (daniela.santiago.sanchez.contractor@csf.com.co, 3124601918) solo anotados en `radicadores_conocimiento_cliente.md`.
+  - Regla: ciudad de compra > director. COLEX no cambia (la ciudad de compra no altera gestor ni coordinador).
+  - ✅ Publicada en producción como versión 82 (despliegue `AKfycbz7rvcu8...`, mismo link). Commit `6db3484`,
+    clasp push hecho. `appsscript.json` subió con la config webapp (propietario, acceso dominio).
