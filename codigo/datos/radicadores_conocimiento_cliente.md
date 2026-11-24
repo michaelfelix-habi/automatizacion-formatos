@@ -136,6 +136,25 @@ Los 3 roles del formato se llenan así:
 |----------|--------|-------|---------------------------|
 | Nayelis de Jesús Toscano | 1.001.880.819 | = su nombre escrito (sin imagen) | ⏳ pendiente |
 
+## 🏙️ TOLIMA (zona: Ibagué, Tolima, Neiva, Armenia, Manizales)
+
+### Coordinadora (fija)
+- **Nombre:** Mayerly Maldonado Angarita — **C.C. 1098664403**
+
+### Gestores — desplegable
+> No hay director comercial definido para la zona: el desplegable lista directamente a los gestores.
+
+| # | Gestor | Cédula | Código (Vinculación) | Ciudad de compra |
+|---|--------|--------|----------------------|------------------|
+| 1 | Leidy Johana Barajas Gómez | 1110586087 | T039867 | Ibagué, Tolima, Neiva |
+| 2 | Luisa María Henao | 1088350905 | T054643 | Armenia, Manizales |
+
+> 📍 **Regla general:** la **ciudad de compra prima sobre el director**. Si la ciudad de compra es una de las
+> anteriores, se asignan el gestor de esa tabla y la coordinadora Mayerly, sin importar la ciudad/director del broker (2026-11-24).
+>
+> 📍 **Santander:** gestor Daniela Santiago Sánchez (C.C. 1004945289, T074586; correo daniela.santiago.sanchez.contractor@csf.com.co,
+> tel. 3124601918) y coordinadora **Rocío del Pilar Suárez Gómez (C.C. 37746484)**, con ciudad de compra en Santander (no aplica a COLEX).
+
 ---
 
 ## 📌 Estado de las 4 ciudades

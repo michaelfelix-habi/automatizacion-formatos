@@ -135,6 +135,7 @@
           <option>Cali</option>
           <option>Medellín</option>
           <option>Barranquilla</option>
+          <option>Tolima</option>
         </select>
       </div>
 
@@ -1655,6 +1656,14 @@ const RADICADORES = {
     directores: [
       { nombre: 'Andrea Álvarez', analista: { nombre: 'Nayelis de Jesús Toscano', cedula: '1001880819', codigo: '' } },
     ]
+  },
+  // Zona Tolima: coordinadora única; el desplegable lista a los gestores (no hay director comercial definido)
+  'Tolima': {
+    coordinador: { nombre: 'Mayerly Maldonado Angarita', cedula: '1098664403' },
+    directores: [
+      { nombre: 'Leidy Johana Barajas Gómez', analista: { nombre: 'Leidy Johana Barajas Gómez', cedula: '1110586087', codigo: 'T039867' } },
+      { nombre: 'Luisa María Henao',          analista: { nombre: 'Luisa María Henao',          cedula: '1088350905', codigo: 'T054643' } },
+    ]
   }
 };
 
@@ -1681,9 +1690,15 @@ const _CIUDADES_NORM = {
   'bogota': 'Bogotá', 'cali': 'Cali',
   'medellin': 'Medellín', 'barranquilla': 'Barranquilla'
 };
+// Zona Tolima: gestor según ciudad de compra (Ibagué, Tolima y Neiva → Leidy; Armenia y Manizales → Luisa)
+const _GESTOR_ZONA_TOLIMA = {
+  'ibague': 0, 'tolima': 0, 'neiva': 0,
+  'armenia': 1, 'manizales': 1
+};
 // Municipios del departamento de Santander → gestor fijo (Daniela Santiago Sánchez)
 const GESTOR_SANTANDER = { nombre: 'Daniela Santiago Sánchez', cedula: '1004945289', codigo: 'T074586' };
-const _MUNICIPIOS_SANTANDER = new Set([
+const COORDINADOR_SANTANDER = { nombre: 'Rocío del Pilar Suárez Gómez', cedula: '37746484' };
+const _MUNICIPIOS_SANTANDER =new Set([
   'Aguada','Albania','Aratoca','Barbosa','Barichara','Barrancabermeja','Betulia','Bolívar','Bucaramanga',
   'Cabrera','California','Capitanejo','Carcasí','Cepitá','Cerrito','Charalá','Charta','Chima','Chipatá',
   'Cimitarra','Concepción','Confines','Contratación','Coromoro','Curití','El Carmen de Chucurí','El Guacamayo',
@@ -1702,6 +1717,7 @@ function resolverAnalistaPorCompra(ciudadCompraRaw, ciudadSel, analistaDefault, 
   // si el broker indica otra ciudad de compra, manda la regla por ciudad (Santander o ciudad con radicadores).
   if (esMunicipioSantander(ciudadCompraRaw)) return GESTOR_SANTANDER;
   const clave = normCiudad(ciudadCompraRaw);
+  if (clave in _GESTOR_ZONA_TOLIMA) return RADICADORES['Tolima'].directores[_GESTOR_ZONA_TOLIMA[clave]].analista;
   const ciudadCompra = _CIUDADES_NORM[clave];
   if (ciudadCompra && ciudadCompra !== ciudadSel && RADICADORES[ciudadCompra]) {
     return RADICADORES[ciudadCompra].directores[0].analista;
@@ -1710,6 +1726,8 @@ function resolverAnalistaPorCompra(ciudadCompraRaw, ciudadSel, analistaDefault, 
 }
 function resolverCoordinadorPorCompra(ciudadCompraRaw, ciudadSel, coordinadorDefault) {
   const clave = normCiudad(ciudadCompraRaw);
+  if (esMunicipioSantander(ciudadCompraRaw)) return COORDINADOR_SANTANDER;
+  if (clave in _GESTOR_ZONA_TOLIMA) return RADICADORES['Tolima'].coordinador;
   const ciudadCompra = _CIUDADES_NORM[clave];
   if (ciudadCompra && ciudadCompra !== ciudadSel && RADICADORES[ciudadCompra]) {
     return RADICADORES[ciudadCompra].coordinador;
